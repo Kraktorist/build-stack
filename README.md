@@ -1,3 +1,5 @@
+## Последовательность
+
 1. Деплоим каркас сетей в терраформ
 2. Устанавливаем машины
 - gitlab
@@ -36,3 +38,27 @@
   - modules
     - terraform
     - ansible
+- apps
+
+
+## Build image
+
+Contains ansible, kubectl and terraform. 
+Location: [Dockerfile](build/Dockerfile)
+Build Step: `docker build ./build/ -t build`
+
+Запуск terraform:
+
+```
+export YC_FOLDER_ID=
+export ACCESS_KEY=
+export SECRET_KEY=
+export YC_TOKEN=
+export ENV=base # env for building
+
+docker run \
+    --entrypoint /bin/bash \
+    -v $(pwd)/infra:/app/infra \
+    -v $HOME/ya_key.pub:/root/ya_key.pub \
+    -ti terraform
+```
