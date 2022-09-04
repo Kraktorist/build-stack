@@ -25,6 +25,11 @@
         state: present
       register: packagekey
 
+    - name: install gitlab-runner
+      ansible.builtin.package:
+        name: gitlab-runner
+        state: present
+
     - name: Set Gitlab External URL
       ansible.builtin.lineinfile:
         path: /etc/gitlab/gitlab.rb
@@ -161,26 +166,40 @@
       - output
       - never
 
-- name: Creating Gitlab Runner
-  hosts: localhost
-  gather_facts: true
-  become: false
-  tasks: 
-
-    - name: Creating kubernetes manifest for Gitlab runner
-      ansible.builtin.template:
-        src: runner-manifest.j2
-        dest: runner-manifest.yml
+    - name: Register gitlab shell runner
+      command: |
+        gitlab-runner register \
+        --non-interactive \
+        --url "{{ gitlab_url }}" \
+        --registration-token "{{ gitlab_group.group.runners_token }}" \
+        --executor "shell" \
+        --description "shell executor" \
+        --tag-list "azure, shell, ansible" \
+        --run-untagged="false" \
+        --locked="true"
       tags:
         - token
         - never
 
-    - name: Start Gitlab Runner
-      ansible.builtin.shell: |
-        kubectl create namespace gitlab-runner
-        kubectl -n gitlab-runner apply -f runner-manifest.yml
-        rm -rf runner-manifest.yml
-      tags:
-        - token
-        - never
+# - name: Creating Gitlab Runner
+#   hosts: localhost
+#   gather_facts: true
+#   become: false
+#   tasks: 
 
+#     - name: Creating kubernetes manifest for Gitlab runner
+#       ansible.builtin.template:
+#         src: runner-manifest.j2
+#         dest: runner-manifest.yml
+#       tags:
+#         - token
+#         - never
+
+#     - name: Start Gitlab Runner
+#       ansible.builtin.shell: |
+#         kubectl create namespace gitlab-runner
+#         kubectl -n gitlab-runner apply -f runner-manifest.yml
+#         rm -rf runner-manifest.yml
+#       tags:
+#         - token
+#         - never

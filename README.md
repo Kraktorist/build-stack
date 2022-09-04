@@ -93,3 +93,16 @@ terraform_apply hosts
 	ansible-galaxy install -r ./ansible/requirements.yml;
 	ansible-playbook -i ${TF_VAR_ansible_inventory} --become ./ansible/nexus/main.yml 
 	ansible-playbook -i ${TF_VAR_ansible_inventory} --become ./ansible/gitlab/main.yml 
+
+нужно
+- создать репозитории
+- local gitlab-runner
+
+
+структура репозиториев:
+infrastructure (local runner)
+- full repo
+- envs
+apps (k8s runner)
+- weaveworks
+- googleshop
