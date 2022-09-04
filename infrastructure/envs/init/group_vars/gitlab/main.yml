@@ -1,0 +1,10 @@
+gitlab_user: root
+gitlab_password: mysecretpassword
+gitlab_email: admin@example.com
+gitlab_host: "{{ hostvars[inventory_hostname].ansible_host }}"
+gitlab_url: http://{{ gitlab_host }}
+lab_group: lab
+git_repolist:
+  - { reponame: lab-kubernetes, repopath: https://github.com/Kraktorist/lab-kubernetes.git }
+  - { reponame: boutique, repopath: https://github.com/GoogleCloudPlatform/microservices-demo.git }
+  - { reponame: weavesocks, repopath: https://github.com/microservices-demo/microservices-demo.git }

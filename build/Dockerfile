@@ -9,10 +9,13 @@ COPY terraform terraform
 COPY .terraformrc /root/.terraformrc
 # install ansible
 RUN apt-get update && \
+  apt-get install -y git && \
   apt-get install -y python3 && \
   apt-get install python3-pip -y && \
   pip3 install --upgrade pip && \
-  pip3 install ansible
+  pip3 install ansible && \
+  pip3 install jmespath
+COPY ansible ansible
 # Install kubectl
 RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - && \
     echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list && \

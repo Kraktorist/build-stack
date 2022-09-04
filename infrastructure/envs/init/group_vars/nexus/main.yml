@@ -1,0 +1,52 @@
+nexus_admin_password: admin123
+nexus_public_hostname: 'nexus-lab'
+httpd_setup_enable: false
+nexus_privileges:
+  - name: all-repos-read
+    description: 'Read & Browse access to all repos'
+    repository: '*'
+    actions:
+      - read
+      - browse
+  - name: company-project-deploy
+    description: 'Deployments to company-project'
+    repository: company-project
+    actions:
+      - add
+      - edit
+nexus_roles:
+  - id: Developers # maps to the LDAP group
+    name: developers
+    description: All developers
+    privileges:
+      - nx-search-read
+      - all-repos-read
+      - company-project-deploy
+    roles: []
+nexus_local_users:
+  - username: gitlab # used as key to update
+    first_name: Gitlab
+    last_name: CI
+    email: support@company.com
+    password: "s3cr3t"
+    roles:
+      - Developers
+# nexus_blobstores:
+#   - name: company-artifacts
+#     path: /var/nexus/blobs/company-artifacts
+nexus_scheduled_tasks:
+  - name: compact-blobstore
+    cron: '0 0 22 * * ?'
+    typeId: blobstore.compact
+    taskProperties:
+      blobstoreName: 'company-artifacts'
+nexus_repos_maven_hosted:
+  - name: microservices-demo
+    version_policy: mixed
+    write_policy: allow
+    blob_store: default
+  - name: google-microservices-demo
+    version_policy: mixed
+    write_policy: allow
+    blob_store: default
+nexus_config_docker: true

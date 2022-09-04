@@ -5,7 +5,7 @@ function init_backend() {
     step=$1
     terraform init \
         -backend-config="endpoint=storage.yandexcloud.net" \
-        -backend-config="bucket=dn-terraform-states" \
+        -backend-config="bucket=${S3_TF_STATE}" \
         -backend-config="region=ru-central1" \
         -backend-config="key=${ENV}/${step}.tfstate" \
         -backend-config="access_key=${ACCESS_KEY}" \
