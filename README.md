@@ -46,19 +46,29 @@
 Contains ansible, kubectl and terraform. 
 Location: [Dockerfile](build/Dockerfile)
 Build Step: `docker build ./build/ -t build`
-
-Запуск terraform:
+Run: 
 
 ```
-export YC_FOLDER_ID=
-export ACCESS_KEY=
-export SECRET_KEY=
-export YC_TOKEN=
-export ENV=base # env for building
-
 docker run \
     --entrypoint /bin/bash \
     -v $(pwd)/infra:/app/infra \
     -v $HOME/ya_key.pub:/root/ya_key.pub \
     -ti terraform
+```
+
+Запуск terraform:
+
+```
+export YC_CLOUD_ID=
+export YC_FOLDER_ID=
+export ACCESS_KEY=
+export SECRET_KEY=
+export YC_TOKEN=
+export ENV=init
+export TF_VAR_config=/app/infra/envs/${ENV}/hosts.yml
+
+source scripts/lib.sh
+terraform_apply network
+terraform_apply hosts
+
 ```

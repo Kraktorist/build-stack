@@ -1,0 +1,73 @@
+---
+- name: Create GitLab Project {{ item.reponame }}
+  community.general.gitlab_project:
+    api_url: "{{ gitlab_url }}"
+    api_username: "{{ gitlab_user }}"
+    api_password: "{{ gitlab_password }}"
+    name: "{{ item.reponame }}"
+    visibility: internal
+    group: "{{ gitlab_group.group.id }}"
+  register: project
+  tags:
+  - never
+  - projects
+
+- name: Prepare {{ item.reponame }} repository
+  ansible.builtin.shell: |
+    repopath={{ item.repopath }}
+    reponame={{ item.reponame }}
+    rm -rf $reponame
+    git clone $repopath $reponame
+  when: project.changed
+  tags:
+  - never
+  - projects
+
+- name: Find all kubernetes manifest
+  ansible.builtin.find:
+    paths: ./{{ item.reponame }}/deploy/kubernetes
+    patterns: '*.yml,*.yaml'
+    contains: 'kind: Deployment|kind: Job|kind: DaemonSet'
+    recurse: true
+  register: manifests
+  when:
+  - hostvars[groups["nexus"][0]].ansible_host is defined
+  tags:
+  - never
+  - nexus_repo
+  - projects
+
+- name: Filter only deployments manifests
+  ansible.builtin.replace:
+    path: "{{ file.path }}"
+    # regexp: 'image: | image: (.*)?$'
+    regexp: '(image: [A-Za-z0-9-]*?\.[A-Za-z0-9-:]*?\/|image: )(.*\/.*|.*)$'
+    replace: 'image: {{ hostvars[groups["nexus"][0]].ansible_host }}:9080/\2'
+    # replace: 'image: {{ docker_host }}/\1'
+  loop: "{{ manifests.files }}"
+  loop_control:
+    loop_var: file
+  when:
+  - '"helm" not in file.path'
+  - project.changed
+  - hostvars[groups["nexus"][0]].ansible_host is defined
+  tags:
+  - never
+  - nexus_repo
+  - projects
+  
+- name: Push {{ item.reponame }} repository
+  ansible.builtin.shell: |
+    repopath={{ item.repopath }}
+    reponame={{ item.reponame }}
+    cd $reponame
+    git add .
+    git commit -m "reconfiguring manifests"
+    git remote add gitlab-origin http://{{ gitlab_user }}:{{ gitlab_password }}@{{ gitlab_host }}/{{ gitlab_group.group.name }}/${reponame}.git
+    git push --all gitlab-origin
+    git push --tags gitlab-origin
+    cd .. && rm -rf $reponame
+  when: project.changed
+  tags:
+  - never
+  - projects

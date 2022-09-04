@@ -1,0 +1,5 @@
+# for the moment of the release only this branch of the role
+# supported multiconfiguration for backends and frontends
+- src: https://github.com/in0rdr/ansible-role-haproxy.git
+  version: feature/multiple-front-and-backends
+  name: geerlingguy.haproxy

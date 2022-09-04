@@ -1,0 +1,22 @@
+variable ssh_user {
+  type = string
+  default = "ubuntu"
+  description = "The user to connect to built machines"
+}
+
+variable ssh_private_key_file {
+  type = string
+  default = "~/ya_key.pub"
+  description = "The SSH key to connect to built machines"
+}
+
+variable os_family {
+  type        = string
+  default     = "ubuntu-2004-lts"
+  description = "Operating System family"
+}
+
+variable node {
+  type        = map
+  description = "Instance Parameters"
+}

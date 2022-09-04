@@ -1,0 +1,25 @@
+---
+- name: Getting list of k8s nodes
+  hosts: localhost
+  gather_facts: no
+  tasks:
+  - name: Set KUBE_CONTROL_PLANE_NODES fact
+    set_fact: 
+      KUBE_CONTROL_PLANE_NODES: "{{ KUBE_CONTROL_PLANE_NODES|default([]) + [{ 'name': item, 'address': hostvars[item].ansible_host + ':__PORT__' }]  }}"
+    with_items:
+      - "{{ groups['kube_control_plane'] | list }}"
+  - name: Set KUBE_NODES fact
+    set_fact: 
+      KUBE_NODES: "{{ KUBE_NODES|default([]) + [{ 'name': item, 'address': hostvars[item].ansible_host + ':__PORT__' }]  }}"
+    with_items:
+      - "{{ groups['kube_node'] | list }}"
+  - name: Set ETCD_NODES fact
+    set_fact: 
+      ETCD_NODES: "{{ ETCD_NODES|default([]) + [{ 'name': item, 'address': hostvars[item].ansible_host + ':__PORT__'}]  }}"
+    with_items:
+      - "{{ groups['kube_node'] | list }}"
+
+- name: Installing nginx balancers
+  hosts: balancers
+  roles:
+    - role: geerlingguy.haproxy

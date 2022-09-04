@@ -1,0 +1,22 @@
+---
+- name: Nexus Installation
+  hosts: nexus
+  pre_tasks:
+  - name: Update repositories (for Debian)
+    apt:
+      update_cache: yes
+      force_apt_get: true
+    when: ansible_os_family == 'Debian'
+
+  - name: Update repositories (for CentOS)
+    yum:
+      update_cache: yes
+    when: ansible_os_family in ['CentOS', 'RedHat']
+
+  - name: install openJDK
+    ansible.builtin.package:
+      name: openjdk-8-jdk
+      state: present 
+
+  roles:
+    - { role: ansible-thoteam.nexus3-oss, tags: ['ansible-thoteam.nexus3-oss'] }

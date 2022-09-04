@@ -9,6 +9,6 @@ output nodes {
 }
 
 output params {
-  value       = local.params
+  value       = local.config
   description = "Params"
 }

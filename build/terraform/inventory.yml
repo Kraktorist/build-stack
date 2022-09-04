@@ -1,0 +1,16 @@
+"all":
+  "children":
+    "gitlab":
+      "hosts":
+        "gitlab11":
+          "ansible_host": "84.252.129.39"
+    "k8s_cluster":
+      "children": {}
+    "nexus":
+      "hosts":
+        "nexus11":
+          "ansible_host": "130.193.53.238"
+  "hosts": {}
+  "vars":
+    "ansible_user": "ubuntu"
+    

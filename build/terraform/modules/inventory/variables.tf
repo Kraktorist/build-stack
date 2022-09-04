@@ -1,6 +1,6 @@
 variable ssh_user {
   type = string
-  default = "vagrant"
+  default = "ubuntu"
   description = "The user to connect to built machines"
 }
 
