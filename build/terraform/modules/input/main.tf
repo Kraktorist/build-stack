@@ -2,7 +2,7 @@ locals {
   # ssh_private_key_file = var.ssh_private_key_file != "" ? var.ssh_private_key_file : "${abspath(path.root)}/key"
   config = yamldecode(file(var.config))
   inventory = local.config.inventory.all
-  hosts = local.config.hosts
+  hosts = try(local.config.hosts, {})
   nodes = merge(flatten([
     [
       for group, members in try(local.inventory.children.k8s_cluster.children, {}): [
