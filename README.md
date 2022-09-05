@@ -42,7 +42,7 @@
 
 ## Prerequisites
 
-- ssh-key
+- generated ssh-key
 - yandex.cloud created account
 - yandex.cloud created cloud YC_CLOUD_ID
 - yandex.cloud created folder YC_FOLDER_ID
@@ -50,6 +50,7 @@
 - yandex.cloud created ACCESS_KEY and SECRET_KEY
 - yandex.cloud created s3 bucket S3_TF_STATE
 - yandex.cloud created OAUTH token for s3 bucket access YC_TOKEN
+- workstation with docker
 
 ## Build image
 
@@ -100,9 +101,9 @@ terraform_apply hosts
 
 
 структура репозиториев:
-infrastructure (local runner)
-- full repo
-- envs
-apps (k8s runner)
-- weaveworks
-- googleshop
+- infrastructure (local runner)
+  - full repo
+  - envs
+- apps (k8s runner)
+  - weaveworks
+  - googleshop
