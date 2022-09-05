@@ -1,15 +1,10 @@
 # TODO recreate the states with repeating tasks as loops
 ---
-- name: Install Gitlab
+- name: Gitlab Provisioning
   hosts: gitlab
   tasks:
 
-    # https://gist.github.com/cjtallman/b526d8c7d8b910ba4fd41eb51cd5405b
-    - name: Adding Gitlab CE repositories
-      ansible.builtin.shell: |
-        curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | bash
-
-    - name: Installing prerequisites
+    - name: Install Gitlab CE | Installing prerequisites
       include_tasks: prerequisites.yml
       loop:
         - curl
@@ -19,38 +14,38 @@
         - postfix
         - python3-pip
 
-    - name: install gitlab-ce
+    # https://gist.github.com/cjtallman/b526d8c7d8b910ba4fd41eb51cd5405b
+    - name: Install Gitlab CE | Adding Gitlab CE repositories
+      ansible.builtin.shell: |
+        curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | bash
+
+    - name: Install Gitlab CE | Install python-gitlab module
+      ansible.builtin.pip:
+        name: python-gitlab
+
+    - name: Install Gitlab CE | Install Package
       ansible.builtin.package:
         name: gitlab-ce
         state: present
       register: packagekey
 
-    - name: install gitlab-runner
-      ansible.builtin.package:
-        name: gitlab-runner
-        state: present
-
-    - name: Set Gitlab External URL
+    - name: Install Gitlab CE | Set Gitlab External URL
       ansible.builtin.lineinfile:
         path: /etc/gitlab/gitlab.rb
         regexp: ^external_url 'http://gitlab.example.com'
         line: external_url '{{ gitlab_url }}'
       register: external_url
 
-    - name: Restart Gitlab CE
+    - name: Install Gitlab CE | Restart Gitlab CE
       ansible.builtin.shell: gitlab-ctl reconfigure && sleep 10
       when: packagekey.changed or external_url.changed
 
-    - name: Install python-gitlab module
-      ansible.builtin.pip:
-        name: python-gitlab
-
-    - name: Get Gitlab password
+    - name: Initial Configuration | Get Gitlab password
       register: initial_gitlab_password
       ansible.builtin.shell: |
         grep -oP '(?<=Password: ).*' /etc/gitlab/initial_root_password
 
-    - name: Create GitLab User
+    - name: Initial Configuration | Create GitLab User
       community.general.gitlab_user:
         api_url: "{{ gitlab_url }}"
         validate_certs: False
@@ -63,98 +58,22 @@
         state: present
       ignore_errors: yes # assuming that the user has been updated already
 
-    - name: "Create GitLab Group {{ lab_group }}"
-      # https://github.com/ansible-collections/community.general/issues/4990#issuecomment-1193366106
-      community.general.gitlab_group:
-        api_url: "{{ gitlab_url }}"
-        validate_certs: False
-        api_username: "{{ gitlab_user }}"
-        api_password: "{{ gitlab_password }}"
-        name: "{{ lab_group }}"
-        visibility: internal
-        description: ''
-        project_creation_level: maintainer
-        require_two_factor_authentication: no
-        subgroup_creation_level: maintainer
-        auto_devops_enabled: no
-        state: present
-      register: gitlab_group
-      tags:
-      - projects
-
-    - name: Set CI/CD variables
-      community.general.gitlab_group_variable:
-        api_url: "{{ gitlab_url }}"
-        validate_certs: False
-        api_username: "{{ gitlab_user }}"
-        api_password: "{{ gitlab_password }}"
-        group: "{{ lab_group }}"
-        purge: true
-        variables:
-          - name: NEXUS_REGISTRY
-            value: "{{ hostvars[groups['nexus'][0]].ansible_host }}:9080"
-          - name: NEXUS_USER
-            value: admin
-          - name: NEXUS_PASSWORD
-            value: "{{ hostvars[groups['nexus'][0]].nexus_admin_password }}"
-      tags:
-      - projects
-
-    - name: Waiting for Gitlab runners_token generating
-      ansible.builtin.pause:
-        seconds: 10
-      when: gitlab_group.changed
-
-    - name: "Getting runners_token"
-      # repeat the same task after delay will return the token
-      community.general.gitlab_group:
-        api_url: "{{ gitlab_url }}"
-        validate_certs: False
-        api_username: "{{ gitlab_user }}"
-        api_password: "{{ gitlab_password }}"
-        name: "{{ lab_group }}"
-        visibility: internal
-        description: ''
-        project_creation_level: maintainer
-        require_two_factor_authentication: no
-        subgroup_creation_level: maintainer
-        auto_devops_enabled: no
-        state: present
-      register: gitlab_group
-      tags:
-      - token
-      - never
-
-    - name: Save runner token
-      ansible.builtin.set_fact:
-        runner_token: "{{ gitlab_group.group.runners_token }}"
-        gitlab_url: "{{ gitlab_url }}"
-      tags:
-      - token
-      - never
-
-    - name: Configure git client
+    - name: Initial Configuration | Configure git client
       ansible.builtin.shell: |
         git config --global user.email "admin@example.com"
         git config --global user.name "root"
 
-    - name: Creating projects
-      include_tasks: projects.yml
-      loop: "{{ git_repolist }}"
+    - name: Gitlab Group | Infrastructure
+      include_tasks: project-infrastructure.yml
       tags:
       - never
-      - projects
+      - infrastructure
 
-
-    # - name: Register runner
-    #   community.general.gitlab_runner:
-    #     api_url: "{{ gitlab_url }}"
-    #     api_username: "{{ gitlab_user }}"
-    #     api_password: "{{ gitlab_password }}"
-    #     registration_token: "{{ gitlab_group.group.runners_token }}"
-    #     description: MyProject runner
-    #     state: present
-    #     project: lab/lab-kubernetes
+    - name: Gitlab Group | Apps
+      include_tasks: project-apps.yml
+      tags:
+      - never
+      - apps
 
     - name: Initial Gitlab Password
       ansible.builtin.debug:
@@ -165,41 +84,3 @@
       tags:
       - output
       - never
-
-    - name: Register gitlab shell runner
-      command: |
-        gitlab-runner register \
-        --non-interactive \
-        --url "{{ gitlab_url }}" \
-        --registration-token "{{ gitlab_group.group.runners_token }}" \
-        --executor "shell" \
-        --description "shell executor" \
-        --tag-list "azure, shell, ansible" \
-        --run-untagged="false" \
-        --locked="true"
-      tags:
-        - token
-        - never
-
-# - name: Creating Gitlab Runner
-#   hosts: localhost
-#   gather_facts: true
-#   become: false
-#   tasks: 
-
-#     - name: Creating kubernetes manifest for Gitlab runner
-#       ansible.builtin.template:
-#         src: runner-manifest.j2
-#         dest: runner-manifest.yml
-#       tags:
-#         - token
-#         - never
-
-#     - name: Start Gitlab Runner
-#       ansible.builtin.shell: |
-#         kubectl create namespace gitlab-runner
-#         kubectl -n gitlab-runner apply -f runner-manifest.yml
-#         rm -rf runner-manifest.yml
-#       tags:
-#         - token
-#         - never

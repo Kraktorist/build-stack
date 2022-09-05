@@ -1,0 +1,137 @@
+
+---
+- name: Gitlab Group | Infrastructure | Create
+  # https://github.com/ansible-collections/community.general/issues/4990#issuecomment-1193366106
+  community.general.gitlab_group:
+    api_url: "{{ gitlab_url }}"
+    validate_certs: False
+    api_username: "{{ gitlab_user }}"
+    api_password: "{{ gitlab_password }}"
+    name: infrastructure
+    visibility: internal
+    description: ''
+    project_creation_level: maintainer
+    require_two_factor_authentication: no
+    subgroup_creation_level: maintainer
+    auto_devops_enabled: no
+    state: present
+  register: gitlab_group
+  tags:
+  - infrastructure
+
+- name: Gitlab Group | Infrastructure | Set CI/CD variables
+  community.general.gitlab_group_variable:
+    api_url: "{{ gitlab_url }}"
+    validate_certs: False
+    api_username: "{{ gitlab_user }}"
+    api_password: "{{ gitlab_password }}"
+    group: infrastructure
+    purge: true
+    variables:
+      - name: NEXUS_REGISTRY
+        value: "{{ hostvars[groups['nexus'][0]].ansible_host }}:9080"
+      - name: NEXUS_USER
+        value: admin
+      - name: NEXUS_PASSWORD
+        value: "{{ hostvars[groups['nexus'][0]].nexus_admin_password }}"
+  tags:
+  - infrastructure
+
+- name: Gitlab Group | Infrastructure | Create build-stack Repository
+  community.general.gitlab_project:
+    api_url: "{{ gitlab_url }}"
+    api_username: "{{ gitlab_user }}"
+    api_password: "{{ gitlab_password }}"
+    name: build-stack
+    visibility: internal
+    group: "{{ gitlab_group.group.id }}"
+  register: project
+  tags:
+  - infrastructure
+
+- name: Gitlab Group | Infrastructure | Create envs Repository
+  community.general.gitlab_project:
+    api_url: "{{ gitlab_url }}"
+    api_username: "{{ gitlab_user }}"
+    api_password: "{{ gitlab_password }}"
+    name: envs
+    visibility: internal
+    group: "{{ gitlab_group.group.id }}"
+  register: project
+  tags:
+  - infrastructure
+
+- name: Gitlab Group | Infrastructure | Push COntent
+  ansible.builtin.shell: |
+    repopath={{ source_repo }}
+    reponame={{ source_repo_name }}
+    rm -rf $reponame
+    git clone $repopath $reponame
+    cp -r $reponame/infrastructure/* .
+    cd envs
+    git init
+    git add .
+    git commit -m "init commit"
+    git remote add gitlab-origin http://{{ gitlab_user }}:{{ gitlab_password }}@{{ gitlab_host }}/{{ gitlab_group.group.name }}/envs.git
+    git push --all gitlab-origin
+    git push --tags gitlab-origin
+    cd .. && rm -rf envs
+    cd $reponame
+    git remote add gitlab-origin http://{{ gitlab_user }}:{{ gitlab_password }}@{{ gitlab_host }}/{{ gitlab_group.group.name }}/${reponame}.git
+    git push --all gitlab-origin
+    git push --tags gitlab-origin
+    cd .. && rm -rf $reponame
+  when: project.changed
+  tags:
+  - infrastructure
+
+- name: Gitlab Group | Infrastructure | Waiting for Gitlab runners_token generating
+  ansible.builtin.pause:
+    seconds: 10
+  when: gitlab_group.changed
+- name: "Getting runners_token"
+  # repeat the same task after delay will return the token
+  community.general.gitlab_group:
+    api_url: "{{ gitlab_url }}"
+    validate_certs: False
+    api_username: "{{ gitlab_user }}"
+    api_password: "{{ gitlab_password }}"
+    name: infrastructure
+    visibility: internal
+    description: ''
+    project_creation_level: maintainer
+    require_two_factor_authentication: no
+    subgroup_creation_level: maintainer
+    auto_devops_enabled: no
+    state: present
+  register: gitlab_infrastructure_group
+  tags:
+  - infrastructure
+
+- name: Gitlab Group | Infrastructure | Save runner token
+  ansible.builtin.set_fact:
+    runner_token: "{{ gitlab_infrastructure_group.group.runners_token }}"
+    gitlab_url: "{{ gitlab_url }}"
+  tags:
+  - infrastructure
+
+- name: Install gitlab-runner
+  ansible.builtin.package:
+    name: gitlab-runner
+    state: present
+  tags:
+  - infrastructure
+
+- name: Gitlab Group | Infrastructure | Register gitlab shell runner
+  command: |
+    gitlab-runner register \
+    --non-interactive \
+    --url "{{ gitlab_url }}" \
+    --registration-token "{{ gitlab_infrastructure_group.group.runners_token }}" \
+    --executor "shell" \
+    --description "shell executor" \
+    --tag-list "infrastructure" \
+    --run-untagged="false" \
+    --locked="true"
+  tags:
+  - infrastructure
