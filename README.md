@@ -89,16 +89,29 @@ terraform_apply hosts
 
 # Ansible provisioning
 
-  ssh-agent bash
-  ssh-add ~/ya_key
-	ansible-galaxy install -r ./ansible/requirements.yml;
-	ansible-playbook -i ${TF_VAR_ansible_inventory} --become ./ansible/nexus/main.yml 
-	ansible-playbook -i ${TF_VAR_ansible_inventory} --become ./ansible/gitlab/main.yml 
+```
+export YC_CLOUD_ID=
+export YC_FOLDER_ID=
+export ACCESS_KEY=
+export SECRET_KEY=
+export YC_TOKEN=
+export ENV=init
+export S3_TF_STATE=dn-terraform-states
+export TF_VAR_config=/app/infrastructure/envs/${ENV}/hosts.yml
+export TF_VAR_ansible_inventory=/app/infrastructure/envs/${ENV}/inventory.yml
 
-нужно
-- создать репозитории
-- local gitlab-runner
+ssh-agent bash
+ssh-add ~/ya_key
+source scripts/lib.sh
+provision_gitlab
+provision_nexus
+```
 
+ - устанавливает gitlab
+ - устанавливает gitlab-runner
+ - устанавливает nexus
+
+# Repositories creating
 
 структура репозиториев:
 - infrastructure (local runner)
@@ -107,3 +120,43 @@ terraform_apply hosts
 - apps (k8s runner)
   - weaveworks
   - googleshop
+
+```
+export YC_CLOUD_ID=
+export YC_FOLDER_ID=
+export ACCESS_KEY=
+export SECRET_KEY=
+export YC_TOKEN=
+export ENV=init
+export S3_TF_STATE=dn-terraform-states
+export TF_VAR_config=/app/infrastructure/envs/${ENV}/hosts.yml
+export TF_VAR_ansible_inventory=/app/infrastructure/envs/${ENV}/inventory.yml
+
+ssh-agent bash
+ssh-add ~/ya_key
+source scripts/lib.sh
+provision_repos
+```
+
+**TODO:** 
+- добавить gitlab-ci.yaml
+- собрать runner image и загрузить в nexus
+
+envs/.gitlab-ci.yaml 
+
+Stages:
+  - status:
+    - status:
+      - network
+      - hosts
+  - build:
+    - plan
+      - network
+      - hosts 
+    - apply
+      - network
+      - hosts 
+  - destroy
+    - destroy
+      - network
+      - hosts

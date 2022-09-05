@@ -21,6 +21,14 @@ function init_step() {
     cp "${step}.template" "${step}.tf"
 }
 
+function terraform_plan() {
+    step=$1
+    init_step $step
+    init_backend $step
+    terraform plan
+    rm -rf "${step}.tf"
+}
+
 function terraform_apply() {
     step=$1
     init_step $step
@@ -43,4 +51,16 @@ function terraform_status() {
     init_backend $step
     terraform show
     rm -rf "${step}.tf"    
+}
+
+function provision_gitlab() {
+  ansible-playbook -i ${TF_VAR_ansible_inventory} --become ./ansible/gitlab/main.yml 
+}
+
+function provision_repos() {
+  ansible-playbook -i ${TF_VAR_ansible_inventory} --become ./ansible/gitlab/main.yml --tag infrastructure --tag apps
+}
+
+function provision_nexus() {
+  ansible-playbook -i ${TF_VAR_ansible_inventory} --become ./ansible/nexus/main.yml
 }

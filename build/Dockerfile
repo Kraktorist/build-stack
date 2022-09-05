@@ -16,6 +16,7 @@ RUN apt-get update && \
   pip3 install ansible && \
   pip3 install jmespath
 COPY ansible ansible
+RUN ansible-galaxy install -r ./ansible/requirements.yml
 # Install kubectl
 RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - && \
     echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list && \
