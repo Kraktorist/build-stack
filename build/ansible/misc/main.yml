@@ -1,0 +1,9 @@
+---
+- name: miscellaneous tasks
+  hosts: all
+  tasks:
+
+    - name: Update all packages to their latest version
+      ansible.builtin.apt:
+        name: "*"
+        update_cache: yes
