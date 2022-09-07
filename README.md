@@ -138,27 +138,30 @@ source scripts/lib.sh
 provision_repos
 ```
 
-**TODO:** 
-- добавить gitlab-ci.yaml
-- собрать runner image и загрузить в nexus
-
-envs/.gitlab-ci.yaml 
+# Infrastructure pipeline
 
 Stages:
   - status:
-    - status:
-      - network
-      - hosts
-  - build:
-    - plan
-      - network
-      - hosts 
-    - apply
-      - network
-      - hosts 
+    - network
+    - hosts
+  - plan
+    - network
+    - hosts 
+  - apply
+    - network
+    - hosts 
   - provision
-      - hosts
+    - gitlab
+    - nexus
   - destroy
-    - destroy
-      - network
-      - hosts
+    - network
+    - hosts
+
+**TODO**
+
+add provisions for
+- docker-runner
+- repos
+- kubernetes cluster
+
+add `yc` for status
