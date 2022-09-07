@@ -163,5 +163,3 @@ add provisions for
 - docker-runner
 - repos
 - kubernetes cluster
-
-add `yc` for status

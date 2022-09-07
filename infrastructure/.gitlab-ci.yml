@@ -28,6 +28,7 @@ status.hosts:
   extends: .terraform:status
   script:
     - terraform_status hosts
+    - yc_get_instances
 
 plan.network:
   extends: .terraform:plan

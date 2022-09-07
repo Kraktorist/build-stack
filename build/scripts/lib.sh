@@ -8,7 +8,13 @@ function yc_init() {
 
 function yc_get_network() {
   yc_init
-  yc vpc network list --format yaml
+  yc vpc network list
+  yc vpc subnet list
+}
+
+function yc_get_instances() {
+  yc_init
+  yc compute instance list
 }
 
 function init_backend() {
