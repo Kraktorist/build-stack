@@ -4,69 +4,76 @@ include:
 default:
   before_script:
     - printenv
-    - pwd
-    - ls -la
-    - ls -la /
+    - eval `ssh-agent -s`
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - echo "$SSH_PUBLIC_KEY"> ~/ya_key.pub
+    - source /app/scripts/lib.sh
   tags:
   - infrastructure
 
 stages:
   - status
   - plan
-  - provision
   - apply
+  - provision
   - destroy
 
 status.network:
   extends: .terraform:status
   script:
     - terraform_status network
-  needs: []
+    - yc_get_network
 
 status.hosts:
   extends: .terraform:status
   script:
     - terraform_status hosts
-  needs: []
 
 plan.network:
   extends: .terraform:plan
   script:
-    - echo terraform_paln network
-  needs: []
+    - terraform_plan network
 
 plan.hosts:
   extends: .terraform:plan
   script:
-    - echo terraform_paln hosts
-  needs: []
+    - terraform_plan hosts
 
 apply.network:
   extends: .terraform:apply
   script:
-    - echo terraform_apply network
-  needs: []
+    - terraform_apply network
 
 apply.hosts:
   extends: .terraform:apply
   script:
-    - echo terraform_apply hosts
-  needs: []
+    - terraform_apply hosts
+  artifacts:
+    paths: 
+      - ${CI_PROJECT_DIR}/${ENV}/inventory.yml
 
-provision.hosts:
+provision.gitlab:
   extends: .ansible:provision
   script:
-    - echo ansible_provision
-  needs: []
+    - provision_gitlab
+  needs: 
+    - job: apply.hosts
+      artifacts: true
+
+provision.nexus:
+  extends: .ansible:provision
+  script:
+    - provision_nexus
+  needs: 
+    - job: apply.hosts
+      artifacts: true
 
 destroy.network:
   extends: .terraform:destroy
   script:
-    - echo terraform_destroy network
-  needs: []
+    - terraform_destroy network
 
 destroy.hosts:
   extends: .terraform:destroy
   script:
-    - echo terraform_destroy hosts
-  needs: []
+    - terraform_destroy hosts

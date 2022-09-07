@@ -1,8 +1,10 @@
 image:
   name: "$NEXUS_REGISTRY/build/builder:latest"
+  entrypoint: [""]
 variables:
-  TF_VAR_config: "/app/infrastructure/envs/${ENV}/hosts.yml"
-  TF_VAR_ansible_inventory: "/app/infrastructure/envs/${ENV}/inventory.yml"
+  ANSIBLE_HOST_KEY_CHECKING: "False"
+  TF_VAR_config: "${CI_PROJECT_DIR}/${ENV}/hosts.yml"
+  TF_VAR_ansible_inventory: "${CI_PROJECT_DIR}/${ENV}/inventory.yml"
 
 .terraform:status: 
   stage: status
