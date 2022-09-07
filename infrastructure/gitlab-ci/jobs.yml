@@ -1,0 +1,24 @@
+image:
+  name: "$NEXUS_REGISTRY/build/builder:latest"
+variables:
+  TF_VAR_config: "/app/infrastructure/envs/${ENV}/hosts.yml"
+  TF_VAR_ansible_inventory: "/app/infrastructure/envs/${ENV}/inventory.yml"
+
+.terraform:status: 
+  stage: status
+
+.terraform:plan: 
+  stage: plan
+
+.terraform:apply: 
+  stage: apply
+  when: manual
+
+.ansible:provision: 
+  stage: provision
+  when: manual
+
+.terraform:destroy: 
+  stage: destroy
+  when: manual
+

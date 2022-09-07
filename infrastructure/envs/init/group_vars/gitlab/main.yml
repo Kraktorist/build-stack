@@ -5,3 +5,7 @@ gitlab_host: "{{ hostvars[inventory_hostname].ansible_host }}"
 gitlab_url: http://{{ gitlab_host }}
 source_repo: https://github.com/Kraktorist/build-stack.git
 source_repo_name: build-stack
+gitlab_vars:
+  test1: x1
+  test2: x2
+  test3: x3

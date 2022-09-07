@@ -1,0 +1,72 @@
+include:
+  - local: gitlab-ci/jobs.yml
+
+default:
+  before_script:
+    - printenv
+    - pwd
+    - ls -la
+    - ls -la /
+  tags:
+  - infrastructure
+
+stages:
+  - status
+  - plan
+  - provision
+  - apply
+  - destroy
+
+status.network:
+  extends: .terraform:status
+  script:
+    - terraform_status network
+  needs: []
+
+status.hosts:
+  extends: .terraform:status
+  script:
+    - terraform_status hosts
+  needs: []
+
+plan.network:
+  extends: .terraform:plan
+  script:
+    - echo terraform_paln network
+  needs: []
+
+plan.hosts:
+  extends: .terraform:plan
+  script:
+    - echo terraform_paln hosts
+  needs: []
+
+apply.network:
+  extends: .terraform:apply
+  script:
+    - echo terraform_apply network
+  needs: []
+
+apply.hosts:
+  extends: .terraform:apply
+  script:
+    - echo terraform_apply hosts
+  needs: []
+
+provision.hosts:
+  extends: .ansible:provision
+  script:
+    - echo ansible_provision
+  needs: []
+
+destroy.network:
+  extends: .terraform:destroy
+  script:
+    - echo terraform_destroy network
+  needs: []
+
+destroy.hosts:
+  extends: .terraform:destroy
+  script:
+    - echo terraform_destroy hosts
+  needs: []

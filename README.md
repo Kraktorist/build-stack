@@ -156,6 +156,8 @@ Stages:
     - apply
       - network
       - hosts 
+  - provision
+      - hosts
   - destroy
     - destroy
       - network
