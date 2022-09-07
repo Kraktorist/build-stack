@@ -9,6 +9,7 @@ data "yandex_vpc_subnet" "subnet" {
 resource "yandex_compute_instance" "node" {
   zone = data.yandex_vpc_subnet.subnet.zone
   name = var.node.name
+  allow_stopping_for_update = true
   resources {
     cores  = var.node.cpu
     memory = var.node.memory/1024
