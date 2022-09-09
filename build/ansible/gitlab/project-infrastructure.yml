@@ -60,8 +60,8 @@
     reponame={{ source_repo_name }}
     rm -rf $reponame
     git clone $repopath $reponame
-    cp -r $reponame/infrastructure/* .
-    cd envs
+    cp -r $reponame/infrastructure .
+    cd infrastructure
     git init
     git add .
     git commit -m "init commit"

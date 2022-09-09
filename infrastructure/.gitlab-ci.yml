@@ -7,6 +7,7 @@ default:
     - eval `ssh-agent -s`
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - echo "$SSH_PUBLIC_KEY"> ~/ya_key.pub
+    - echo "$ANSIBLE_VAULT_PASSWORD">.vault
     - source /app/scripts/lib.sh
   tags:
   - infrastructure
@@ -57,6 +58,30 @@ provision.gitlab:
   extends: .ansible:provision
   script:
     - provision_gitlab
+  needs: 
+    - job: apply.hosts
+      artifacts: true
+
+provision.infra_repo:
+  extends: .ansible:provision
+  script:
+    - provision_infra_repo
+  needs: 
+    - job: apply.hosts
+      artifacts: true
+
+provision.infra_repo:
+  extends: .ansible:provision
+  script:
+    - provision_infra_runner
+  needs: 
+    - job: apply.hosts
+      artifacts: true
+
+provision.apps_repo:
+  extends: .ansible:provision
+  script:
+    - provision_apps_repo
   needs: 
     - job: apply.hosts
       artifacts: true
