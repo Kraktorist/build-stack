@@ -36,6 +36,25 @@
         line: external_url '{{ gitlab_url }}'
       register: external_url
 
+    - name: Install Gitlab CE | Memory Tuning
+      ansible.builtin.lineinfile:
+        path: /etc/gitlab/gitlab.rb
+        line: "{{ item }}"
+      loop:
+        - "puma['worker_processes'] = 0"
+        - "sidekiq['max_concurrency'] = 10"
+        - "prometheus_monitoring['enable'] = false"
+        - "gitlab_rails['env'] = {'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000'}"
+        - "gitaly['cgroups_count'] = 2"
+        - "gitaly['cgroups_mountpoint'] = '/sys/fs/cgroup'"
+        - "gitaly['cgroups_hierarchy_root'] = 'gitaly'"
+        - "gitaly['cgroups_memory_enabled'] = true"
+        - "gitaly['cgroups_memory_limit'] = 500000"
+        - "gitaly['cgroups_cpu_enabled'] = true"
+        - "gitaly['cgroups_cpu_shares'] = 512"
+        - "gitaly['concurrency'] = [{'rpc' => '/gitaly.SmartHTTPService/PostReceivePack','max_per_repo' => 3}, {'rpc' => '/gitaly.SSHService/SSHUploadPack','max_per_repo' => 3}]"
+        - "gitaly['env'] = {'LD_PRELOAD' => '/opt/gitlab/embedded/lib/libjemalloc.so', 'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000', 'GITALY_COMMAND_SPAWN_MAX_PARALLEL' => '2'}"      
+
     - name: Install Gitlab CE | Restart Gitlab CE
       ansible.builtin.shell: gitlab-ctl reconfigure && sleep 10
       when: packagekey.changed or external_url.changed
@@ -68,6 +87,7 @@
       tags:
       - never
       - infrastructure
+      - runner
 
     - name: Gitlab Group | Apps
       include_tasks: project-apps.yml
@@ -84,3 +104,9 @@
       tags:
       - output
       - never
+
+- name: Gitlab Runner | Install
+  ansible.builtin.import_playbook: runner.yml
+  vars:
+    url: "{{ gitlab_url }}"
+    token: "{{ gitlab_infrastructure_group.group.runners_token }}"

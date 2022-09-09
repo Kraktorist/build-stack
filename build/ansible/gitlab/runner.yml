@@ -1,0 +1,42 @@
+- name: Gitlab Runner
+  hosts: runner
+  tasks:
+    # https://docs.gitlab.com/runner/install/linux-repository.html
+    - name: Gitlab Runner | Infrastructure | Adding Gitlab CE repositories
+      ansible.builtin.shell: |
+        curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh" | bash
+      tags:
+      - runner
+      - never
+
+    - name: Gitlab Runner | Infrastructure | Install docker
+      ansible.builtin.package:
+        name: docker.io
+        state: present
+      tags:
+      - runner
+      - never
+
+    - name: Gitlab Runner | Infrastructure | Install gitlab-runner
+      ansible.builtin.package:
+        name: gitlab-runner
+        state: present
+      tags:
+      - runner
+      - never
+
+    - name: Gitlab Runner | Infrastructure | Register gitlab docker runner
+      command: |
+        gitlab-runner register \
+        --non-interactive \
+        --url "{{ url }}" \
+        --registration-token "{{ token }}" \
+        --docker-image alpine:latest \
+        --executor "docker" \
+        --description "docker executor" \
+        --tag-list "infrastructure" \
+        --run-untagged="false" \
+        --locked="true"
+      tags:
+      - runner
+      - never

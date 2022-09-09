@@ -26,13 +26,7 @@
     api_password: "{{ gitlab_password }}"
     group: infrastructure
     purge: true
-    variables:
-      - name: NEXUS_REGISTRY
-        value: "{{ hostvars[groups['nexus'][0]].ansible_host }}:9080"
-      - name: NEXUS_USER
-        value: admin
-      - name: NEXUS_PASSWORD
-        value: "{{ hostvars[groups['nexus'][0]].nexus_admin_password }}"
+    variables: "{{ infra_gitlab_vars}}"
   tags:
     - infrastructure
 
@@ -106,6 +100,7 @@
   register: gitlab_infrastructure_group
   tags:
     - infrastructure
+    - runner
 
 - name: Gitlab Group | Infrastructure | Save runner token
   ansible.builtin.set_fact:
@@ -113,37 +108,4 @@
     gitlab_url: "{{ gitlab_url }}"
   tags:
   - infrastructure
-
-# https://docs.gitlab.com/runner/install/linux-repository.html
-- name: Gitlab Group | Infrastructure | Adding Gitlab CE repositories
-  ansible.builtin.shell: |
-    curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh" | bash
-
-- name: Install docker
-  ansible.builtin.package:
-    name: docker.io
-    state: present
-  tags:
-  - infrastructure
-
-- name: Install gitlab-runner
-  ansible.builtin.package:
-    name: gitlab-runner
-    state: present
-  tags:
-  - infrastructure
-
-- name: Gitlab Group | Infrastructure | Register gitlab docker runner
-  command: |
-    gitlab-runner register \
-    --non-interactive \
-    --url "{{ gitlab_url }}" \
-    --registration-token "{{ gitlab_infrastructure_group.group.runners_token }}" \
-    --docker-image alpine:latest \
-    --executor "docker" \
-    --description "docker executor" \
-    --tag-list "infrastructure" \
-    --run-untagged="false" \
-    --locked="true"
-  tags:
-  - infrastructure
+  - runner
