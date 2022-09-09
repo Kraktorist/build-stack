@@ -5,7 +5,26 @@ gitlab_host: "{{ hostvars[inventory_hostname].ansible_host }}"
 gitlab_url: http://{{ gitlab_host }}
 source_repo: https://github.com/Kraktorist/build-stack.git
 source_repo_name: build-stack
-gitlab_vars:
-  test1: x1
-  test2: x2
-  test3: x3
+infra_gitlab_vars:
+  - name: ACCESS_KEY
+    value: "{{ ACCESS_KEY }}"
+  - name: DOCKER_AUTH_CONFIG
+    value: '"{{ DOCKER_AUTH_CONFIG }}"' # remember for double quoting
+  - name: NEXUS_REGISTRY
+    value: "{{ NEXUS_REGISTRY }}"
+  - name: S3_TF_STATE
+    value: "{{ S3_TF_STATE }}"
+  - name: SECRET_KEY
+    value: "{{ SECRET_KEY }}"
+  - name: SSH_PRIVATE_KEY
+    value: "{{ SSH_PRIVATE_KEY }}"
+  - name: SSH_PUBLIC_KEY
+    value: "{{ SSH_PUBLIC_KEY }}"
+  - name: YC_CLOUD_ID
+    value: "{{ YC_CLOUD_ID }}"
+  - name: YC_FOLDER_ID
+    value: "{{ YC_FOLDER_ID }}"
+  - name: YC_TOKEN
+    value: "{{ YC_TOKEN }}"
+  - name: ANSIBLE_VAULT_PASSWORD
+    value: NOT_DEFINED
