@@ -71,20 +71,30 @@ function terraform_status() {
 }
 
 function provision_misc() {
-  ansible-playbook -i ${TF_VAR_ansible_inventory} --become /app/ansible/misc/main.yml 
+  ansible-playbook -i ${TF_VAR_ansible_inventory} --vault-password-file .vault --become /app/ansible/misc/main.yml 
 }
 
 function provision_gitlab() {
   provision_misc
-  ansible-playbook -i ${TF_VAR_ansible_inventory} --become /app/ansible/gitlab/main.yml 
+  ansible-playbook -i ${TF_VAR_ansible_inventory} --vault-password-file .vault --become /app/ansible/gitlab/main.yml 
 }
 
-function provision_repos() {
+function provision_infra_repo() {
   provision_misc
-  ansible-playbook -i ${TF_VAR_ansible_inventory} --become /app/ansible/gitlab/main.yml --tag infrastructure --tag apps
+  ansible-playbook -i ${TF_VAR_ansible_inventory} --vault-password-file .vault --become /app/ansible/gitlab/main.yml --tag infrastructure
+}
+
+function provision_apps_repo() {
+  provision_misc
+  ansible-playbook -i ${TF_VAR_ansible_inventory} --vault-password-file .vault --become /app/ansible/gitlab/main.yml --tag apps
+}
+
+function provision_infra_runner() {
+  provision_misc
+  ansible-playbook -i ${TF_VAR_ansible_inventory} --vault-password-file .vault --become /app/ansible/gitlab/main.yml --tag runner
 }
 
 function provision_nexus() {
   provision_misc
-  ansible-playbook -i ${TF_VAR_ansible_inventory} --become /app/ansible/nexus/main.yml
+  ansible-playbook -i ${TF_VAR_ansible_inventory} --vault-password-file .vault --become /app/ansible/nexus/main.yml
 }
