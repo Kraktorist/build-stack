@@ -8,7 +8,7 @@ locals {
                     node => {
                       ansible_host = [
                           for v in var.vm:
-                            try(v.vm.network_interface[0].nat_ip_address, v.vm.network_adapter[0].ip_address ) if node == v.vm.name
+                            try(v.vm.network_interface[0].nat_ip_address, v.vm.network_interface[0].ip_address ) if node == v.vm.name
                       ][0]
                       fqdn = [
                           for v in var.vm:
@@ -37,7 +37,7 @@ locals {
                             node => {
                               ansible_host = [
                                   for v in var.vm:
-                                    try(v.vm.network_interface[0].nat_ip_address, v.vm.network_adapter[0].ip_address ) if node == v.vm.name
+                                    try(v.vm.network_interface[0].nat_ip_address, v.vm.network_interface[0].ip_address ) if node == v.vm.name
                               ][0]
                               fqdn = [
                                   for v in var.vm:
