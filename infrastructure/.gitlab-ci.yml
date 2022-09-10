@@ -94,6 +94,14 @@ provision.nexus:
     - job: apply.hosts
       artifacts: true
 
+provision.k8s:
+  extends: .ansible:provision
+  script:
+    - provision_k8s
+  needs: 
+    - job: apply.hosts
+      artifacts: true
+
 destroy.network:
   extends: .terraform:destroy
   script:
