@@ -56,16 +56,17 @@
 
 Contains ansible, kubectl and terraform. 
 Location: [Dockerfile](build/Dockerfile)
-Build Step: `docker build ./build/ -t build`
+Build Step: `docker build ./build/ -t builder`
 Run: 
 
 ```
 docker run \
+    --rm \
     --entrypoint /bin/bash \
     -v $(pwd)/infrastructure:/app/infrastructure \
     -v $HOME/ya_key.pub:/root/ya_key.pub \
     -v $HOME/ya_key:/root/ya_key \
-    -ti terraform
+    -ti builder
 ```
 
 Запуск terraform:
@@ -81,7 +82,13 @@ export S3_TF_STATE=dn-terraform-states
 export TF_VAR_config=/app/infrastructure/envs/${ENV}/hosts.yml
 export TF_VAR_ansible_inventory=/app/infrastructure/envs/${ENV}/inventory.yml
 
-source scripts/lib.sh
+export ANSIBLE_VAULT_PASSWORD=
+export ANSIBLE_HOST_KEY_CHECKING="False"
+echo $ANSIBLE_VAULT_PASSWORD>.vault
+eval `ssh-agent -s`
+ssh-add ~/ya_key
+source /app/scripts/lib.sh
+
 terraform_apply network
 terraform_apply hosts
 
@@ -90,19 +97,7 @@ terraform_apply hosts
 # Ansible provisioning
 
 ```
-export YC_CLOUD_ID=
-export YC_FOLDER_ID=
-export ACCESS_KEY=
-export SECRET_KEY=
-export YC_TOKEN=
-export ENV=init
-export S3_TF_STATE=dn-terraform-states
-export TF_VAR_config=/app/infrastructure/envs/${ENV}/hosts.yml
-export TF_VAR_ansible_inventory=/app/infrastructure/envs/${ENV}/inventory.yml
 
-ssh-agent bash
-ssh-add ~/ya_key
-source scripts/lib.sh
 provision_gitlab
 provision_nexus
 ```
@@ -159,7 +154,13 @@ Stages:
 
 **TODO**
 
-add provisions for
-- docker-runner
-- repos
-- kubernetes cluster
+Infra:
+  - vms with multiple disks
+  - tls connection
+
+    add provisions for
+    - docker-runner
+    - repos
+    - kubernetes cluster
+
+  
