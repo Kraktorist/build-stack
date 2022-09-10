@@ -20,3 +20,9 @@ variable node {
   type        = map
   description = "Instance Parameters"
 }
+
+variable ENV {
+  type        = string
+  default     = ""
+  description = "environment label"
+}

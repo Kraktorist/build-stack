@@ -9,3 +9,9 @@ variable ansible_inventory {
   default     = "inventory.yml"
   description = "Ansible inventory file which will be outputed"
 }
+
+variable ENV {
+  type        = string
+  default     = ""
+  description = "environment label"
+}

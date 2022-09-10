@@ -30,4 +30,7 @@ resource "yandex_compute_instance" "node" {
   metadata = {
     ssh-keys = "${var.ssh_user}:${file(var.ssh_private_key_file)}"
   }
+  labels = {
+    env = var.ENV
+  }
 }
