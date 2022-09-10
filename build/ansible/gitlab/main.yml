@@ -56,7 +56,7 @@
         - "gitaly['env'] = {'LD_PRELOAD' => '/opt/gitlab/embedded/lib/libjemalloc.so', 'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000', 'GITALY_COMMAND_SPAWN_MAX_PARALLEL' => '2'}"      
 
     - name: Install Gitlab CE | Restart Gitlab CE
-      ansible.builtin.shell: gitlab-ctl reconfigure && sleep 10
+      ansible.builtin.shell: gitlab-ctl reconfigure && sleep 30
       when: packagekey.changed or external_url.changed
 
     - name: Initial Configuration | Get Gitlab password
