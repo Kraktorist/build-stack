@@ -52,7 +52,7 @@ apply.hosts:
     - terraform_apply hosts
   artifacts:
     paths: 
-      - ${CI_PROJECT_DIR}/${ENV}/inventory.yml
+      - ${CI_PROJECT_DIR}/envs/${ENV}/inventory.yml
 
 provision.gitlab:
   extends: .ansible:provision

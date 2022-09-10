@@ -3,8 +3,8 @@ image:
   entrypoint: [""]
 variables:
   ANSIBLE_HOST_KEY_CHECKING: "False"
-  TF_VAR_config: "${CI_PROJECT_DIR}/${ENV}/hosts.yml"
-  TF_VAR_ansible_inventory: "${CI_PROJECT_DIR}/${ENV}/inventory.yml"
+  TF_VAR_config: "${CI_PROJECT_DIR}/envs/${ENV}/hosts.yml"
+  TF_VAR_ansible_inventory: "${CI_PROJECT_DIR}/envs/${ENV}/inventory.yml"
 
 .terraform:status: 
   stage: status
