@@ -101,5 +101,5 @@ function provision_nexus() {
 
 function provision_k8s() {
   provision_misc
-  ansible-playbook -i ${TF_VAR_ansible_inventory} --vault-password-file .vault --become /app/ansible/kubespray/main.yml
+  ansible-playbook -i ${TF_VAR_ansible_inventory} --vault-password-file .vault --become /app/ansible/kubespray/cluster.yml
 }
