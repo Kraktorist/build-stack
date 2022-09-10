@@ -5,11 +5,12 @@ gitlab_host: "{{ hostvars[inventory_hostname].ansible_host }}"
 gitlab_url: http://{{ gitlab_host }}
 source_repo: https://github.com/Kraktorist/build-stack.git
 source_repo_name: build-stack
+NEXUS_REGISTRY: "{{ hostvars[groups['nexus'][0]]['fqdn'] }}:9080"
 infra_gitlab_vars:
   - name: ACCESS_KEY
     value: "{{ ACCESS_KEY }}"
   - name: DOCKER_AUTH_CONFIG
-    value: '"{{ DOCKER_AUTH_CONFIG }}"' # remember for double quoting
+    value: " {\"auths\": { \"{{ NEXUS_REGISTRY }}\": { \"auth\": \"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\" }}}"
   - name: NEXUS_REGISTRY
     value: "{{ NEXUS_REGISTRY }}"
   - name: S3_TF_STATE
@@ -27,4 +28,4 @@ infra_gitlab_vars:
   - name: YC_TOKEN
     value: "{{ YC_TOKEN }}"
   - name: ANSIBLE_VAULT_PASSWORD
-    value: NOT_DEFINED
+    value: "{{ ANSIBLE_VAULT_PASSWORD }}"

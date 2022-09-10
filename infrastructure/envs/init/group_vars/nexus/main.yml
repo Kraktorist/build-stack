@@ -1,4 +1,4 @@
-nexus_admin_password: admin123
+nexus_admin_password: "{{ NEXUS_ADMIN_PASSWORD }}"
 nexus_public_hostname: 'nexus-lab'
 httpd_setup_enable: false
 nexus_privileges:
@@ -15,22 +15,24 @@ nexus_privileges:
       - add
       - edit
 nexus_roles:
-  - id: Developers # maps to the LDAP group
-    name: developers
+  - id: Gitlab # maps to the LDAP group
+    name: gitlab
     description: All developers
     privileges:
       - nx-search-read
       - all-repos-read
       - company-project-deploy
+      - nx-repository-admin-*-*-edit
+      - nx-repository-view-*-*-*
     roles: []
 nexus_local_users:
   - username: gitlab # used as key to update
     first_name: Gitlab
     last_name: CI
     email: support@company.com
-    password: "s3cr3t"
+    password: "{{ NEXUS_GITLAB_PASSWORD }}"
     roles:
-      - Developers
+      - Gitlab
 # nexus_blobstores:
 #   - name: company-artifacts
 #     path: /var/nexus/blobs/company-artifacts
@@ -40,13 +42,13 @@ nexus_scheduled_tasks:
     typeId: blobstore.compact
     taskProperties:
       blobstoreName: 'company-artifacts'
-nexus_repos_maven_hosted:
-  - name: microservices-demo
-    version_policy: mixed
-    write_policy: allow
-    blob_store: default
-  - name: google-microservices-demo
-    version_policy: mixed
-    write_policy: allow
-    blob_store: default
+# nexus_repos_maven_hosted:
+#   - name: microservices-demo
+#     version_policy: mixed
+#     write_policy: allow
+#     blob_store: default
+#   - name: google-microservices-demo
+#     version_policy: mixed
+#     write_policy: allow
+#     blob_store: default
 nexus_config_docker: true
