@@ -6,10 +6,14 @@ locals {
             "hosts" = {
                 for node, params in members.hosts:
                     node => {
-                    ansible_host = [
-                        for v in var.vm:
-                          try(v.vm.network_adapter[0].ipv4_address, v.vm.network_interface[0].nat_ip_address) if node == v.vm.name
-                    ][0]
+                      ansible_host = [
+                          for v in var.vm:
+                            try(v.vm.network_interface[0].nat_ip_address, v.vm.network_adapter[0].ip_address ) if node == v.vm.name
+                      ][0]
+                      fqdn = [
+                          for v in var.vm:
+                            try(v.vm.fqdn) if node == v.vm.name
+                      ][0]                    
                     }
             }
           } if group != "k8s_cluster"    
@@ -31,11 +35,14 @@ locals {
                     hosts = {
                         for node, params in members.hosts:
                             node => {
-                            ansible_host = [
-                                for v in var.vm:
-                                # TODO this needs to be fixed
-                                try(v.vm.network_adapter[0].ipv4_address, v.vm.network_interface[0].nat_ip_address) if node == v.vm.name
-                            ][0]                
+                              ansible_host = [
+                                  for v in var.vm:
+                                    try(v.vm.network_interface[0].nat_ip_address, v.vm.network_adapter[0].ip_address ) if node == v.vm.name
+                              ][0]
+                              fqdn = [
+                                  for v in var.vm:
+                                    try(v.vm.fqdn) if node == v.vm.name
+                              ][0]                
                             }
                     }
                   }
