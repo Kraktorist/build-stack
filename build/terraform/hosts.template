@@ -2,6 +2,7 @@ module yc_instance {
   for_each = try(module.input.params.hosts, {})
   node = each.value
   source = "./modules/yc_instance/"
+  ENV = var.ENV
 }
 
 module inventory {
