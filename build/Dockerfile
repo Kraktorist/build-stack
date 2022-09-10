@@ -17,12 +17,12 @@ RUN apk add --no-cache git python3 py3-pip && \
     pip3 install --no-cache-dir ansible==5.10.0 && \
     pip3 install --no-cache-dir jmespath  && \
     pip3 install --no-cache-dir netaddr  
-# install kubespray
-RUN curl -L https://github.com/kubernetes-sigs/kubespray/archive/refs/heads/master.zip --output kubespray.zip && \
-    unzip kubespray.zip && rm -rf kubespray.zip && mv kubespray-master ./ansible/kubespray
 COPY scripts scripts
 RUN chmod +x ./scripts/*
 COPY terraform terraform
 COPY .terraformrc /root/.terraformrc
 COPY ansible ansible
 RUN ansible-galaxy install -r ./ansible/requirements.yml
+# install kubespray
+RUN curl -L https://github.com/kubernetes-sigs/kubespray/archive/refs/heads/master.zip --output kubespray.zip && \
+    unzip kubespray.zip && rm -rf kubespray.zip && mv kubespray-master ./ansible/kubespray
