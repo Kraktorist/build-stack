@@ -1,6 +1,7 @@
 ---
 - name: miscellaneous tasks
   hosts: all
+  gather_facts: no
   tasks:
     - name: Waiting SSH connection
       ansible.builtin.wait_for_connection:
@@ -11,11 +12,3 @@
       ansible.builtin.apt:
         name: "*"
         update_cache: yes
-      retries: 5
-      delay: 30
-      register: result
-      until: result.rc == 0
-    
-    - name: debug
-      ansible.builtin.debug:
-        var: result
