@@ -52,6 +52,7 @@
         --executor "docker" \
         --description "docker executor" \
         --tag-list "infrastructure" \
+        --docker-volumes /var/run/docker.sock:/var/run/docker.sock \
         --run-untagged="false" \
         --locked="true"
       tags:

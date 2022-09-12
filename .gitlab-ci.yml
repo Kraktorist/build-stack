@@ -2,17 +2,14 @@ default:
   image: docker:20.10.16
   tags:
   - infrastructure
+  before_script:
+    - mkdir -p ${HOME}/.docker && echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
   
 stages:
   - build
-  - push
 
 build:
   stage: build
   script:
-    - docker build --no-cache ./build/ -t builder
-
-push:
-  stage: push
-  script:
-    - echo docker push
+    - docker build --no-cache ./build/ -t ${NEXUS_REGISTRY}/builder/builder
+    - docker push ${NEXUS_REGISTRY}/builder/builder
