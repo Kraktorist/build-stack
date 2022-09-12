@@ -1,6 +1,6 @@
 variable config {
   type        = string
-  default     = "hosts.yml"
+  default     = "config.yml"
   description = "List of machines to build"
 }
 
