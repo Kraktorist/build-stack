@@ -2,6 +2,10 @@
 - name: miscellaneous tasks
   hosts: all
   tasks:
+    - name: Waiting SSH connection
+      ansible.builtin.wait_for_connection:
+        delay: 60
+        timeout: 300
 
     - name: Update all packages to their latest version
       ansible.builtin.apt:
@@ -11,3 +15,7 @@
       delay: 30
       register: result
       until: result.rc == 0
+    
+    - name: debug
+      ansible.builtin.debug:
+        var: result
