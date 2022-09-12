@@ -150,7 +150,7 @@ export SECRET_KEY=
 export YC_TOKEN=
 export ENV=platform
 export S3_TF_STATE=dn-terraform-states
-export TF_VAR_config=/app/infrastructure/envs/${ENV}/hosts.yml
+export TF_VAR_config=/app/infrastructure/envs/${ENV}/config.yml
 export TF_VAR_ansible_inventory=/app/infrastructure/envs/${ENV}/inventory.yml
 
 export ANSIBLE_VAULT_PASSWORD=
