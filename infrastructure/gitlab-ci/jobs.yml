@@ -1,5 +1,5 @@
 image:
-  name: "$NEXUS_REGISTRY/build/builder:latest"
+  name: "$NEXUS_REGISTRY/builder/builder:latest"
   entrypoint: [""]
 variables:
   ANSIBLE_HOST_KEY_CHECKING: "False"
