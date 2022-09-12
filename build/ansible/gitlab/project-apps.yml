@@ -49,12 +49,12 @@
   tags:
   - apps
 
-- name: Gitlab Group | Apps | Create googleshop Repository
+- name: Gitlab Group | Apps | Create boutique Repository
   community.general.gitlab_project:
     api_url: "{{ gitlab_url }}"
     api_username: "{{ gitlab_user }}"
     api_password: "{{ gitlab_password }}"
-    name: googleshop
+    name: boutique
     visibility: internal
     group: "{{ gitlab_group.group.id }}"
   register: project
