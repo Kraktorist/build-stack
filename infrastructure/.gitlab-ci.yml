@@ -50,6 +50,7 @@ apply.hosts:
   extends: .terraform:apply
   script:
     - terraform_apply hosts
+    - provision_misc
   artifacts:
     paths: 
       - ${CI_PROJECT_DIR}/envs/${ENV}/inventory.yml
