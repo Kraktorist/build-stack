@@ -54,10 +54,10 @@
 
 ## Build image
 
-Contains ansible, kubectl and terraform. 
-Location: [Dockerfile](build/Dockerfile)
-Build Step: `docker build ./build/ -t builder`
-Run: 
+Contains ansible, kubectl and terraform.  
+Location: [Dockerfile](build/Dockerfile)  
+Build Step: `docker build --no-cache ./build/ -t builder`  
+Run:  
 
 ```
 docker run \
@@ -69,6 +69,77 @@ docker run \
     -ti builder
 ```
 
+## Network installation
+
+Network spec:
+
+```yaml
+network: 
+  name: instances
+  subnets:
+    dev-a:
+      zone: ru-central1-a 
+      subnets: [192.168.16.0/28]
+    dev-b:
+      zone: ru-central1-b 
+      subnets: [192.168.32.0/28]
+```
+
+## Hosts Installation
+
+Hosts spec:
+
+```yaml
+hosts:
+  gitlab11:
+    name: gitlab11
+    cpu: 2
+    memory: 4096
+    disk: 40
+    subnet: platform-a
+    public_ip: true
+  nexus11:
+    name: nexus11
+    cpu: 2
+    memory: 4096
+    disk: 40
+    subnet: platform-a
+    public_ip: true
+```
+
+Inventory spec:
+
+```yaml
+inventory:
+  # ansible inventory structure
+  # every host mentioned in this section must be specified in the params: section
+  all:
+    children:
+      # kupespray structure
+      k8s_cluster:
+        children:
+          kube_node:
+            hosts:
+              worker-dev11:  
+              worker-dev12:
+          kube_control_plane:
+            hosts:
+              master-dev13: 
+          etcd:
+            hosts:
+              master-dev13:
+      # other hosts 
+      gitlab:
+        hosts:
+          gitlab11:
+      runner:
+        hosts:
+          gitlab11:
+      nexus:
+        hosts:
+          nexus11:
+```
+
 Запуск terraform:
 
 ```
@@ -77,7 +148,7 @@ export YC_FOLDER_ID=
 export ACCESS_KEY=
 export SECRET_KEY=
 export YC_TOKEN=
-export ENV=init
+export ENV=platform
 export S3_TF_STATE=dn-terraform-states
 export TF_VAR_config=/app/infrastructure/envs/${ENV}/hosts.yml
 export TF_VAR_ansible_inventory=/app/infrastructure/envs/${ENV}/inventory.yml
@@ -94,44 +165,24 @@ terraform_apply hosts
 
 ```
 
-# Ansible provisioning
+# Hosts provisioning
 
 ```
-
 provision_gitlab
 provision_nexus
+provision_infra_runner
+provision_k8s
 ```
-
- - устанавливает gitlab
- - устанавливает gitlab-runner
- - устанавливает nexus
 
 # Repositories creating
 
 структура репозиториев:
 - infrastructure (local runner)
-  - full repo
+  - full repo (for building builder image)
   - envs
 - apps (k8s runner)
   - weaveworks
-  - googleshop
-
-```
-export YC_CLOUD_ID=
-export YC_FOLDER_ID=
-export ACCESS_KEY=
-export SECRET_KEY=
-export YC_TOKEN=
-export ENV=init
-export S3_TF_STATE=dn-terraform-states
-export TF_VAR_config=/app/infrastructure/envs/${ENV}/hosts.yml
-export TF_VAR_ansible_inventory=/app/infrastructure/envs/${ENV}/inventory.yml
-
-ssh-agent bash
-ssh-add ~/ya_key
-source scripts/lib.sh
-provision_repos
-```
+  - boutique
 
 # Infrastructure pipeline
 
@@ -148,19 +199,34 @@ Stages:
   - provision
     - gitlab
     - nexus
+    - runner
+    - k8s
+    - repo
+    - monitoring
   - destroy
     - network
     - hosts
+
+## Monitoring
+
+```
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install prom prometheus-community/kube-prometheus-stack -n monitoring -f values.yaml
+```
+
+monitoring spec:
+
+```yaml
+monitoring:
+  enabled: true
+  namespace: monitoring
+  helm_values: monitoring/values.yaml
+```
+
 
 **TODO**
 
 Infra:
   - vms with multiple disks
   - tls connection
-
-    add provisions for
-    - docker-runner
-    - repos
-    - kubernetes cluster
-
-  
