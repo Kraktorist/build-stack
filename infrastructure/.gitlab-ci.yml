@@ -71,7 +71,7 @@ provision.infra_repo:
     - job: apply.hosts
       artifacts: true
 
-provision.infra_repo:
+provision.infra_runner:
   extends: .ansible:provision
   script:
     - provision_infra_runner
