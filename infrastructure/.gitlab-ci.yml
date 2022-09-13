@@ -103,6 +103,14 @@ provision.k8s:
     - job: apply.hosts
       artifacts: true
 
+provision.monitoring:
+  extends: .ansible:provision
+  script:
+    - provision_monitoring
+  needs: 
+    - job: apply.hosts
+      artifacts: true
+
 destroy.network:
   extends: .terraform:destroy
   script:
