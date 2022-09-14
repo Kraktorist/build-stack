@@ -230,3 +230,4 @@ monitoring:
 Infra:
   - vms with multiple disks
   - tls connection
+  - anybadge
