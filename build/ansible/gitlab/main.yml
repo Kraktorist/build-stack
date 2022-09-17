@@ -90,7 +90,7 @@
       - runner
 
     - name: Gitlab Group | Apps
-      include_tasks: project-apps.yml
+      include_tasks: boutique.yml
       tags:
       - never
       - apps

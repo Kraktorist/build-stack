@@ -29,3 +29,13 @@ infra_gitlab_vars:
     value: "{{ YC_TOKEN }}"
   - name: ANSIBLE_VAULT_PASSWORD
     value: "{{ ANSIBLE_VAULT_PASSWORD }}"
+git_repolist:
+  - { reponame: weavesocks, repopath: https://github.com/microservices-demo/microservices-demo.git }
+  - { reponame: carts, repopath: https://github.com/microservices-demo/carts.git }
+  - { reponame: frontend, repopath: https://github.com/microservices-demo/front-end.git }
+  - { reponame: user, repopath: https://github.com/microservices-demo/user.git }
+  - { reponame: shipping, repopath: https://github.com/microservices-demo/shipping.git }
+  - { reponame: queue-master, repopath: https://github.com/microservices-demo/queue-master.git }
+  - { reponame: orders, repopath: https://github.com/microservices-demo/orders.git }
+  - { reponame: catalogue, repopath: https://github.com/microservices-demo/catalogue.git }
+  - { reponame: payment, repopath: https://github.com/microservices-demo/payment.git }

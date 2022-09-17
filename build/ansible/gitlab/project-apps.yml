@@ -1,13 +1,13 @@
 
 ---
-- name: Gitlab Group | Apps | Create
+- name: Gitlab Group | Boutique | Create
   # https://github.com/ansible-collections/community.general/issues/4990#issuecomment-1193366106
   community.general.gitlab_group:
     api_url: "{{ gitlab_url }}"
     validate_certs: False
     api_username: "{{ gitlab_user }}"
     api_password: "{{ gitlab_password }}"
-    name: apps
+    name: boutique
     visibility: internal
     description: ''
     project_creation_level: maintainer
@@ -19,56 +19,26 @@
   tags:
   - apps
 
-- name: Gitlab Group | Apps | Set CI/CD variables
-  community.general.gitlab_group_variable:
-    api_url: "{{ gitlab_url }}"
-    validate_certs: False
-    api_username: "{{ gitlab_user }}"
-    api_password: "{{ gitlab_password }}"
-    group: apps
-    purge: true
-    variables:
-      - name: NEXUS_REGISTRY
-        value: "{{ hostvars[groups['nexus'][0]].ansible_host }}:9080"
-      - name: NEXUS_USER
-        value: admin
-      - name: NEXUS_PASSWORD
-        value: "{{ hostvars[groups['nexus'][0]].nexus_admin_password }}"
-  tags:
-  - apps
+ - name: Gitlab Group | Boutique | Set CI/CD variables
+   community.general.gitlab_group_variable:
+     api_url: "{{ gitlab_url }}"
+     validate_certs: False
+     api_username: "{{ gitlab_user }}"
+     api_password: "{{ gitlab_password }}"
+     group: boutique
+     purge: true
+     variables: "{{ lab_gitlab_vars }}"
+   tags:
+   - apps
 
-- name: Gitlab Group | Apps | Create weavesocks Repository
-  community.general.gitlab_project:
-    api_url: "{{ gitlab_url }}"
-    api_username: "{{ gitlab_user }}"
-    api_password: "{{ gitlab_password }}"
-    name: weavesocks
-    visibility: internal
-    group: "{{ gitlab_group.group.id }}"
-  register: project
-  tags:
-  - apps
+ - name: Gitlab Group | Boutique | Creating Projects
+   include_tasks: projects.yml
+   loop: "{{ git_repolist }}"
+   tags:
+   - never
+   - apps
 
-- name: Gitlab Group | Apps | Create boutique Repository
-  community.general.gitlab_project:
-    api_url: "{{ gitlab_url }}"
-    api_username: "{{ gitlab_user }}"
-    api_password: "{{ gitlab_password }}"
-    name: boutique
-    visibility: internal
-    group: "{{ gitlab_group.group.id }}"
-  register: project
-  tags:
-  - apps
-
-- name: Gitlab Group | Apps | Push Content
-  ansible.builtin.shell: |
-    echo TBD
-  when: project.changed
-  tags:
-  - apps
-
-- name: Gitlab Group | Apps | Waiting for Gitlab runners_token generating
+- name: Gitlab Group | Boutique | Waiting for Gitlab runners_token generating
   ansible.builtin.pause:
     seconds: 10
   when: gitlab_group.changed
@@ -79,7 +49,7 @@
     validate_certs: False
     api_username: "{{ gitlab_user }}"
     api_password: "{{ gitlab_password }}"
-    name: apps
+    name: boutique
     visibility: internal
     description: ''
     project_creation_level: maintainer
@@ -91,7 +61,7 @@
   tags:
   - apps
 
-- name: Gitlab Group | Apps | Save runner token
+- name: Gitlab Group | Boutique | Save runner token
   ansible.builtin.set_fact:
     runner_token: "{{ gitlab_apps_group.group.runners_token }}"
     gitlab_url: "{{ gitlab_url }}"
