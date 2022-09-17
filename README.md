@@ -231,3 +231,15 @@ Infra:
   - vms with multiple disks
   - tls connection
   - anybadge
+
+
+## Apps
+
+**TODO**
+
+- creating repos for all app microservices
+- kubernetes runner adopting
+- build jobs for all microservices
+- dev deploy job for testing
+- prod deploy job
+- app monitoring
