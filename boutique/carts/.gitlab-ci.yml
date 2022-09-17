@@ -1,9 +1,18 @@
 default:
   image: maven:3.6-jdk-11
   before_script:
-    - chmod +x ./scripts/*
-    - ls -la /certs/client
     - mkdir -p ${HOME}/.docker && echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+    - echo "Waiting for docker cli to respond before continuing build..."
+    - |
+      for i in $(seq 1 30); do
+          if ! docker info &> /dev/null; then
+              echo "Docker not responding yet. Sleeping for 2s..." && sleep 2s
+          else
+              echo "Docker ready. Continuing build..."
+              break
+          fi
+      done
+
 
 variables:
   DOCKER_HOST: tcp://docker:2376
@@ -13,16 +22,6 @@ variables:
 
 stages:
   - build
-
-build-a:
-  image: docker:20.10.16
-  services:
-    - docker:20.10.16-dind
-  stage: build
-  script:
-    - sleep 60
-    - docker info
-
 
 build-package:
   stage: build
@@ -39,8 +38,6 @@ build-image:
     - docker:20.10.16-dind
   stage: build
   script:
-    - sleep 60
-    - docker info
     - docker build --build-arg COMMIT=test -t carts ${CI_PROJECT_DIR}/docker/carts
   needs: 
     - job: build-package
