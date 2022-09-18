@@ -1,23 +1,9 @@
 default:
   image: maven:3.6-jdk-11
-  before_script:
-    - mkdir -p ${HOME}/.docker && echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
-    - echo "Waiting for docker cli to respond before continuing build..."
-    - |
-      for i in $(seq 1 30); do
-          if ! docker info &> /dev/null; then
-              echo "Docker not responding yet. Sleeping for 2s..." && sleep 2s
-          else
-              echo "Docker ready. Continuing build..."
-              break
-          fi
-      done
 
-variables:
-  DOCKER_HOST: tcp://docker:2376
-  DOCKER_TLS_CERTDIR: "/certs"
-  DOCKER_TLS_VERIFY: 0
-  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG
 
 stages:
   - build
@@ -25,19 +11,26 @@ stages:
 build-package:
   stage: build
   script:
-    - GROUP=weaveworksdemos COMMIT=test ./scripts/build.sh
+    - mvn -DskipTests package
+    - cp target/*.jar docker/carts
   artifacts:
     expire_in: 2 hrs
     paths: 
       - ${CI_PROJECT_DIR}/docker/carts
       
-build-image:
-  image: docker:20.10.16
-  services:
-    - docker:20.10.16-dind
+build:
   stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.0-debug
+    entrypoint: [""]
   script:
-    - docker build --build-arg COMMIT=test -t carts ${CI_PROJECT_DIR}/docker/carts
+    - mkdir -p /kaniko/.docker && echo $DOCKER_AUTH_CONFIG > /kaniko/.docker/config.json
+    - /kaniko/executor
+      --build-arg "COMMIT=${CI_COMMIT_SHORT_SHA}"
+      --build-arg "BUILD_DATE=${CI_JOB_STARTED_AT}"
+      --context "${CI_PROJECT_DIR}/docker/carts"
+      --dockerfile "${CI_PROJECT_DIR}/docker/carts/Dockerfile"
+      --destination "${NEXUS_REGISTRY}/boutique/carts:${CI_COMMIT_SHORT_SHA}"
   needs: 
     - job: build-package
       artifacts: true
