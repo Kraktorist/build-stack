@@ -250,7 +250,7 @@ Infra:
 Inject .gitlab-ci.yml
 
 ```
-git filter-branch --index-filter "cp /home/kraktorist/repos/carts-1/.gitlab-ci.yml . && git add .gitlab-ci.yml" --tag-name-filter cat --prune-empty -- --all
+git filter-branch --index-filter "cp /home/kraktorist/repos/lab-terraform-ya/boutique/carts/.gitlab-ci.yml . && git add .gitlab-ci.yml" --tag-name-filter cat --prune-empty -- --all
 ```
 
 ```
