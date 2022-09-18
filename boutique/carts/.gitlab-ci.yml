@@ -13,7 +13,6 @@ default:
           fi
       done
 
-
 variables:
   DOCKER_HOST: tcp://docker:2376
   DOCKER_TLS_CERTDIR: "/certs"
