@@ -32,7 +32,7 @@ infra_gitlab_vars:
 git_repolist:
   - { reponame: weavesocks, repopath: https://github.com/microservices-demo/microservices-demo.git }
   - { reponame: carts, repopath: https://github.com/microservices-demo/carts.git }
-  - { reponame: frontend, repopath: https://github.com/microservices-demo/front-end.git }
+  - { reponame: front-end, repopath: https://github.com/microservices-demo/front-end.git }
   - { reponame: user, repopath: https://github.com/microservices-demo/user.git }
   - { reponame: shipping, repopath: https://github.com/microservices-demo/shipping.git }
   - { reponame: queue-master, repopath: https://github.com/microservices-demo/queue-master.git }

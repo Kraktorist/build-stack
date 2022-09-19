@@ -1,0 +1,1 @@
+looks easy. Just build an image from Dockerfile
