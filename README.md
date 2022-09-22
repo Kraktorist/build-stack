@@ -245,24 +245,12 @@ Infra:
 - dev deploy job for testing
 - prod deploy job
 - app monitoring
+- ALB
 
 
 Inject .gitlab-ci.yml
 
 ```
 git filter-branch --index-filter "cp /home/kraktorist/repos/lab-terraform-ya/boutique/carts/.gitlab-ci.yml . && git add .gitlab-ci.yml" --tag-name-filter cat --prune-empty -- --all
+# git push -m '[skip.ci]'
 ```
-
-```
-first_commit=$(git rev-list --max-parents=0 HEAD) # first commit
-git checkout ${first_commit}
-git switch -c main
-# copying .gitlab-ci.yml
-git add .
-git commit -m 'adding .gitlab-ci.yml'
-git checkout master
-git rebase main
-git branch -d main
-```
-
-link old tagged commit with the new one
