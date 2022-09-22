@@ -1,0 +1,36 @@
+default:
+  image: maven:3.6-jdk-11
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG
+
+stages:
+  - build
+
+build-package:
+  stage: build
+  script:
+    - mvn -DskipTests package
+    - cp target/*.jar docker/orders
+  artifacts:
+    expire_in: 2 hrs
+    paths: 
+      - ${CI_PROJECT_DIR}/docker/orders
+      
+build:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.0-debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker && echo $DOCKER_AUTH_CONFIG > /kaniko/.docker/config.json
+    - /kaniko/executor
+      --build-arg "COMMIT=${CI_COMMIT_SHORT_SHA}"
+      --build-arg "BUILD_DATE=${CI_JOB_STARTED_AT}"
+      --context "${CI_PROJECT_DIR}/docker/orders"
+      --dockerfile "${CI_PROJECT_DIR}/docker/orders/Dockerfile"
+      --destination "${NEXUS_REGISTRY}/boutique/orders:${CI_COMMIT_SHORT_SHA}"
+  needs: 
+    - job: build-package
+      artifacts: true
