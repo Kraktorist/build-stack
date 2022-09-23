@@ -229,6 +229,7 @@ monitoring:
 
 Infra:
   - vms with multiple disks
+  - cri-o instead of containerd
   - tls connection
   - anybadge
 
@@ -237,8 +238,8 @@ Infra:
 
 **TODO**
 
+
 - creating repos for all app microservices (draft created, need to test)
-- kubernetes runner adopting
 - build jobs for all microservices
   - on commit build to staging
   - on tag build to release
@@ -254,3 +255,41 @@ Inject .gitlab-ci.yml
 git filter-branch --index-filter "cp /home/kraktorist/repos/lab-terraform-ya/boutique/carts/.gitlab-ci.yml . && git add .gitlab-ci.yml" --tag-name-filter cat --prune-empty -- --all
 # git push -m '[skip.ci]'
 ```
+
+Get image from private registry
+
+```
+ctr i pull -u admin --plain-http 192.168.0.48:9080/boutique/carts:72567a7a
+```
+
+containerd config
+
+```
+[plugins]
+  [plugins."io.containerd.grpc.v1.cri"]
+    sandbox_image = "registry.k8s.io/pause:3.6"
+    max_container_log_line_size = -1
+    [plugins."io.containerd.grpc.v1.cri".containerd]
+      default_runtime_name = "runc"
+      snapshotter = "overlayfs"
+      [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+          runtime_type = "io.containerd.runc.v2"
+          runtime_engine = ""
+          runtime_root = ""
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+            systemdCgroup = true
+    [plugins."io.containerd.grpc.v1.cri".registry]
+      [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.io"]
+          endpoint = ["https://registry-1.docker.io"]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."192.168.0.48"]
+          endpoint = ["http://192.168.0.48:9080"]
+        [plugins."io.containerd.grpc.v1.cri".registry.configs]
+          [plugins."io.containerd.grpc.v1.cri".registry.configs."test.http-registry.io".tls]
+            insecure_skip_verify = true
+```
+
+## Working now
+
+Create all boutique repos with injected pipelines and replaced files
