@@ -19,6 +19,10 @@ function yc_get_instances() {
 
 function init_backend() {
     # init_backend "network"
+    if [ -z ${ENV} ]; then
+      echo "Environment variable 'ENV' is empty">/dev/stderr
+      exit 1
+    fi
     step=$1
     terraform -chdir=/app/terraform init \
         -backend-config="endpoint=storage.yandexcloud.net" \
