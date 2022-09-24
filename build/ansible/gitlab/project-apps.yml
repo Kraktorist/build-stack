@@ -19,29 +19,39 @@
   tags:
   - apps
 
- - name: Gitlab Group | Boutique | Set CI/CD variables
-   community.general.gitlab_group_variable:
-     api_url: "{{ gitlab_url }}"
-     validate_certs: False
-     api_username: "{{ gitlab_user }}"
-     api_password: "{{ gitlab_password }}"
-     group: boutique
-     purge: true
-     variables: "{{ lab_gitlab_vars }}"
-   tags:
-   - apps
+- name: Gitlab Group | Boutique | Set CI/CD variables
+  community.general.gitlab_group_variable:
+    api_url: "{{ gitlab_url }}"
+    validate_certs: False
+    api_username: "{{ gitlab_user }}"
+    api_password: "{{ gitlab_password }}"
+    group: boutique
+    purge: true
+    variables: "{{ apps_gitlab_vars }}"
+  tags:
+  - apps
 
- - name: Gitlab Group | Boutique | Creating Projects
-   include_tasks: projects.yml
-   loop: "{{ git_repolist }}"
-   tags:
-   - never
-   - apps
+- name: Gitlab Group | Boutique | Copying project
+  ansible.builtin.copy:
+    src: /boutique
+    dest: /
+    mode: '0644'
+  tags:
+  - never
+  - apps
+
+- name: Gitlab Group | Boutique | Creating Projects
+  include_tasks: boutique.yml
+  loop: "{{ git_repolist }}"
+  tags:
+  - never
+  - apps
 
 - name: Gitlab Group | Boutique | Waiting for Gitlab runners_token generating
   ansible.builtin.pause:
     seconds: 10
   when: gitlab_group.changed
+
 - name: "Getting runners_token"
   # repeat the same task after delay will return the token
   community.general.gitlab_group:

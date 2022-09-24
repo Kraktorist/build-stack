@@ -66,6 +66,7 @@ docker run \
     -v $(pwd)/infrastructure:/app/infrastructure \
     -v $HOME/ya_key.pub:/root/ya_key.pub \
     -v $HOME/ya_key:/root/ya_key \
+    -v $(pwd)/boutique:/boutique \
     -ti builder
 ```
 

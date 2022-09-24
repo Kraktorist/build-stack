@@ -1,0 +1,22 @@
+"all":
+  "children":
+    "gitlab":
+      "hosts":
+        "gitlab11":
+          "ansible_host": "84.201.131.151"
+          "fqdn": "gitlab11.ru-central1.internal"
+    "k8s_cluster":
+      "children": {}
+    "nexus":
+      "hosts":
+        "nexus11":
+          "ansible_host": "130.193.38.245"
+          "fqdn": "nexus11.ru-central1.internal"
+    "runner":
+      "hosts":
+        "gitlab11":
+          "ansible_host": "84.201.131.151"
+          "fqdn": "gitlab11.ru-central1.internal"
+  "hosts": {}
+  "vars":
+    "ansible_user": "ubuntu"

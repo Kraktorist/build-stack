@@ -29,6 +29,17 @@ infra_gitlab_vars:
     value: "{{ YC_TOKEN }}"
   - name: ANSIBLE_VAULT_PASSWORD
     value: "{{ ANSIBLE_VAULT_PASSWORD }}"
+apps_gitlab_vars:
+  - name: DOCKER_AUTH_CONFIG
+    value: " {\"auths\": { \"{{ NEXUS_REGISTRY }}\": { \"auth\": \"{{ ('admin:' + NEXUS_ADMIN_PASSWORD) | b64encode }}\" }}}"
+  - name: NEXUS_REGISTRY
+    value: "{{ NEXUS_REGISTRY }}"
+  - name: SSH_PRIVATE_KEY
+    value: "{{ SSH_PRIVATE_KEY }}"
+  - name: SSH_PUBLIC_KEY
+    value: "{{ SSH_PUBLIC_KEY }}"
+  - name: ANSIBLE_VAULT_PASSWORD
+    value: "{{ ANSIBLE_VAULT_PASSWORD }}"
 git_repolist:
   - { reponame: weavesocks, repopath: https://github.com/microservices-demo/microservices-demo.git }
   - { reponame: carts, repopath: https://github.com/microservices-demo/carts.git }

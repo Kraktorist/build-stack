@@ -89,8 +89,8 @@
       - infrastructure
       - runner
 
-    - name: Gitlab Group | Apps
-      include_tasks: boutique.yml
+    - name: Gitlab Group | Apps | Injects
+      include_tasks: project-apps.yml
       tags:
       - never
       - apps
