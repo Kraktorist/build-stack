@@ -185,6 +185,19 @@ provision_k8s
   - weaveworks
   - boutique
 
+# Upload builder image
+
+```
+# add insecure registry
+# sudo vi /etc/docker/daemon.json
+# sudo systemcl restart docker
+# nexus address
+NEXUS_REPO="nexus:9080"
+docker tag builder ${NEXUS_REPO}/infrastructure/builder
+docker login ${NEXUS_REPO}
+docker push ${NEXUS_REPO}/infrastructure/builder
+```
+
 # Infrastructure pipeline
 
 Stages:
