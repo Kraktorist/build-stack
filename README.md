@@ -310,3 +310,6 @@ containerd config
 ## Working now
 
 Creating runner in every deployed cluster for boutique repo.
+- copy kubeconfig https://github.com/kubernetes-sigs/kubespray/blob/master/docs/getting-started.md#accessing-kubernetes-api
+- add kubeconfig to ci/cd variables per environment https://docs.ansible.com/ansible/latest/collections/community/general/gitlab_project_variable_module.html
+- deploy runner with tag named as environment (convert deployment to helm)
