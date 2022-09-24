@@ -5,3 +5,5 @@ terraform.tfstate*
 virtualbox.box
 ansible_inventory.yml
 .vscode/
+# excluding ansible inventory files
+infrastructure/envs/*/inventory.yml
