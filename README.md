@@ -245,6 +245,7 @@ monitoring:
 
 Infra:
   - vms with multiple disks
+  - gitlab-runner docker concurrent jobs
   - cri-o instead of containerd
   - tls connection
   - anybadge
