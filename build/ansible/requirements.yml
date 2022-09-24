@@ -1,4 +1,5 @@
 - name: ansible-thoteam.nexus3-oss
+- name: kubernetes.core
 - src: https://github.com/in0rdr/ansible-role-haproxy.git
   version: feature/multiple-front-and-backends
   name: geerlingguy.haproxy

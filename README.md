@@ -153,6 +153,7 @@ export ENV=platform
 export S3_TF_STATE=dn-terraform-states
 export TF_VAR_config=/app/infrastructure/envs/${ENV}/config.yml
 export TF_VAR_ansible_inventory=/app/infrastructure/envs/${ENV}/inventory.yml
+export ENV_PATH=/app/infrastructure/envs/${ENV}
 
 export ANSIBLE_VAULT_PASSWORD=
 export ANSIBLE_HOST_KEY_CHECKING="False"
@@ -234,6 +235,7 @@ monitoring spec:
 ```yaml
 monitoring:
   enabled: true
+  name: prom
   namespace: monitoring
   helm_values: monitoring/values.yaml
 ```
@@ -306,4 +308,4 @@ containerd config
 
 ## Working now
 
-Create all boutique repos with injected pipelines and replaced files
+Creating runner in every deployed cluster for boutique repo.

@@ -16,7 +16,12 @@ RUN apk add --no-cache git python3 py3-pip && \
     pip3 install --no-cache-dir --upgrade pip && \
     pip3 install --no-cache-dir ansible==5.10.0 && \
     pip3 install --no-cache-dir jmespath  && \
-    pip3 install --no-cache-dir netaddr  
+    pip3 install --no-cache-dir netaddr && \
+    pip3 install kubernetes
+# install helm
+RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && \
+    chmod 700 get_helm.sh && \
+    VERIFY_CHECKSUM=false ./get_helm.sh && rm -rf get_helm.sh
 COPY scripts scripts
 RUN chmod +x ./scripts/*
 COPY terraform terraform

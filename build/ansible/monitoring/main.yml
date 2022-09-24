@@ -5,29 +5,53 @@
   tasks:
     - name: Read config file
       ansible.builtin.include_vars:
-        file: config.yml
+        file: "{{ lookup('env','TF_VAR_config') }}"
         name: config
 
-- name: Monitoring Installation
-  block:
-    - name: Copy kubeconfig
-      hosts: kube_control_plane
-      tasks:
+    - name: Monitoring Installation
+      block:
         - name: Copy kubeconfig
+          delegate_to: "{{ groups['kube_control_plane'][0] }}"
           ansible.builtin.fetch:
             src: /root/.kube/config
-            dest: /root/.kube/config
+            dest: /root/.kube/
+            flat: true
 
-    - name: Add stable chart repo
-      kubernetes.core.helm_repository:
-        name: prometheus-community
-        repo_url: https://prometheus-community.github.io/helm-charts
+        - name: Modifying kubeconfig
+          ansible.builtin.shell: |
+              kubectl config set-cluster cluster.local \
+                --server=https://{{ groups['kube_control_plane'][0] }}:6443/ \
+                --insecure-skip-tls-verify=true
 
-    - name: Install prometheus-operator
-      kubernetes.core.helm:
-        name: prom
-        chart_ref: prometheus-community/kube-prometheus-stack 
-        release_namespace: monitoring
-        values_files:
-          - /monitoring/values.yaml
-  when: config.monitoring.enabled | bool
+        - name: Create namespace for monitoring
+          kubernetes.core.k8s:
+            name: "{{ config.monitoring.namespace }}"
+            api_version: v1
+            kind: Namespace
+            state: present
+          when: config.monitoring.namespace is defined
+
+        - name: Add stable chart repo
+          kubernetes.core.helm_repository:
+            name: prometheus-community
+            repo_url: https://prometheus-community.github.io/helm-charts
+
+        - name: Check helm_values paths
+          stat:
+            path: "{{ lookup('env','ENV_PATH') }}//{{ item }}"
+          register: stat_results
+          with_items: "{{ config.monitoring.helm_values }}"
+          ignore_errors: True
+          when: config.monitoring.helm_values is defined
+
+        - name: Prints helm_values                                                                                                          
+          ansible.builtin.debug:
+            msg: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}" 
+
+        - name: Install prometheus-operator
+          kubernetes.core.helm:
+            name: "{{ config.monitoring.name }}"
+            chart_ref: prometheus-community/kube-prometheus-stack 
+            release_namespace: "{{ config.monitoring.namespace | default('default') }}"
+            values_files: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}" 
+      when: config.monitoring.enabled is defined and config.monitoring.enabled | bool

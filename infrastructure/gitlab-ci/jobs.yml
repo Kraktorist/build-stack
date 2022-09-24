@@ -6,6 +6,7 @@ variables:
   TF_VAR_ENV: ${ENV}
   TF_VAR_config: "${CI_PROJECT_DIR}/envs/${ENV}/config.yml"
   TF_VAR_ansible_inventory: "${CI_PROJECT_DIR}/envs/${ENV}/inventory.yml"
+  ENV_PATH: ${CI_PROJECT_DIR}/envs/${ENV}
 
 .terraform:status: 
   stage: status

@@ -16,6 +16,16 @@ inventory:
             hosts:
               master-dev13: 
   
+# monitoring spec
+monitoring:
+  enabled: true
+  name: prometheus
+  namespace: monitoring
+  helm_values: 
+    - monitoring/values.yaml
+    - monitoring/values2.yaml
+    - monitoring/values3.yaml
+
 # hosts specification
 # every host must have defined name, cpu, memory, disk, public_ip
 hosts:
