@@ -83,7 +83,7 @@
         git config --global user.name "root"
 
     - name: Gitlab Group | Infrastructure
-      include_tasks: project-infrastructure.yml
+      include_tasks: infra-projects.yml
       tags:
       - never
       - infrastructure
@@ -106,7 +106,7 @@
       - never
 
 - name: Gitlab Runner | Install
-  ansible.builtin.import_playbook: runner.yml
+  ansible.builtin.import_playbook: infra-runner.yml
   vars:
     url: "{{ gitlab_url }}"
     token: "{{ gitlab_infrastructure_group.group.runners_token }}"
