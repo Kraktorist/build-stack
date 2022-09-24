@@ -11,5 +11,5 @@ stages:
 build:
   stage: build
   script:
-    - docker build --no-cache ./build/ -t ${NEXUS_REGISTRY}/builder/builder
-    - docker push ${NEXUS_REGISTRY}/builder/builder
+    - docker build --no-cache ./build/ -t ${NEXUS_REGISTRY}/infrastructure/builder
+    - docker push ${NEXUS_REGISTRY}/infrastructure/builder
