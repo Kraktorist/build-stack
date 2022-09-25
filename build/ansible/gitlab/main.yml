@@ -1,4 +1,3 @@
-# TODO recreate the states with repeating tasks as loops
 ---
 - name: Gitlab Provisioning
   hosts: gitlab
@@ -105,7 +104,7 @@
       - output
       - never
 
-- name: Gitlab Runner | Install
+- name: Infra Gitlab Runner | Install
   ansible.builtin.import_playbook: infra-runner.yml
   vars:
     url: "{{ gitlab_url }}"
