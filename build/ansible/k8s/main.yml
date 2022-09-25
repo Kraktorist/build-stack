@@ -1,0 +1,25 @@
+- name: K8S | Install
+  ansible.builtin.import_playbook: ../kubespray/cluster.yml
+
+- name: K8S | Get Gitlab Token
+  hosts: gitlab
+  tasks:
+    - name: K8S | Get Token
+      include_tasks: ../gitlab/apps-projects.yml
+
+- name: K8S | Register Kubeconfig
+  hosts: localhost
+  tasks:
+    - name: K8S | Boutique | Register KUBECONFIG
+      community.general.gitlab_group_variable:
+        api_url: "{{ gitlab_url }}"
+        validate_certs: False
+        api_username: "{{ gitlab_user }}"
+        api_password: "{{ gitlab_password }}"
+        group: boutique
+        purge: false
+        variables:
+          - name: KUBECONFIG
+            value: "{{lookup('ansible.builtin.file', '{{ inventory_dir }}/artifacts/admin.conf') }}"
+            variable_type: file
+            environment_scope: "{{ env }}"
