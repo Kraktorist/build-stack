@@ -1,3 +1,7 @@
+workflow:
+  rules:
+    - if: $ENV
+  
 include:
   - local: gitlab-ci/jobs.yml
 
