@@ -244,6 +244,7 @@ monitoring:
 **TODO**
 
 Infra:
+  - working through bastion host and ALB https://cloud.yandex.ru/docs/security/domains/checklist
   - vms with multiple disks
   - gitlab-runner docker concurrent jobs
   - cri-o instead of containerd
