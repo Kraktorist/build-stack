@@ -167,9 +167,10 @@ terraform_apply hosts
 
 ```
 
-# Hosts provisioning
+# Provisioning
 
 ```
+provision_misc # this is apt-get update
 provision_gitlab
 provision_nexus
 provision_infra_runner
