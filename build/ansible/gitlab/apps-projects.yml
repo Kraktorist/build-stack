@@ -31,14 +31,14 @@
   tags:
   - apps
 
-- name: Gitlab Group | Boutique | Copying project
-  ansible.builtin.copy:
-    src: ./boutique
-    dest: /
-    mode: '0644'
-  tags:
-  - never
-  - apps
+# - name: Gitlab Group | Boutique | Copying project
+#   ansible.builtin.copy:
+#     src: /boutique
+#     dest: /
+#     mode: '0644'
+#   tags:
+#   - never
+#   - apps
 
 - name: Gitlab Group | Boutique | Creating Projects
   include_tasks: boutique.yml
@@ -70,6 +70,7 @@
   register: gitlab_apps_group
   tags:
   - apps
+  - apps_runner
 
 - name: Gitlab Group | Boutique | Save runner token
   ansible.builtin.set_fact:
@@ -77,3 +78,4 @@
     gitlab_url: "{{ gitlab_url }}"
   tags:
   - apps
+  - apps_runner

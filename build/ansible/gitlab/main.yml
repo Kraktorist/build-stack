@@ -104,8 +104,21 @@
       - output
       - never
 
+    - name: Gitlab Group | Boutique | Copying project
+      ansible.builtin.copy:
+        src: /boutique
+        dest: /
+        mode: '0644'
+
 - name: Infra Gitlab Runner | Install
   ansible.builtin.import_playbook: infra-runner.yml
   vars:
     url: "{{ gitlab_url }}"
     token: "{{ gitlab_infrastructure_group.group.runners_token }}"
+
+- name: Boutique Gitlab Runner | Install
+  ansible.builtin.import_playbook: apps-runner.yml
+  vars:
+    url: "{{ gitlab_url }}"
+    token: "{{ gitlab_apps_group.group.runners_token }}"
+    env: "{{ lookup('env','ENV') }}"
