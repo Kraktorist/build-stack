@@ -89,7 +89,7 @@
       - runner
 
     - name: Gitlab Group | Apps | Injects
-      include_tasks: project-apps.yml
+      include_tasks: apps-projects.yml
       tags:
       - never
       - apps
