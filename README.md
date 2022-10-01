@@ -173,6 +173,7 @@ terraform_apply hosts
 provision_misc # this is apt-get update
 provision_gitlab
 provision_nexus
+provision_infra_repo
 provision_infra_runner
 provision_k8s
 ```
