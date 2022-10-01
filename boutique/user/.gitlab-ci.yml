@@ -7,6 +7,7 @@ stages:
 
 build-user:
   stage: build
+  tags: [dev]
   image:
     name: gcr.io/kaniko-project/executor:v1.9.0-debug
     entrypoint: [""]
@@ -21,6 +22,7 @@ build-user:
 
 build-user-db:
   image: docker:20.10.16
+  tags: [dev]
   services:
     - name: docker:20.10.16-dind
       entrypoint: ["dockerd-entrypoint.sh"]

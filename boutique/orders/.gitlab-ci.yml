@@ -10,6 +10,7 @@ stages:
 
 build-package:
   stage: build
+  tags: [dev]
   script:
     - mvn -DskipTests package
     - cp target/*.jar docker/orders
@@ -20,6 +21,7 @@ build-package:
       
 build:
   stage: build
+  tags: [dev]
   image:
     name: gcr.io/kaniko-project/executor:v1.9.0-debug
     entrypoint: [""]
