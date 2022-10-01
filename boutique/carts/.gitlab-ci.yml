@@ -28,6 +28,7 @@ build:
   script:
     - mkdir -p /kaniko/.docker && echo $DOCKER_AUTH_CONFIG > /kaniko/.docker/config.json
     - /kaniko/executor
+      --insecure
       --build-arg "COMMIT=${CI_COMMIT_SHORT_SHA}"
       --build-arg "BUILD_DATE=${CI_JOB_STARTED_AT}"
       --context "${CI_PROJECT_DIR}/docker/carts"

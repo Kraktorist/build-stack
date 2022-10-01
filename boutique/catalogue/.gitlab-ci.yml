@@ -14,6 +14,7 @@ build-catalogue:
   script:
     - mkdir -p /kaniko/.docker && echo $DOCKER_AUTH_CONFIG > /kaniko/.docker/config.json
     - /kaniko/executor
+      --insecure
       --build-arg "COMMIT=${CI_COMMIT_SHORT_SHA}"
       --build-arg "BUILD_DATE=${CI_JOB_STARTED_AT}"
       --context "${CI_PROJECT_DIR}"
@@ -30,6 +31,7 @@ build-catalogue-db:
     - mkdir -p /kaniko/.docker && echo $DOCKER_AUTH_CONFIG > /kaniko/.docker/config.json
 # https://github.com/GoogleContainerTools/kaniko/issues/1745
     - /kaniko/executor
+      --insecure
       --ignore-path=/lib
       --build-arg "COMMIT=${CI_COMMIT_SHORT_SHA}"
       --build-arg "BUILD_DATE=${CI_JOB_STARTED_AT}"
