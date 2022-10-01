@@ -10,19 +10,29 @@ variables:
 
 .terraform:status: 
   stage: status
+  environment:
+    name: $ENV
 
 .terraform:plan: 
   stage: plan
+  environment:
+    name: $ENV
 
 .terraform:apply: 
   stage: apply
   when: manual
+  environment:
+    name: $ENV
 
 .ansible:provision: 
   stage: provision
   when: manual
+  environment:
+    name: $ENV
 
 .terraform:destroy: 
   stage: destroy
   when: manual
+  environment:
+    name: $ENV
 
