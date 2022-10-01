@@ -21,10 +21,10 @@ build-user:
       --destination "${NEXUS_REGISTRY}/boutique/user:${CI_COMMIT_SHORT_SHA}"
 
 build-user-db:
-  image: docker:20.10.16
+  image: docker.io/docker:20.10.16
   tags: [dev]
   services:
-    - name: docker:20.10.16-dind
+    - name: docker.io/docker:20.10.16-dind
       entrypoint: ["dockerd-entrypoint.sh"]
       command: ["--insecure-registry", "192.168.0.0/24"]
   stage: build
