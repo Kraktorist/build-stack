@@ -310,9 +310,13 @@ containerd config
             insecure_skip_verify = true
 ```
 
+## K8S runner provisioning
+
+1. Copy kubeconfig from artifacts to `KUBECONFIG` env variable related to the certain gitlab environment
+2. Copy gitlab_runner_token to the `RUNNER_TOKEN` env variable as well
+3. Provision runner
+
 ## Working now
 
-Creating runner in every deployed cluster for boutique repo.
-- copy kubeconfig https://github.com/kubernetes-sigs/kubespray/blob/master/docs/getting-started.md#accessing-kubernetes-api
-- add kubeconfig to ci/cd variables per environment https://docs.ansible.com/ansible/latest/collections/community/general/gitlab_project_variable_module.html
-- deploy runner with tag named as environment (convert deployment to helm)
+1. Adjust helm config for k8s runner. Make it similar to monitoring spec.
+2. Build all and try to deploy
