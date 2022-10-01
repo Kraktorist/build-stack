@@ -8,6 +8,7 @@ include:
 default:
   before_script:
     - printenv
+    - chmod 400 $KUBECONFIG
     - eval `ssh-agent -s`
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - echo "$SSH_PUBLIC_KEY"> ~/ya_key.pub
@@ -116,6 +117,11 @@ provision.k8s:
   artifacts:
     paths: 
       - ${CI_PROJECT_DIR}/envs/${ENV}/artifacts/
+
+provision.k8s_runner:
+  extends: .ansible:provision
+  script:
+    - provision_k8s_runner
 
 provision.monitoring:
   extends: .ansible:provision

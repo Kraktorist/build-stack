@@ -122,8 +122,7 @@ function provision_k8s() {
 function provision_k8s_runner() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
-    --become /app/ansible/gitlab/main.yml \
-    --tag apps_runner
+    --become /app/ansible/k8s/main.yml
 }
 
 function provision_monitoring() {

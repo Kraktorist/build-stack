@@ -1,0 +1,22 @@
+runners:
+  config: |
+    [[runners]]
+      [runners.kubernetes]
+        image = "ubuntu:20.04"
+        privileged = true
+      [[runners.kubernetes.volumes.empty_dir]]
+        name = "docker-certs"
+        mount_path = "/certs/client"
+        medium = "Memory"
+      [[runners.kubernetes.volumes.empty_dir]]
+        name = "dind-storage"
+        mount_path = "/var/lib/docker"
+      [[runners.kubernetes.volumes.host_path]]
+        name = "hostpath-modules"
+        mount_path = "/lib/modules"
+        read_only = true
+        host_path = "/lib/modules"
+      [[runners.kubernetes.volumes.host_path]]
+        name = "hostpath-cgroup"
+        mount_path = "/sys/fs/cgroup"
+        host_path = "/sys/fs/cgroup"
