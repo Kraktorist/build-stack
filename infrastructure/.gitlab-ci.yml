@@ -113,6 +113,9 @@ provision.k8s:
   needs: 
     - job: apply.hosts
       artifacts: true
+  artifacts:
+    paths: 
+      - ${CI_PROJECT_DIR}/envs/${ENV}/artifacts/
 
 provision.monitoring:
   extends: .ansible:provision
