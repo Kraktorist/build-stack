@@ -22,21 +22,30 @@ build-user:
       --destination "${NEXUS_REGISTRY}/boutique/user:${CI_COMMIT_SHORT_SHA}"
 
 build-user-db:
-  image: docker.io/docker:20.10.16
+  image: 
+    name: docker.io/docker:20.10.16
   tags: [dev]
   services:
     - name: docker.io/docker:20.10.16-dind
-      entrypoint: ["dockerd-entrypoint.sh"]
-      command: ["--insecure-registry", "192.168.0.0/24"]
+      # https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3808
+      entrypoint: [ "sh", "-c", "dockerd-entrypoint.sh $DOCKER_DAEMON_OPTIONS" ]
   stage: build
   variables:
-    DOCKER_HOST: tcp://docker:2376
+    DOCKER_DAEMON_OPTIONS: "--insecure-registry=${NEXUS_REGISTRY}"
+  #  DOCKER_HOST: tcp://localhost:2375
+  #  DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: tcp://localhost:2376
     DOCKER_TLS_CERTDIR: "/certs"
-    DOCKER_TLS_VERIFY: 0
+    DOCKER_TLS_VERIFY: 1
     DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
   script:
     - mkdir -p ${HOME}/.docker && echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+    - |
+      mkdir -p /etc/docker
     - echo "Waiting for docker cli to respond before continuing build..."
+    - ls -la /certs/client
+    - ps ef
+    - printenv
     - |
       for i in $(seq 1 30); do
           if ! docker info &> /dev/null; then
