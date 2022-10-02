@@ -33,22 +33,38 @@ nexus_local_users:
     password: "{{ NEXUS_GITLAB_PASSWORD }}"
     roles:
       - Gitlab
-# nexus_blobstores:
-#   - name: company-artifacts
-#     path: /var/nexus/blobs/company-artifacts
 nexus_scheduled_tasks:
   - name: compact-blobstore
     cron: '0 0 22 * * ?'
     typeId: blobstore.compact
     taskProperties:
       blobstoreName: 'company-artifacts'
-# nexus_repos_maven_hosted:
-#   - name: microservices-demo
-#     version_policy: mixed
-#     write_policy: allow
-#     blob_store: default
-#   - name: google-microservices-demo
-#     version_policy: mixed
-#     write_policy: allow
-#     blob_store: default
 nexus_config_docker: true
+
+nexus_repos_docker_hosted:
+  - name: docker-release
+    http_port: 9079
+    v1_enabled: True
+  - name: docker-snapshots
+    http_port: 9080
+    v1_enabled: True
+    cleanup_policies:
+    - docker_snapshots_cleanup
+
+
+nexus_repos_docker_group:
+  - name: docker-group
+    http_port: "{{ nexus_docker_group_port }}"
+    v1_enabled: True
+    member_repos:
+      - docker-release
+      - docker-snapshots
+      - docker-proxy
+
+nexus_repos_cleanup_policies:
+  - name: docker_snapshots_cleanup
+    format: docker
+    mode:
+    notes: "Cleaning Snapshots Repository"
+    criteria:
+      lastBlobUpdated: 2  # Optional

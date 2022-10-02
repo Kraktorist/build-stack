@@ -21,7 +21,7 @@
       ansible.builtin.lineinfile:
         path: /etc/docker/daemon.json
         create: yes
-        line: " {\"insecure-registries\" : [ \"{{ hostvars[groups['nexus'][0]]['fqdn'] }}:9080\" ]}"
+        line: " {\"insecure-registries\" : [ \"{{ hostvars[groups['nexus'][0]]['fqdn'] }}:9082\" ]}"
       tags:
       - runner
       - never
