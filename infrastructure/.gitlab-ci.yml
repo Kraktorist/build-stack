@@ -8,7 +8,7 @@ include:
 default:
   before_script:
     - printenv
-    - chmod 400 $KUBECONFIG
+    - if [ -f "${KUBECONFIG}" ]; then chmod 400 ${KUBECONFIG}; fi;
     - eval `ssh-agent -s`
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - echo "$SSH_PUBLIC_KEY"> ~/ya_key.pub
