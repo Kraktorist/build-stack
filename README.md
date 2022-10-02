@@ -319,4 +319,4 @@ containerd config
 ## Working now
 
 1. Adjust helm config for k8s runner. Make it similar to monitoring spec.
-2. Build all and try to deploy
+2. Bugs with `catalogue` build multistep build doesn't work for some reasons. and the /app exists as a folder not a file
