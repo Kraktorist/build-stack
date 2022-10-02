@@ -19,7 +19,7 @@ build-user:
       --build-arg "BUILD_DATE=${CI_JOB_STARTED_AT}"
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/docker/user/Dockerfile-release"
-      --destination "${NEXUS_REGISTRY}/boutique/user:${CI_COMMIT_SHORT_SHA}"
+      --destination "${NEXUS_REGISTRY}/boutique/user:${CI_COMMIT_TAG}"
 
 build-user-db:
   image: 
@@ -56,4 +56,4 @@ build-user-db:
           fi
       done
     - docker build --build-arg BUILD_DATE=${CI_JOB_STARTED_AT} --build-arg COMMIT=${CI_COMMIT_SHORT_SHA} -t "${NEXUS_REGISTRY}/boutique/user-db:${CI_COMMIT_SHORT_SHA}" "${CI_PROJECT_DIR}/docker/user-db"
-    - docker push "${NEXUS_REGISTRY}/boutique/user-db:${CI_COMMIT_SHORT_SHA}"
+    - docker push "${NEXUS_REGISTRY}/boutique/user-db:${CI_COMMIT_TAG}"
