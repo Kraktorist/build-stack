@@ -10,18 +10,6 @@
 
     - name: Monitoring Installation
       block:
-        - name: Copy kubeconfig
-          delegate_to: "{{ groups['kube_control_plane'][0] }}"
-          ansible.builtin.fetch:
-            src: /root/.kube/config
-            dest: /root/.kube/
-            flat: true
-
-        - name: Modifying kubeconfig
-          ansible.builtin.shell: |
-              kubectl config set-cluster cluster.local \
-                --server=https://{{ groups['kube_control_plane'][0] }}:6443/ \
-                --insecure-skip-tls-verify=true
 
         - name: Create namespace for monitoring
           kubernetes.core.k8s:
