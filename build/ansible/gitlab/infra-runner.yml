@@ -58,3 +58,21 @@
       tags:
       - runner
       - never
+
+    - name: Gitlab Runner | Infrastructure | Set concurrent
+      ansible.builtin.lineinfile:
+        path: /etc/gitlab-runner/config.toml
+        regexp: '^concurrent'
+        line: concurrent = 10
+      tags:
+      - runner
+      - never
+
+    - name: Gitlab Runner | Infrastructure | Restart daemon
+      ansible.builtin.systemd:
+        state: restarted
+        daemon_reload: yes
+        name: gitlab-runner
+      tags:
+      - runner
+      - never
