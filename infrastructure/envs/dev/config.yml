@@ -26,6 +26,14 @@ monitoring:
     - monitoring/values2.yaml
     - monitoring/values3.yaml
 
+# gitlab runner spec
+runner:
+  enabled: true
+  name: gitlab-runner
+  namespace: gitlab-runner
+  helm_values: 
+    - runner/values.yml
+
 # hosts specification
 # every host must have defined name, cpu, memory, disk, public_ip
 hosts:
