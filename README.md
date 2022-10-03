@@ -197,7 +197,7 @@ provision_k8s
 # nexus address
 NEXUS_REPO="nexus:9080"
 docker tag builder ${NEXUS_REPO}/infrastructure/builder
-docker login ${NEXUS_REPO}
+echo $NEXUS_PASS | docker login -u $NEXUS_USER --password-stdin ${NEXUS_REPO}
 docker push ${NEXUS_REPO}/infrastructure/builder
 ```
 
@@ -259,11 +259,9 @@ Infra:
 **TODO**
 
 
-- creating repos for all app microservices (draft created, need to test)
 - build jobs for all microservices
   - on commit build to staging
   - on tag build to release
-- dev deploy job for testing
 - prod deploy job
 - app monitoring
 - ALB
@@ -318,5 +316,5 @@ containerd config
 
 ## Working now
 
-1. Adjust helm config for k8s runner. Make it similar to monitoring spec.
-2. Bugs with `catalogue` build multistep build doesn't work for some reasons. and the /app exists as a folder not a file
+1. Find a way to copy /boutique folder
+2. `catalogue` and `payment` don't work on priveleged ports
