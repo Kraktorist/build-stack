@@ -242,30 +242,7 @@ monitoring:
   helm_values: monitoring/values.yaml
 ```
 
-
-**TODO**
-
-Infra:
-  - working through bastion host and ALB https://cloud.yandex.ru/docs/security/domains/checklist
-  - vms with multiple disks
-  - gitlab-runner docker concurrent jobs
-  - cri-o instead of containerd
-  - tls connection
-  - anybadge
-
-
 ## Apps
-
-**TODO**
-
-
-- build jobs for all microservices
-  - on commit build to staging
-  - on tag build to release
-- prod deploy job
-- app monitoring
-- ALB
-
 
 Inject .gitlab-ci.yml
 
@@ -314,7 +291,30 @@ containerd config
 2. Copy gitlab_runner_token to the `RUNNER_TOKEN` env variable as well
 3. Provision runner
 
+
+**TODO**
+
+Infra:
+  - working through bastion host and ALB https://cloud.yandex.ru/docs/security/domains/checklist
+  - security groups
+  - ansible inventory as a separate step
+  - vms with multiple disks
+  - tls connections
+
+Apps:
+- build jobs for all microservices
+  - on commit build to staging
+  - on tag build to release
+- prod deploy job
+- app monitoring
+- anybadge
+
 ## Working now
 
+- deploy applications (make helm deployment)
+- monitoring apps
+
+## Issues
+
 1. Find a way to copy /boutique folder
-2. `catalogue` and `payment` don't work on priveleged ports
+2. `catalogue` and `payment` don't work on privileged ports
