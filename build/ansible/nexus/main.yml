@@ -1,22 +1,54 @@
 ---
+- name: Copying certificate to local machine
+  hosts: localhost
+  vars:
+    local_httpd_ssl_certificate_file: "files/nexus.vm.crt"
+    local_httpd_ssl_certificate_key_file: "files/nexus.vm.key"
+  tasks:
+    - name: Create ./files Directory
+      ansible.builtin.file:
+        path: ./files
+        state: directory
+
+    - name: Copy Trusted Root Certificate For Internal Zone
+      copy:
+        dest: "{{ local_httpd_ssl_certificate_file }}"
+        content: "{{ INTERNAL_TRUSTED_CERTIFICATE }}"
+
+    - name: Copy Trusted Root Certificate Key For Internal Zone
+      copy:
+        dest: "{{ local_httpd_ssl_certificate_key_file }}"
+        content: "{{ INTERNAL_TRUSTED_CERTIFICATE_KEY }}"
+
 - name: Nexus Installation
   hosts: nexus
   pre_tasks:
-  - name: Update repositories (for Debian)
-    apt:
-      update_cache: yes
-      force_apt_get: true
-    when: ansible_os_family == 'Debian'
-
-  - name: Update repositories (for CentOS)
-    yum:
-      update_cache: yes
-    when: ansible_os_family in ['CentOS', 'RedHat']
-
   - name: install openJDK
     ansible.builtin.package:
       name: openjdk-8-jdk
       state: present 
 
   roles:
-    - { role: ansible-thoteam.nexus3-oss, tags: ['ansible-thoteam.nexus3-oss'] }
+    - role: geerlingguy.apache
+      apache_create_vhosts: no
+      apache_mods_enabled: ["proxy", "proxy_http", "headers", "rewrite", "ssl"]
+      apache_remove_default_vhost: true
+      tags: ["geerlingguy.apache"]
+    - role: ansible-thoteam.nexus3-oss
+      tags: ['ansible-thoteam.nexus3-oss']
+
+  post_tasks:
+  - name: Setup vhosts for each docker registry
+    template:
+      src: "vhost-template.conf.j2"
+      dest: "{{ httpd_config_dir }}/docker-{{ item.fqdn }}.conf"
+    with_items:
+      - "{{ nexus_repos_docker_hosted }}"
+      - "{{ nexus_repos_docker_proxy }}"
+      - "{{ nexus_repos_docker_group }}"
+    when: item.fqdn is defined  
+  - name: Restart Apache
+    ansible.builtin.systemd:
+      state: restarted
+      daemon_reload: yes
+      name: apache2

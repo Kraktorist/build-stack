@@ -1,0 +1,14 @@
+<VirtualHost *:443>
+  ServerName "{{ item.fqdn }}"
+
+  SSLEngine on
+  SSLCertificateFile {{ certificate_file_dest }}/{{ httpd_ssl_certificate_file | basename }}
+  SSLCertificateKeyFile {{ certificate_key_dest }}/{{ httpd_ssl_certificate_key_file | basename }}
+
+  ProxyPass / http://localhost:{{ item.http_port }}{{ nexus_default_context_path }}
+  ProxyPassReverse / http://localhost:{{ item.http_port }}{{ nexus_default_context_path }}
+  RequestHeader set X-Forwarded-Proto "https"
+
+  ErrorLog /var/log/apache2/ssl_{{ item.fqdn }}_error_log
+  CustomLog /var/log/apache2/ssl_{{ item.fqdn }}_access_log common
+</VirtualHost>

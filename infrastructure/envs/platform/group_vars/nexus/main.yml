@@ -1,6 +1,6 @@
 nexus_admin_password: "{{ NEXUS_ADMIN_PASSWORD }}"
-nexus_public_hostname: 'nexus-lab'
-httpd_setup_enable: false
+nexus_public_hostname: "{{ hostvars[groups['nexus'][0]]['fqdn'] }}"
+httpd_setup_enable: true
 nexus_privileges:
   - name: all-repos-read
     description: 'Read & Browse access to all repos'
@@ -43,9 +43,11 @@ nexus_config_docker: true
 
 nexus_repos_docker_hosted:
   - name: docker-release
+    fqdn: docker-release.ru-central1.internal
     http_port: 9079
     v1_enabled: True
   - name: docker-snapshots
+    fqdn: docker-snapshots.ru-central1.internal
     http_port: 9080
     v1_enabled: True
     cleanup_policies:
@@ -54,6 +56,7 @@ nexus_repos_docker_hosted:
 
 nexus_repos_docker_group:
   - name: docker-group
+    fqdn: docker-group.ru-central1.internal
     http_port: "{{ nexus_docker_group_port }}"
     v1_enabled: True
     member_repos:

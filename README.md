@@ -285,6 +285,14 @@ containerd config
             insecure_skip_verify = true
 ```
 
+## Certificate creating
+
+```
+openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes \
+  -keyout internal-zone.key -out internal-zone.crt -subj "/CN=ru-central1.internal" \
+  -addext "subjectAltName=DNS:*.ru-central1.internal"
+```
+
 ## K8S runner provisioning
 
 1. Copy kubeconfig from artifacts to `KUBECONFIG` env variable related to the certain gitlab environment
@@ -311,7 +319,7 @@ Apps:
 
 ## Working now
 
-- deploy applications (make helm deployment)
+- make deploy for boutique environments
 - monitoring apps
 
 ## Issues
