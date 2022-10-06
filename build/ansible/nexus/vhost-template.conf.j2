@@ -1,14 +1,19 @@
-<VirtualHost *:443>
-  ServerName "{{ item.fqdn }}"
+Listen {{ item.proxy_port }} https
 
-  SSLEngine on
+<VirtualHost *:{{ item.proxy_port }}>
+  ServerName nexus11.ru-central1.internal
+  ServerAdmin admin@example.com
+
+  AllowEncodedSlashes NoDecode
+  ProxyRequests Off
+  ProxyPreserveHost On
+
+  SSLEngine ON
   SSLCertificateFile {{ certificate_file_dest }}/{{ httpd_ssl_certificate_file | basename }}
   SSLCertificateKeyFile {{ certificate_key_dest }}/{{ httpd_ssl_certificate_key_file | basename }}
 
+  ProxyTimeout 300
   ProxyPass / http://localhost:{{ item.http_port }}{{ nexus_default_context_path }}
   ProxyPassReverse / http://localhost:{{ item.http_port }}{{ nexus_default_context_path }}
   RequestHeader set X-Forwarded-Proto "https"
-
-  ErrorLog /var/log/apache2/ssl_{{ item.fqdn }}_error_log
-  CustomLog /var/log/apache2/ssl_{{ item.fqdn }}_access_log common
 </VirtualHost>

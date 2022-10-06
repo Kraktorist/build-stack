@@ -9,7 +9,7 @@ build-user:
   stage: build
   tags: [dev]
   image:
-    name: gcr.io/kaniko-project/executor:v1.9.0-debug
+    name: ${NEXUS_GROUP_REGISTRY}/kaniko-project/executor:v1.9.0-debug
     entrypoint: [""]
   script:
     - mkdir -p /kaniko/.docker && echo $DOCKER_AUTH_CONFIG > /kaniko/.docker/config.json
@@ -19,14 +19,14 @@ build-user:
       --build-arg "BUILD_DATE=${CI_JOB_STARTED_AT}"
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/docker/user/Dockerfile-release"
-      --destination "${NEXUS_REGISTRY}/boutique/user:${CI_COMMIT_TAG}"
+      --destination "${NEXUS_RELEASE_REGISTRY}/boutique/user:${CI_COMMIT_TAG}"
 
 build-user-db:
   image: 
-    name: docker.io/docker:20.10.16
+    name: ${NEXUS_GROUP_REGISTRY}/docker:20.10.16
   tags: [dev]
   services:
-    - name: docker.io/docker:20.10.16-dind
+    - name: ${NEXUS_GROUP_REGISTRY}/docker:20.10.16-dind
       # https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3808
       entrypoint: [ "sh", "-c", "dockerd-entrypoint.sh $DOCKER_DAEMON_OPTIONS" ]
   stage: build
@@ -43,9 +43,6 @@ build-user-db:
     - |
       mkdir -p /etc/docker
     - echo "Waiting for docker cli to respond before continuing build..."
-    - ls -la /certs/client
-    - ps ef
-    - printenv
     - |
       for i in $(seq 1 30); do
           if ! docker info &> /dev/null; then
@@ -56,4 +53,4 @@ build-user-db:
           fi
       done
     - docker build --build-arg BUILD_DATE=${CI_JOB_STARTED_AT} --build-arg COMMIT=${CI_COMMIT_SHORT_SHA} -t "${NEXUS_REGISTRY}/boutique/user-db:${CI_COMMIT_TAG}" "${CI_PROJECT_DIR}/docker/user-db"
-    - docker push "${NEXUS_REGISTRY}/boutique/user-db:${CI_COMMIT_TAG}"
+    - docker push "${NEXUS_RELEASE_REGISTRY}/boutique/user-db:${CI_COMMIT_TAG}"

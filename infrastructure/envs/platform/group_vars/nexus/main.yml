@@ -43,26 +43,40 @@ nexus_config_docker: true
 
 nexus_repos_docker_hosted:
   - name: docker-release
-    fqdn: docker-release.ru-central1.internal
     http_port: 9079
+    proxy_port: 9179
     v1_enabled: True
   - name: docker-snapshots
-    fqdn: docker-snapshots.ru-central1.internal
     http_port: 9080
+    proxy_port: 9180
     v1_enabled: True
     cleanup_policies:
     - docker_snapshots_cleanup
 
+nexus_repos_docker_proxy:
+  - name: docker-proxy
+    http_port: "{{ nexus_docker_proxy_port }}"
+    v1_enabled: True
+    index_type: "HUB"
+    remote_url: "https://registry-1.docker.io"
+    use_nexus_certificates_to_access_index: false
+  - name: gcr-proxy
+    http_port: 9083
+    v1_enabled: True
+    index_type: "REGISTRY"
+    remote_url: "https://gcr.io/"
+    use_nexus_certificates_to_access_index: false
 
 nexus_repos_docker_group:
   - name: docker-group
-    fqdn: docker-group.ru-central1.internal
     http_port: "{{ nexus_docker_group_port }}"
+    proxy_port: 9182
     v1_enabled: True
     member_repos:
       - docker-release
       - docker-snapshots
       - docker-proxy
+      - gcr-proxy
 
 nexus_repos_cleanup_policies:
   - name: docker_snapshots_cleanup

@@ -41,12 +41,12 @@
   - name: Setup vhosts for each docker registry
     template:
       src: "vhost-template.conf.j2"
-      dest: "{{ httpd_config_dir }}/docker-{{ item.fqdn }}.conf"
+      dest: "{{ httpd_config_dir }}/docker-{{ item.name }}.conf"
     with_items:
       - "{{ nexus_repos_docker_hosted }}"
       - "{{ nexus_repos_docker_proxy }}"
       - "{{ nexus_repos_docker_group }}"
-    when: item.fqdn is defined  
+    when: item.proxy_port is defined  
   - name: Restart Apache
     ansible.builtin.systemd:
       state: restarted

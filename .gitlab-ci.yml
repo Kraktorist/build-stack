@@ -1,5 +1,5 @@
 default:
-  image: docker:20.10.16
+  image: ${NEXUS_GROUP_REGISTRY}/docker:20.10.16
   tags:
   - infrastructure
   before_script:
@@ -11,5 +11,5 @@ stages:
 build:
   stage: build
   script:
-    - docker build --no-cache ./build/ -t ${NEXUS_REGISTRY}/infrastructure/builder
-    - docker push ${NEXUS_REGISTRY}/infrastructure/builder
+    - docker build --no-cache ./build/ -t ${NEXUS_RELEASE_REGISTRY}/infrastructure/builder
+    - docker push ${NEXUS_RELEASE_REGISTRY}/infrastructure/builder

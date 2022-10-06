@@ -6,13 +6,22 @@ gitlab_url: http://{{ gitlab_host }}
 source_repo: https://github.com/Kraktorist/build-stack.git
 source_repo_name: build-stack
 NEXUS_REGISTRY: "{{ hostvars[groups['nexus'][0]]['fqdn'] }}:9080"
+NEXUS_GROUP_REGISTRY: "{{ hostvars[groups['nexus'][0]]['fqdn'] }}:9182"
+NEXUS_SNAPSHOTS_REGISTRY: "{{ hostvars[groups['nexus'][0]]['fqdn'] }}:9180"
+NEXUS_RELEASE_REGISTRY: "{{ hostvars[groups['nexus'][0]]['fqdn'] }}:9179"
 infra_gitlab_vars:
   - name: ACCESS_KEY
     value: "{{ ACCESS_KEY }}"
   - name: DOCKER_AUTH_CONFIG
-    value: " {\"auths\": { \"{{ NEXUS_REGISTRY }}\": { \"auth\": \"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\" }}}"
+    value: " {\"auths\":{\"{{ NEXUS_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_GROUP_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_SNAPSHOTS_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_RELEASE_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"}}}"
   - name: NEXUS_REGISTRY
     value: "{{ NEXUS_REGISTRY }}"
+  - name: NEXUS_GROUP_REGISTRY
+    value: "{{ NEXUS_GROUP_REGISTRY }}"
+  - name: NEXUS_SNAPSHOTS_REGISTRY
+    value: "{{ NEXUS_SNAPSHOTS_REGISTRY }}"
+  - name: NEXUS_RELEASE_REGISTRY
+    value: "{{ NEXUS_RELEASE_REGISTRY }}"
   - name: S3_TF_STATE
     value: "{{ S3_TF_STATE }}"
   - name: SECRET_KEY
@@ -33,9 +42,19 @@ infra_gitlab_vars:
     value: true
 apps_gitlab_vars:
   - name: DOCKER_AUTH_CONFIG
-    value: " {\"auths\": { \"{{ NEXUS_REGISTRY }}\": { \"auth\": \"{{ ('admin:' + NEXUS_ADMIN_PASSWORD) | b64encode }}\" }}}"
+    value: " {\"auths\":{\"{{ NEXUS_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_GROUP_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_SNAPSHOTS_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_RELEASE_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"}}}"
   - name: NEXUS_REGISTRY
     value: "{{ NEXUS_REGISTRY }}"
+  - name: NEXUS_GROUP_REGISTRY
+    value: "{{ NEXUS_GROUP_REGISTRY }}"
+  - name: NEXUS_SNAPSHOTS_REGISTRY
+    value: "{{ NEXUS_SNAPSHOTS_REGISTRY }}"
+  - name: NEXUS_RELEASE_REGISTRY
+    value: "{{ NEXUS_RELEASE_REGISTRY }}"
+  # - name: DOCKER_AUTH_CONFIG
+  #   value: " {\"auths\": { \"{{ NEXUS_REGISTRY }}\": { \"auth\": \"{{ ('admin:' + NEXUS_ADMIN_PASSWORD) | b64encode }}\" }}}"
+  # - name: NEXUS_REGISTRY
+  #   value: "{{ NEXUS_REGISTRY }}"
   - name: SSH_PRIVATE_KEY
     value: "{{ SSH_PRIVATE_KEY }}"
   - name: SSH_PUBLIC_KEY
@@ -45,7 +64,6 @@ apps_gitlab_vars:
   - name: ANSIBLE_FORCE_COLOR
     value: true
 git_repolist:
-  - { reponame: weavesocks, repopath: https://github.com/microservices-demo/microservices-demo.git }
   - { reponame: carts, repopath: https://github.com/microservices-demo/carts.git }
   - { reponame: front-end, repopath: https://github.com/microservices-demo/front-end.git }
   - { reponame: user, repopath: https://github.com/microservices-demo/user.git }
