@@ -29,5 +29,5 @@ COPY .terraformrc /root/.terraformrc
 COPY ansible ansible
 RUN ansible-galaxy install -r ./ansible/requirements.yml
 # install kubespray
-RUN curl -L https://github.com/kubernetes-sigs/kubespray/archive/refs/heads/master.zip --output kubespray.zip && \
-    unzip kubespray.zip && rm -rf kubespray.zip && mv kubespray-master ./ansible/kubespray
+RUN curl -L https://github.com/kubernetes-sigs/kubespray/archive/refs/tags/v2.20.0.zip --output kubespray.zip && \
+    unzip kubespray.zip && rm -rf kubespray.zip && mv kubespray-2.20.0 ./ansible/kubespray
