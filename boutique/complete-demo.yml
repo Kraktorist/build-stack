@@ -1,8 +1,8 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: sock-shop
+# ---
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   name: sock-shop
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: carts
-        image: nexus11.ru-central1.internal:9080/boutique/carts:test
+        image: nexus11.ru-central1.internal:9182/boutique/carts:test
         env:
          - name: JAVA_OPTS
            value: -Xms64m -Xmx128m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false
@@ -48,6 +48,8 @@ spec:
         volumeMounts:
         - mountPath: /tmp
           name: tmp-volume
+      imagePullSecrets:
+        - name: registry-creds
       volumes:
         - name: tmp-volume
           emptyDir:
@@ -107,6 +109,8 @@ spec:
         volumeMounts:
         - mountPath: /tmp
           name: tmp-volume
+      imagePullSecrets:
+        - name: registry-creds
       volumes:
         - name: tmp-volume
           emptyDir:
@@ -148,7 +152,7 @@ spec:
     spec:
       containers:
       - name: catalogue
-        image: nexus11.ru-central1.internal:9080/boutique/catalogue:test
+        image: nexus11.ru-central1.internal:9182/boutique/catalogue:test
         command: ["/app"]
         args:
         - -port=8080
@@ -182,6 +186,8 @@ spec:
             port: 8080
           initialDelaySeconds: 180
           periodSeconds: 3
+      imagePullSecrets:
+        - name: registry-creds
       nodeSelector:
         beta.kubernetes.io/os: linux
 ---
@@ -221,7 +227,7 @@ spec:
     spec:
       containers:
       - name: catalogue-db
-        image: nexus11.ru-central1.internal:9080/boutique/catalogue-db:test
+        image: nexus11.ru-central1.internal:9182/boutique/catalogue-db:test
         env:
           - name: MYSQL_ROOT_PASSWORD
             value: fake_password
@@ -230,6 +236,8 @@ spec:
         ports:
         - name: mysql
           containerPort: 3306
+      imagePullSecrets:
+        - name: registry-creds
       nodeSelector:
         beta.kubernetes.io/os: linux
 ---
@@ -265,7 +273,7 @@ spec:
     spec:
       containers:
       - name: front-end
-        image: nexus11.ru-central1.internal:9080/boutique/front-end:test
+        image: nexus11.ru-central1.internal:9182/boutique/front-end:test
         resources:
           limits:
             cpu: 300m
@@ -297,6 +305,8 @@ spec:
             port: 8079
           initialDelaySeconds: 30
           periodSeconds: 3
+      imagePullSecrets:
+        - name: registry-creds
       nodeSelector:
         beta.kubernetes.io/os: linux
 ---
@@ -337,7 +347,7 @@ spec:
     spec:
       containers:
       - name: orders
-        image: nexus11.ru-central1.internal:9080/boutique/orders:test
+        image: nexus11.ru-central1.internal:9182/boutique/orders:test
         env:
          - name: JAVA_OPTS
            value: -Xms64m -Xmx128m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false
@@ -362,6 +372,8 @@ spec:
         volumeMounts:
         - mountPath: /tmp
           name: tmp-volume
+      imagePullSecrets:
+        - name: registry-creds
       volumes:
         - name: tmp-volume
           emptyDir:
@@ -421,6 +433,8 @@ spec:
         volumeMounts:
         - mountPath: /tmp
           name: tmp-volume
+      imagePullSecrets:
+        - name: registry-creds
       volumes:
         - name: tmp-volume
           emptyDir:
@@ -462,7 +476,7 @@ spec:
     spec:
       containers:
       - name: payment
-        image: nexus11.ru-central1.internal:9080/boutique/payment:test
+        image: nexus11.ru-central1.internal:9182/boutique/payment:test
         resources:
           limits:
             cpu: 200m
@@ -493,6 +507,8 @@ spec:
             port: 80
           initialDelaySeconds: 180
           periodSeconds: 3
+      imagePullSecrets:
+        - name: registry-creds
       nodeSelector:
         beta.kubernetes.io/os: linux
 ---
@@ -532,7 +548,7 @@ spec:
     spec:
       containers:
       - name: queue-master
-        image: nexus11.ru-central1.internal:9080/boutique/queue-master:test
+        image: nexus11.ru-central1.internal:9182/boutique/queue-master:test
         env:
          - name: JAVA_OPTS
            value: -Xms64m -Xmx128m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false
@@ -545,6 +561,8 @@ spec:
             memory: 300Mi
         ports:
         - containerPort: 80
+      imagePullSecrets:
+        - name: registry-creds
       nodeSelector:
         beta.kubernetes.io/os: linux
 ---
@@ -607,6 +625,8 @@ spec:
         ports:
         - containerPort: 9090
           name: exporter
+      imagePullSecrets:
+        - name: registry-creds
       nodeSelector:
         beta.kubernetes.io/os: linux
 ---
@@ -667,6 +687,8 @@ spec:
               - SETGID
               - SETUID
           readOnlyRootFilesystem: true
+      imagePullSecrets:
+        - name: registry-creds
       nodeSelector:
         beta.kubernetes.io/os: linux
 ---
@@ -704,7 +726,7 @@ spec:
     spec:
       containers:
       - name: shipping
-        image: nexus11.ru-central1.internal:9080/boutique/shipping:test
+        image: nexus11.ru-central1.internal:9182/boutique/shipping:test
         env:
          - name: ZIPKIN
            value: zipkin.jaeger.svc.cluster.local
@@ -731,6 +753,8 @@ spec:
         volumeMounts:
         - mountPath: /tmp
           name: tmp-volume
+      imagePullSecrets:
+        - name: registry-creds
       volumes:
         - name: tmp-volume
           emptyDir:
@@ -775,7 +799,7 @@ spec:
     spec:
       containers:
       - name: user
-        image: nexus11.ru-central1.internal:9080/boutique/user:test
+        image: nexus11.ru-central1.internal:9182/boutique/user:test
         resources:
           limits:
             cpu: 300m
@@ -809,6 +833,8 @@ spec:
             port: 80
           initialDelaySeconds: 180
           periodSeconds: 3
+      imagePullSecrets:
+        - name: registry-creds
       nodeSelector:
         beta.kubernetes.io/os: linux
 ---
@@ -849,7 +875,7 @@ spec:
     spec:
       containers:
       - name: user-db
-        image: nexus11.ru-central1.internal:9080/boutique/user-db:test
+        image: nexus11.ru-central1.internal:9182/boutique/user-db:test
 
         ports:
         - name: mongo
@@ -866,6 +892,8 @@ spec:
         volumeMounts:
         - mountPath: /tmp
           name: tmp-volume
+      imagePullSecrets:
+        - name: registry-creds
       volumes:
         - name: tmp-volume
           emptyDir:
