@@ -1,3 +1,9 @@
+certsSecretName: defaultcertificates
+envVars:
+  - name: CI_SERVER_TLS_CA_FILE
+    value: /home/gitlab-runner/.gitlab-runner/certs/selfsigned.crt
+  - name: CONFIG_FILE
+    value: /home/gitlab-runner/.gitlab-runner/config.toml
 runners:
   config: |
     [[runners]]

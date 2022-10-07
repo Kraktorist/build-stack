@@ -307,7 +307,6 @@ Infra:
   - security groups
   - ansible inventory as a separate step
   - vms with multiple disks
-  - tls connections
 
 Apps:
 - build jobs for all microservices
@@ -317,12 +316,15 @@ Apps:
 - app monitoring
 - anybadge
 
+## Issues
+
+1. Find a way to copy /boutique folder
+2. `catalogue` and `payment` don't work on privileged ports
+
 ## Working now
 
 - make deploy for boutique environments
 - monitoring apps
 
-## Issues
-
-1. Find a way to copy /boutique folder
-2. `catalogue` and `payment` don't work on privileged ports
+runner doesn't trust to self-signed crtificate
+Try to replace with chain
