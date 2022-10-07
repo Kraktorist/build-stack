@@ -66,6 +66,12 @@ nexus_repos_docker_proxy:
     index_type: "REGISTRY"
     remote_url: "https://gcr.io/"
     use_nexus_certificates_to_access_index: false
+  - name: quay-proxy
+    http_port: 9084
+    v1_enabled: True
+    index_type: "REGISTRY"
+    remote_url: "https://quay.io/"
+    use_nexus_certificates_to_access_index: false
 
 nexus_repos_docker_group:
   - name: docker-group
@@ -77,6 +83,7 @@ nexus_repos_docker_group:
       - docker-snapshots
       - docker-proxy
       - gcr-proxy
+      - quay-proxy
 
 nexus_repos_cleanup_policies:
   - name: docker_snapshots_cleanup
