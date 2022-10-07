@@ -31,9 +31,7 @@ build-user-db:
       entrypoint: [ "sh", "-c", "dockerd-entrypoint.sh $DOCKER_DAEMON_OPTIONS" ]
   stage: build
   variables:
-    DOCKER_DAEMON_OPTIONS: "--insecure-registry=${NEXUS_REGISTRY}"
-  #  DOCKER_HOST: tcp://localhost:2375
-  #  DOCKER_TLS_CERTDIR: ""
+  #  DOCKER_DAEMON_OPTIONS: "--insecure-registry=${NEXUS_REGISTRY}"
     DOCKER_HOST: tcp://localhost:2376
     DOCKER_TLS_CERTDIR: "/certs"
     DOCKER_TLS_VERIFY: 1
@@ -52,5 +50,5 @@ build-user-db:
               break
           fi
       done
-    - docker build --build-arg BUILD_DATE=${CI_JOB_STARTED_AT} --build-arg COMMIT=${CI_COMMIT_SHORT_SHA} -t "${NEXUS_REGISTRY}/boutique/user-db:${CI_COMMIT_TAG}" "${CI_PROJECT_DIR}/docker/user-db"
+    - docker build --build-arg BUILD_DATE=${CI_JOB_STARTED_AT} --build-arg COMMIT=${CI_COMMIT_SHORT_SHA} -t "${NEXUS_RELEASE_REGISTRY}/boutique/user-db:${CI_COMMIT_TAG}" "${CI_PROJECT_DIR}/docker/user-db"
     - docker push "${NEXUS_RELEASE_REGISTRY}/boutique/user-db:${CI_COMMIT_TAG}"
