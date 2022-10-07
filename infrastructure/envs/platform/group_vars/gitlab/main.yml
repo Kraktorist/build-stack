@@ -51,6 +51,12 @@ apps_gitlab_vars:
     value: "{{ NEXUS_SNAPSHOTS_REGISTRY }}"
   - name: NEXUS_RELEASE_REGISTRY
     value: "{{ NEXUS_RELEASE_REGISTRY }}"
+  - name: TRUSTED_CERTIFICATES
+    variable_type: file
+    value: |
+      {{ INTERNAL_TRUSTED_CERTIFICATE }}
+      {{ INTERNAL_TRUSTED_ROOT_CERTIFICATE }}
+
   # - name: DOCKER_AUTH_CONFIG
   #   value: " {\"auths\": { \"{{ NEXUS_REGISTRY }}\": { \"auth\": \"{{ ('admin:' + NEXUS_ADMIN_PASSWORD) | b64encode }}\" }}}"
   # - name: NEXUS_REGISTRY

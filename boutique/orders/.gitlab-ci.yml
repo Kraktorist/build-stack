@@ -1,5 +1,5 @@
 default:
-  image: ${NEXUS_GROUP_REGISTRY}//maven:3.6-jdk-11
+  image: ${NEXUS_GROUP_REGISTRY}/maven:3.6-jdk-11
 
 workflow:
   rules:
@@ -28,12 +28,14 @@ build:
   script:
     - mkdir -p /kaniko/.docker && echo $DOCKER_AUTH_CONFIG > /kaniko/.docker/config.json
     - /kaniko/executor
-      --insecure
       --build-arg "COMMIT=${CI_COMMIT_SHORT_SHA}"
       --build-arg "BUILD_DATE=${CI_JOB_STARTED_AT}"
       --context "${CI_PROJECT_DIR}/docker/orders"
       --dockerfile "${CI_PROJECT_DIR}/docker/orders/Dockerfile"
       --destination "${NEXUS_RELEASE_REGISTRY}/boutique/orders:${CI_COMMIT_TAG}"
+      --registry-certificate ${NEXUS_RELEASE_REGISTRY}=${TRUSTED_CERTIFICATES}
+      --registry-certificate ${NEXUS_GROUP_REGISTRY}=${TRUSTED_CERTIFICATES}
+      --registry-mirror ${NEXUS_GROUP_REGISTRY}
   needs: 
     - job: build-package
       artifacts: true

@@ -14,13 +14,15 @@ build-user:
   script:
     - mkdir -p /kaniko/.docker && echo $DOCKER_AUTH_CONFIG > /kaniko/.docker/config.json
     - /kaniko/executor
-      --insecure
       --build-arg "COMMIT=${CI_COMMIT_SHORT_SHA}"
       --build-arg "BUILD_DATE=${CI_JOB_STARTED_AT}"
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/docker/user/Dockerfile-release"
       --destination "${NEXUS_RELEASE_REGISTRY}/boutique/user:${CI_COMMIT_TAG}"
-
+      --registry-certificate ${NEXUS_RELEASE_REGISTRY}=${TRUSTED_CERTIFICATES}
+      --registry-certificate ${NEXUS_GROUP_REGISTRY}=${TRUSTED_CERTIFICATES}
+      --registry-mirror ${NEXUS_GROUP_REGISTRY}
+      
 build-user-db:
   image: 
     name: ${NEXUS_GROUP_REGISTRY}/docker:20.10.16
@@ -31,7 +33,7 @@ build-user-db:
       entrypoint: [ "sh", "-c", "dockerd-entrypoint.sh $DOCKER_DAEMON_OPTIONS" ]
   stage: build
   variables:
-  #  DOCKER_DAEMON_OPTIONS: "--insecure-registry=${NEXUS_REGISTRY}"
+    DOCKER_DAEMON_OPTIONS: "--insecure-registry=${NEXUS_RELEASE_REGISTRY}"
     DOCKER_HOST: tcp://localhost:2376
     DOCKER_TLS_CERTDIR: "/certs"
     DOCKER_TLS_VERIFY: 1

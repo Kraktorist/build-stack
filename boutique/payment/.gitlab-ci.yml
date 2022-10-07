@@ -14,10 +14,11 @@ build-payment:
   script:
     - mkdir -p /kaniko/.docker && echo $DOCKER_AUTH_CONFIG > /kaniko/.docker/config.json
     - /kaniko/executor
-      --insecure
       --build-arg "COMMIT=${CI_COMMIT_SHORT_SHA}"
       --build-arg "BUILD_DATE=${CI_JOB_STARTED_AT}"
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/docker/payment/Dockerfile"
       --destination "${NEXUS_RELEASE_REGISTRY}/boutique/payment:${CI_COMMIT_TAG}"
-
+      --registry-certificate ${NEXUS_RELEASE_REGISTRY}=${TRUSTED_CERTIFICATES}
+      --registry-certificate ${NEXUS_GROUP_REGISTRY}=${TRUSTED_CERTIFICATES}
+      --registry-mirror ${NEXUS_GROUP_REGISTRY}
