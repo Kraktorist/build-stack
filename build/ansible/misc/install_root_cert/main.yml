@@ -5,8 +5,8 @@
   register: result
   failed_when: not result.stat.exists
 
-- include: debian.yml
+- include_tasks: debian.yml
   when: ansible_os_family == "Debian"
 
-- include: red_hat.yml
+- include_tasks: red_hat.yml
   when: ansible_os_family == "RedHat"
