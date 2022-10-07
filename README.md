@@ -195,7 +195,7 @@ provision_k8s
 # sudo vi /etc/docker/daemon.json
 # sudo systemcl restart docker
 # nexus address
-NEXUS_REPO="nexus:9080"
+NEXUS_REPO="nexus11.ru-central1.internal:9179"
 docker tag builder ${NEXUS_REPO}/infrastructure/builder
 echo $NEXUS_PASS | docker login -u $NEXUS_USER --password-stdin ${NEXUS_REPO}
 docker push ${NEXUS_REPO}/infrastructure/builder
@@ -328,3 +328,16 @@ Apps:
 
 runner doesn't trust to self-signed crtificate
 Try to replace with chain
+
+for docker push https://gitlab.com/gitlab-org/gitlab-runner/-/issues/1842
+check if it's mandatory to create 
+KUBECONFIG=/home/kraktorist/Downloads/artifacts\ \(1\)/envs/dev/artifacts/admin.conf kubectl -n gitlab-runner create secret generic defaultcertificates --from-file=/home/kraktorist/repos/test/selfsigned.crt
+
+kubectl 
+  --namespace sock-shop \
+    create secret docker-registry registry-creds \
+  --docker-server=nexus11.ru-central1.internal:9182 \
+  --docker-username= \
+  --docker-password= \
+  --docker-email=1@1.ru
+
