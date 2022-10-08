@@ -26,8 +26,8 @@ cartsdb:
     image:
         repo: mongo
         tag: 4.4.0
-        imagePullSecrets:
-        - name: registry-pull-credentials
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     resources:
         requests:
             cpu: 500m
@@ -43,8 +43,8 @@ carts:
     image:
         repo: weaveworksdemos/carts
         tag: 0.4.8
-        imagePullSecrets:
-        - name: registry-pull-credentials
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     containerPort: 80
     resources:
         limits:
