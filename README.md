@@ -298,6 +298,12 @@ openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes \
 2. Copy gitlab_runner_token to the `RUNNER_TOKEN` env variable as well
 3. Provision runner
 
+## Boutique deployment
+
+```
+helm -n sock upgrade --install sock-shop /home/kraktorist/repos/lab-terraform-ya/build/helm/boutique --values /home/kraktorist/repos/lab-terraform-ya/boutique/deploy/prod/values.yaml
+```
+
 
 **TODO**
 
