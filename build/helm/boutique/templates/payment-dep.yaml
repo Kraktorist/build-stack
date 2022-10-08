@@ -23,7 +23,7 @@ spec:
       - name: payment
         image: {{if .Values.global.registry}}{{ .Values.global.registry }}/{{end}}{{ .Values.payment.image.repo }}:{{ .Values.payment.image.tag }}
         command:
-        - /app
+        - /app/main
         - -decline={{ .Values.payment.declinePaymentsOverAmount }}
         resources:
 {{ toYaml .Values.payment.resources | indent 10 }}

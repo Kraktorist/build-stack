@@ -1,0 +1,235 @@
+# Default values for sock-shop.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+global:
+    registry: nexus11.ru-central1.internal:9182
+    imageCredentials:
+        registry: nexus11.ru-central1.internal:9182
+        username: admin
+        password: admin
+        email: someone@host.com
+
+java:
+    options: -Xms64m -Xmx128m -XX:PermSize=32m -XX:MaxPermSize=64m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
+
+ingress:
+    annotations:
+        kubernetes.io/ingress.class: nginx
+    labels: {}
+    host: qamo.ru
+    tlsSecretName: ''
+
+cartsdb:
+    image:
+        repo: mongo
+        tag: 4.4.0
+        imagePullSecrets:
+        - name: registry-pull-credentials
+    resources:
+        requests:
+            cpu: 500m
+            memory: 512Mi
+        limits:
+            cpu: 500m
+            memory: 512Mi
+    persistentVolume:
+        storageClass: ''
+        size: 512Mi
+
+carts:
+    image:
+        repo: boutique/carts
+        tag: test
+        imagePullSecrets:
+        - name: registry-pull-credentials
+    containerPort: 80
+    resources:
+        limits:
+            cpu: 300m
+            memory: 2000Mi
+        requests:
+            cpu: 300m
+            memory: 1000Mi
+
+cataloguedb:
+    image:
+        repo: boutique/catalogue-db
+        tag: test
+        imagePullSecrets:
+        - name: registry-pull-credentials
+    resources:
+        limits:
+            cpu: 300m
+            memory: 1000Mi
+        requests:
+            cpu: 100m
+            memory: 300Mi
+
+catalogue:
+    image:
+        repo: boutique/catalogue
+        tag: test
+        imagePullSecrets:
+        - name: registry-pull-credentials
+    containerPort: 8080
+    resources:
+        limits:
+            cpu: 100m
+            memory: 100Mi
+        requests:
+            cpu: 100m
+            memory: 100Mi
+
+frontend:
+    replicas: 1
+    image:
+        repo: boutique/front-end
+        tag: test
+        imagePullSecrets:
+        - name: registry-pull-credentials
+    resources:
+        limits:
+            cpu: 300m
+            memory: 1000Mi
+        requests:
+            cpu: 100m
+            memory: 300Mi
+    service:
+        type: ClusterIP
+
+ordersdb:
+    image:
+        repo: mongo
+        tag: 4.4.0
+        imagePullSecrets:
+        - name: registry-pull-credentials
+    resources:
+        requests:
+            cpu: 500m
+            memory: 512Mi
+        limits:
+            cpu: 500m
+            memory: 512Mi
+    persistentVolume:
+        storageClass: ''
+        size: 512Mi
+
+orders:
+    image:
+        repo: boutique/orders
+        tag: test
+        imagePullSecrets:
+        - name: registry-pull-credentials
+    containerPort: 80
+    resources:
+        limits:
+            cpu: 500m
+            memory: 2000Mi
+        requests:
+            cpu: 200m
+            memory: 1000Mi
+
+payment:
+    image:
+        repo: boutique/payment
+        tag: test
+        imagePullSecrets:
+        - name: registry-pull-credentials
+    declinePaymentsOverAmount: 200
+    containerPort: 8080
+    resources:
+        limits:
+            cpu: 100m
+            memory: 100Mi
+        requests:
+            cpu: 100m
+            memory: 100Mi
+
+queuemaster:
+    image:
+        repo: boutique/queue-master
+        tag: test
+        imagePullSecrets:
+        - name: registry-pull-credentials
+    resources:
+        limits:
+            cpu: 300m
+            memory: 1000Mi
+        requests:
+            cpu: 300m
+            memory: 500Mi
+
+rabbitmq:
+    image:
+        repo: rabbitmq
+        tag: 3.6.8
+        imagePullSecrets:
+        - name: registry-pull-credentials
+    resources:
+        requests:
+            memory: 256Mi
+            cpu: 350m
+        limits:
+            memory: 512Mi
+            cpu: 1
+
+sessiondb:
+    image:
+        repo: redis
+        tag: alpine
+        imagePullSecrets:
+        - name: registry-pull-credentials
+    resources:
+        requests:
+            memory: 256Mi
+            cpu: 250m
+        limits:
+            memory: 256Mi
+            cpu: 250m
+    persistentVolume:
+        storageClass: ''
+        size: 512Mi
+
+shipping:
+    image:
+        repo: boutique/shipping
+        tag: test
+        imagePullSecrets:
+        - name: registry-pull-credentials
+    containerPort: 80
+    resources:
+        limits:
+            cpu: 300m
+            memory: 2000Mi
+        requests:
+            cpu: 300m
+            memory: 1000Mi
+
+userdb:
+    image:
+        repo: boutique/user-db
+        tag: test
+        imagePullSecrets:
+        - name: registry-pull-credentials
+    resources:
+        limits:
+            cpu: 300m
+            memory: 1000Mi
+        requests:
+            cpu: 100m
+            memory: 300Mi
+
+user:
+    image:
+        repo: boutique/user
+        tag: test
+        imagePullSecrets:
+        - name: registry-pull-credentials
+    containerPort: 80
+    resources:
+        limits:
+            cpu: 300m
+            memory: 1000Mi
+        requests:
+            cpu: 100m
+            memory: 400Mi
