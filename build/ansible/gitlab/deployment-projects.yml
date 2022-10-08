@@ -1,0 +1,50 @@
+---
+- name: Gitlab Group | Boutique Deployment | Create
+  # https://github.com/ansible-collections/community.general/issues/4990#issuecomment-1193366106
+  community.general.gitlab_group:
+    api_url: "{{ gitlab_url }}"
+    validate_certs: False
+    api_username: "{{ gitlab_user }}"
+    api_password: "{{ gitlab_password }}"
+    name: deploy
+    visibility: internal
+    description: ''
+    project_creation_level: maintainer
+    require_two_factor_authentication: no
+    subgroup_creation_level: maintainer
+    auto_devops_enabled: no
+    state: present
+  register: gitlab_group
+  tags:
+    - apps
+
+- name: Gitlab Group | Boutique Deployment | Create Prod Repository
+  community.general.gitlab_project:
+    api_url: "{{ gitlab_url }}"
+    api_username: "{{ gitlab_user }}"
+    api_password: "{{ gitlab_password }}"
+    name: deploy-prod
+    visibility: internal
+    group: "{{ gitlab_group.group.id }}"
+  register: project
+  tags:
+    - apps
+
+- name: Gitlab Group | Boutique Deployment | Push Content
+  ansible.builtin.shell: |
+    repopath={{ source_repo }}
+    reponame={{ source_repo_name }}
+    rm -rf $reponame
+    git clone $repopath $reponame
+    cp -r $reponame/boutique/deploy/prod .
+    cd prod
+    git init
+    git add .
+    git commit -m "init commit"
+    git remote add gitlab-origin http://{{ gitlab_user }}:{{ gitlab_password }}@{{ gitlab_host }}/{{ gitlab_group.group.name }}/deploy-prod.git
+    git push --all gitlab-origin
+    git push --tags gitlab-origin
+    cd .. && rm -rf prod
+  when: project.changed
+  tags:
+    - apps

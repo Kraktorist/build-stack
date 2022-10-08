@@ -94,6 +94,12 @@
       - never
       - apps
 
+    - name: Gitlab Group | Boutique Deployment
+      include_tasks: deployment-projects.yml
+      tags:
+      - never
+      - apps
+
     - name: Initial Gitlab Password
       ansible.builtin.debug:
         msg: |
