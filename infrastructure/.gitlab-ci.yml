@@ -7,7 +7,6 @@ include:
 
 default:
   before_script:
-    - printenv
     - if [ -f "${KUBECONFIG}" ]; then chmod 400 ${KUBECONFIG}; fi;
     - eval `ssh-agent -s`
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
