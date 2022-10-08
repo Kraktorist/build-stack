@@ -66,7 +66,7 @@ docker run \
     -v $(pwd)/infrastructure:/app/infrastructure \
     -v $HOME/ya_key.pub:/root/ya_key.pub \
     -v $HOME/ya_key:/root/ya_key \
-    -v $(pwd)/boutique:/boutique \
+    -v $(pwd)/boutique/components:/boutique \
     -ti builder
 ```
 
@@ -197,8 +197,7 @@ provision_k8s
 # nexus address
 NEXUS_REPO="nexus11.ru-central1.internal:9179"
 docker tag builder ${NEXUS_REPO}/infrastructure/builder
-echo $NEXUS_PASS | docker login -u $NEXUS_USER --password-stdin ${NEXUS_REPO}
-docker push ${NEXUS_REPO}/infrastructure/builder
+docker login ${NEXUS_REPO} && docker push ${NEXUS_REPO}/infrastructure/builder
 ```
 
 # Infrastructure pipeline
@@ -320,14 +319,14 @@ Apps:
 
 1. Find a way to copy /boutique folder
 2. `catalogue` and `payment` don't work on privileged ports
+3. gitalb: The deployment job is older than the previously succeeded deployment job
+   https://gitlab.com/gitlab-org/gitlab/-/issues/212621
 
 ## Working now
 
 - make deploy for boutique environments
 - monitoring apps
 
-runner doesn't trust to self-signed crtificate
-Try to replace with chain
 
 for docker push https://gitlab.com/gitlab-org/gitlab-runner/-/issues/1842
 check if it's mandatory to create 
@@ -341,3 +340,9 @@ kubectl
   --docker-password= \
   --docker-email=1@1.ru
 
+## To Do
+
+1. Check if it's necessary to create `defaultcertificates`
+2. Work on helm deployment for application
+   - imagePullSecrets
+   - 
