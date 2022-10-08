@@ -46,3 +46,7 @@ spec:
             port: 8079
           initialDelaySeconds: 30
           periodSeconds: 3
+    {{- with .Values.frontend.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

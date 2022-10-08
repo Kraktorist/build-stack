@@ -57,3 +57,7 @@ spec:
             port: {{ .Values.payment.containerPort }}
           initialDelaySeconds: 180
           periodSeconds: 3
+    {{- with .Values.payment.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

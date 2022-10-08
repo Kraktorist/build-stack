@@ -64,6 +64,10 @@ spec:
             port: {{ .Values.shipping.containerPort }}
           initialDelaySeconds: 360
           periodSeconds: 3
+    {{- with .Values.shipping.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
       volumes:
         - name: tmp-volume
           emptyDir:

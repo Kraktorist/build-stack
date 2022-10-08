@@ -3,6 +3,11 @@
 # Declare variables to be passed into your templates.
 global:
     registry: ''
+    # imageCredentials:
+    #     registry: quay.io
+    #     username: someone
+    #     password: sillyness
+    #     email: someone@host.com
 
 java:
     options: -Xms64m -Xmx128m -XX:PermSize=32m -XX:MaxPermSize=64m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
@@ -21,6 +26,8 @@ cartsdb:
     image:
         repo: mongo
         tag: 4.4.0
+        imagePullSecrets:
+        - name: registry-pull-credentials
     resources:
         requests:
             cpu: 500m
@@ -36,6 +43,8 @@ carts:
     image:
         repo: weaveworksdemos/carts
         tag: 0.4.8
+        imagePullSecrets:
+        - name: registry-pull-credentials
     containerPort: 80
     resources:
         limits:
@@ -49,6 +58,8 @@ cataloguedb:
     image:
         repo: weaveworksdemos/catalogue-db
         tag: 0.3.0
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     resources:
         limits:
             cpu: 300m
@@ -61,6 +72,8 @@ catalogue:
     image:
         repo: weaveworksdemos/catalogue
         tag: 0.3.5
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     containerPort: 80
     resources:
         limits:
@@ -75,6 +88,8 @@ frontend:
     image:
         repo: weaveworksdemos/front-end
         tag: 0.3.12
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     resources:
         limits:
             cpu: 300m
@@ -94,6 +109,8 @@ loadtest:
     image:
         repo: weaveworksdemos/load-test
         tag: 0.1.1
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     resources:
         limits:
             cpu: 300m
@@ -106,6 +123,8 @@ ordersdb:
     image:
         repo: mongo
         tag: 4.4.0
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     resources:
         requests:
             cpu: 500m
@@ -121,6 +140,8 @@ orders:
     image:
         repo: weaveworksdemos/orders
         tag: 0.4.7
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     containerPort: 80
     resources:
         limits:
@@ -134,6 +155,8 @@ payment:
     image:
         repo: weaveworksdemos/payment
         tag: 0.4.3
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     declinePaymentsOverAmount: 200
     containerPort: 8080
     resources:
@@ -148,6 +171,8 @@ queuemaster:
     image:
         repo: weaveworksdemos/queue-master
         tag: 0.3.1
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     resources:
         limits:
             cpu: 300m
@@ -160,6 +185,8 @@ rabbitmq:
     image:
         repo: rabbitmq
         tag: 3.6.8
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     resources:
         requests:
             memory: 256Mi
@@ -172,6 +199,8 @@ sessiondb:
     image:
         repo: redis
         tag: alpine
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     resources:
         requests:
             memory: 256Mi
@@ -187,6 +216,8 @@ shipping:
     image:
         repo: weaveworksdemos/shipping
         tag: 0.4.8
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     containerPort: 80
     resources:
         limits:
@@ -200,6 +231,8 @@ userdb:
     image:
         repo: weaveworksdemos/user-db
         tag: 0.4.0
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     resources:
         limits:
             cpu: 300m
@@ -212,6 +245,8 @@ user:
     image:
         repo: weaveworksdemos/user
         tag: 0.4.7
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     containerPort: 80
     resources:
         limits:
@@ -225,6 +260,8 @@ zipkincron:
     image:
         repo: openzipkin/zipkin-dependencies
         tag: 1.4.0
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     resources:
         limits:
             cpu: 300m
@@ -237,6 +274,8 @@ zipkin:
     image:
         repo: openzipkin/zipkin
         tag: 2.21
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     resources:
         limits:
             cpu: 300m
@@ -251,6 +290,8 @@ zipkinmysql:
     image:
         repo: openzipkin/zipkin-mysql
         tag: 1.20.0
+        # imagePullSecrets:
+        # - name: registry-pull-credentials
     resources:
         requests:
             memory: 256Mi

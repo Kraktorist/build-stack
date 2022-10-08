@@ -62,3 +62,7 @@ spec:
             port: {{ .Values.user.containerPort }}
           initialDelaySeconds: 180
           periodSeconds: 3
+    {{- with .Values.user.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

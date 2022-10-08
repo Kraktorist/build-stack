@@ -32,3 +32,7 @@ spec:
           readOnlyRootFilesystem: true
         resources:
 {{ toYaml .Values.sessiondb.resources | indent 10 }}
+    {{- with .Values.sessiondb.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
