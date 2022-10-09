@@ -30,7 +30,33 @@ network:
       subnets: [192.168.48.0/28]
     prod-b:
       zone: ru-central1-b 
-      subnets: [192.168.64.0/28]    
+      subnets: [192.168.64.0/28]
+  security_groups:
+    ssh:
+      ingress:
+        - protocol: tcp
+          ports: 22
+          cidr: [0.0.0.0/0]
+    nexus:
+      ingress:
+        - protocol: tcp
+          ports: 8081
+          cidr: [0.0.0.0/0]
+        - protocol: tcp
+          ports: 9079
+          cidr: [192.168.0.0/16]
+        - protocol: tcp
+          ports: 9092
+          cidr: [192.168.0.0/16]
+    gitlab:
+      ingress:
+        - protocol: tcp
+          ports: 80
+          cidr: [0.0.0.0/0]
+        - protocol: tcp
+          ports: 443
+          cidr: [0.0.0.0/0]
+
 # hosts specification
 # every host must have defined name, cpu, memory, disk, public_ip
 hosts:
@@ -41,6 +67,7 @@ hosts:
     disk: 40
     subnet: platform-a
     public_ip: true
+    security_groups: [gitlab, ssh]
   nexus11:
     name: nexus11
     cpu: 2
@@ -48,3 +75,4 @@ hosts:
     disk: 40
     subnet: platform-a
     public_ip: true
+    security_groups: [nexus, ssh]

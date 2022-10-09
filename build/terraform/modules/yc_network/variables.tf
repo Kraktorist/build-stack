@@ -8,3 +8,8 @@ variable subnets {
   type        = map
   description = "Subnets For Instances"
 }
+
+variable security_groups {
+  type        = map
+  description = "Security Groups List"
+}

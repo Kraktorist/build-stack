@@ -15,6 +15,7 @@ locals {
                 disk = local.hosts[node].disk
                 subnet = local.hosts[node].subnet
                 public_ip = local.hosts[node].public_ip
+                security_groups = local.hosts[node].security_groups
             }
         }
       ]
@@ -30,6 +31,7 @@ locals {
                 disk = local.hosts[node].disk
                 subnet = local.hosts[node].subnet
                 public_ip = local.hosts[node].public_ip
+                security_groups = local.hosts[node].security_groups
             }
         }
       ] if group != "k8s_cluster"

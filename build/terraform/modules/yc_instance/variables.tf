@@ -17,7 +17,15 @@ variable os_family {
 }
 
 variable node {
-  type        = map
+  type = object({
+      name = string
+      cpu = number
+      memory = number
+      disk = number
+      subnet = string
+      public_ip = string
+      security_groups = list(string)
+  })
   description = "Instance Parameters"
 }
 

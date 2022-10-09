@@ -44,6 +44,7 @@ hosts:
     disk: 40
     subnet: dev-a
     public_ip: true
+    security_groups: [ssh]
   worker-dev12:
     name: worker-dev12
     cpu: 2
@@ -51,6 +52,7 @@ hosts:
     disk: 40
     subnet: dev-b
     public_ip: true
+    security_groups: [ssh]
   master-dev13:
     name: master-dev13
     cpu: 2
@@ -58,3 +60,4 @@ hosts:
     disk: 40
     subnet: dev-b
     public_ip: true
+    security_groups: [ssh]

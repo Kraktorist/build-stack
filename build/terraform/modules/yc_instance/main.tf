@@ -6,6 +6,11 @@ data "yandex_vpc_subnet" "subnet" {
   name = var.node.subnet
 }
 
+data "yandex_vpc_security_group" "group" {
+  for_each = toset(var.node.security_groups)
+  name = each.value
+}
+
 resource "yandex_compute_instance" "node" {
   zone = data.yandex_vpc_subnet.subnet.zone
   name = var.node.name
@@ -19,6 +24,8 @@ resource "yandex_compute_instance" "node" {
   network_interface {
     subnet_id = data.yandex_vpc_subnet.subnet.id
     nat = var.node.public_ip
+    # security_group_ids = data.yandex_vpc_security_group.group[*].security_group_id
+    security_group_ids = [for o in data.yandex_vpc_security_group.group : o.security_group_id]
   }
 
   boot_disk {
