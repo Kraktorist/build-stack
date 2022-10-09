@@ -86,6 +86,25 @@ network:
       subnets: [192.168.32.0/28]
 ```
 
+## Security Groups
+
+Required Ports:
+  Gitlab:
+  - 80
+  - 443
+  Nexus:
+  - 8081
+  - 9179
+  - 9182
+  k8s:
+  - 80
+  - 2379
+  - 2380
+  - 6443
+  - 10250
+  - 10257
+  - 10259
+
 ## Hosts Installation
 
 Hosts spec:
