@@ -21,3 +21,9 @@ variable inventory {
   type        = map
   description = "Object of inventory"
 }
+
+variable vm {
+  type        = map
+  description = "List of virtual machines"
+}
+

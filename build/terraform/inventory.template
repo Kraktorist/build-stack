@@ -1,0 +1,5 @@
+module inventory {
+  source = "./modules/inventory"
+  inventory = module.input.inventory
+  ansible_inventory = var.ansible_inventory
+}

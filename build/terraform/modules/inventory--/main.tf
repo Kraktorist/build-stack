@@ -1,16 +1,4 @@
 locals {
-  nodes = distinct(concat(
-    flatten([for group, members in try(var.inventory.children, {}): keys(members.hosts) if group != "k8s_cluster"]),
-    flatten([for group, members in try(var.inventory.children.k8s_cluster.children, {}): keys(members.hosts)])
-  ))
-}
-
-data "yandex_compute_instance" "node" {
-  for_each = toset(local.nodes)
-  name = each.key
-}
-
-locals {
   misc_hosts = tomap(
     {
       for group, members in try(var.inventory.children, {}):
@@ -19,12 +7,12 @@ locals {
                 for node, params in members.hosts:
                     node => {
                       ansible_host = [
-                          for v in data.yandex_compute_instance.node:
-                            try(v.network_interface[0].nat_ip_address, v.network_interface[0].ip_address ) if node == v.name
+                          for v in var.vm:
+                            try(v.vm.network_interface[0].nat_ip_address, v.vm.network_interface[0].ip_address ) if node == v.vm.name
                       ][0]
                       fqdn = [
-                          for v in data.yandex_compute_instance.node:
-                            try(v.fqdn) if node == v.name
+                          for v in var.vm:
+                            try(v.vm.fqdn) if node == v.vm.name
                       ][0]                    
                     }
             }
@@ -48,12 +36,12 @@ locals {
                         for node, params in members.hosts:
                             node => {
                               ansible_host = [
-                                  for v in data.yandex_compute_instance.node:
-                                    try(v.network_interface[0].nat_ip_address, v.network_interface[0].ip_address ) if node == v.name
+                                  for v in var.vm:
+                                    try(v.vm.network_interface[0].nat_ip_address, v.vm.network_interface[0].ip_address ) if node == v.vm.name
                               ][0]
                               fqdn = [
-                                  for v in data.yandex_compute_instance.node:
-                                    try(v.fqdn) if node == v.name
+                                  for v in var.vm:
+                                    try(v.vm.fqdn) if node == v.vm.name
                               ][0]                
                             }
                     }

@@ -37,16 +37,35 @@ network:
         - protocol: tcp
           ports: 22
           cidr: [0.0.0.0/0]
+    internet:
+      egress:
+        - protocol: tcp
+          ports: 80
+          cidr: [0.0.0.0/0]
+        - protocol: tcp
+          ports: 443
+          cidr: [0.0.0.0/0]
+    access_to_nexus:
+      egress:
+        - protocol: tcp
+          ports: 9182
+          cidr: [192.168.0.0/16]
+        - protocol: tcp
+          ports: 9179
+          cidr: [192.168.0.0/16]    
     nexus:
       ingress:
         - protocol: tcp
-          ports: 8081
+          ports: 80
           cidr: [0.0.0.0/0]
         - protocol: tcp
-          ports: 9079
+          ports: 443
+          cidr: [0.0.0.0/0]
+        - protocol: tcp
+          ports: 9179
           cidr: [192.168.0.0/16]
         - protocol: tcp
-          ports: 9092
+          ports: 9182
           cidr: [192.168.0.0/16]
     gitlab:
       ingress:
@@ -56,6 +75,29 @@ network:
         - protocol: tcp
           ports: 443
           cidr: [0.0.0.0/0]
+    k8s_cluster:
+      ingress:
+        - protocol: tcp
+          ports: 80
+          cidr: [0.0.0.0/0]
+        - protocol: tcp
+          ports: 2379
+          cidr: [192.168.0.0/16]
+        - protocol: tcp
+          ports: 2380
+          cidr: [192.168.0.0/16]
+        - protocol: tcp
+          ports: 6443
+          cidr: [192.168.0.0/16]
+        - protocol: tcp
+          ports: 10250
+          cidr: [192.168.0.0/16]
+        - protocol: tcp
+          ports: 10257
+          cidr: [192.168.0.0/16]
+        - protocol: tcp
+          ports: 10259
+          cidr: [192.168.0.0/16]
 
 # hosts specification
 # every host must have defined name, cpu, memory, disk, public_ip
@@ -67,7 +109,7 @@ hosts:
     disk: 40
     subnet: platform-a
     public_ip: true
-    security_groups: [gitlab, ssh]
+    security_groups: [gitlab, ssh, internet, access_to_nexus]
   nexus11:
     name: nexus11
     cpu: 2
@@ -75,4 +117,4 @@ hosts:
     disk: 40
     subnet: platform-a
     public_ip: true
-    security_groups: [nexus, ssh]
+    security_groups: [nexus, ssh, internet, access_to_nexus]

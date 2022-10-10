@@ -44,7 +44,7 @@ hosts:
     disk: 40
     subnet: dev-a
     public_ip: true
-    security_groups: [ssh]
+    security_groups: [ssh,internet,access_to_nexus,k8s_cluster]
   worker-dev12:
     name: worker-dev12
     cpu: 2
@@ -52,7 +52,7 @@ hosts:
     disk: 40
     subnet: dev-b
     public_ip: true
-    security_groups: [ssh]
+    security_groups: [ssh,internet,access_to_nexus,k8s_cluster]
   master-dev13:
     name: master-dev13
     cpu: 2
@@ -60,4 +60,4 @@ hosts:
     disk: 40
     subnet: dev-b
     public_ip: true
-    security_groups: [ssh]
+    security_groups: [ssh,internet,access_to_nexus,k8s_cluster]

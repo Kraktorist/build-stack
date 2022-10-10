@@ -5,9 +5,9 @@ module yc_instance {
   ENV = var.ENV
 }
 
-module inventory {
-  source = "./modules/inventory"
-  vm = module.yc_instance
-  inventory = module.input.inventory
-  ansible_inventory = var.ansible_inventory
-}
+# module inventory {
+#  source = "./modules/inventory"
+#  vm = module.yc_instance
+#  inventory = module.input.inventory
+#  ansible_inventory = var.ansible_inventory
+#}

@@ -54,6 +54,11 @@ apply.hosts:
   extends: .terraform:apply
   script:
     - terraform_apply hosts
+
+apply.inventory:
+  extends: .terraform:apply
+  script:
+    - terraform_apply inventory
   artifacts:
     paths: 
       - ${CI_PROJECT_DIR}/envs/${ENV}/inventory.yml
@@ -63,7 +68,7 @@ provision.misc:
   script:
     - provision_misc
   needs: 
-    - job: apply.hosts
+    - job: apply.inventory
       artifacts: true
 
 provision.gitlab:
@@ -71,7 +76,7 @@ provision.gitlab:
   script:
     - provision_gitlab
   needs: 
-    - job: apply.hosts
+    - job: apply.inventory
       artifacts: true
 
 provision.infra_repo:
@@ -79,7 +84,7 @@ provision.infra_repo:
   script:
     - provision_infra_repo
   needs: 
-    - job: apply.hosts
+    - job: apply.inventory
       artifacts: true
 
 provision.infra_runner:
@@ -87,7 +92,7 @@ provision.infra_runner:
   script:
     - provision_infra_runner
   needs: 
-    - job: apply.hosts
+    - job: apply.inventory
       artifacts: true
 
 provision.apps_repo:
@@ -95,7 +100,7 @@ provision.apps_repo:
   script:
     - provision_apps_repo
   needs: 
-    - job: apply.hosts
+    - job: apply.inventory
       artifacts: true
 
 provision.nexus:
@@ -103,7 +108,7 @@ provision.nexus:
   script:
     - provision_nexus
   needs: 
-    - job: apply.hosts
+    - job: apply.inventory
       artifacts: true
 
 provision.k8s:
@@ -111,7 +116,7 @@ provision.k8s:
   script:
     - provision_k8s
   needs: 
-    - job: apply.hosts
+    - job: apply.inventory
       artifacts: true
   artifacts:
     paths: 
@@ -127,7 +132,7 @@ provision.monitoring:
   script:
     - provision_monitoring
   needs: 
-    - job: apply.hosts
+    - job: apply.inventory
       artifacts: true
 
 destroy.network:
