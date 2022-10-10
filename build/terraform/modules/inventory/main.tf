@@ -20,7 +20,7 @@ locals {
                     node => {
                       ansible_host = [
                           for v in data.yandex_compute_instance.node:
-                            try(v.network_interface[0].nat_ip_address, v.network_interface[0].ip_address ) if node == v.name
+                            coalesce(v.network_interface[0].nat_ip_address, v.network_interface[0].ip_address ) if node == v.name
                       ][0]
                       fqdn = [
                           for v in data.yandex_compute_instance.node:
@@ -49,7 +49,7 @@ locals {
                             node => {
                               ansible_host = [
                                   for v in data.yandex_compute_instance.node:
-                                    try(v.network_interface[0].nat_ip_address, v.network_interface[0].ip_address ) if node == v.name
+                                    coalesce(v.network_interface[0].nat_ip_address, v.network_interface[0].ip_address ) if node == v.name
                               ][0]
                               fqdn = [
                                   for v in data.yandex_compute_instance.node:
