@@ -45,6 +45,11 @@ network:
         - protocol: tcp
           ports: 443
           cidr: [0.0.0.0/0]
+    ansible_runner:
+      egress:
+        - protocol: tcp
+          ports: 22
+          cidr: [0.0.0.0/0]
     access_to_nexus:
       egress:
         - protocol: tcp
@@ -78,43 +83,46 @@ network:
     k8s_cluster:
       ingress:
         - protocol: tcp
-          ports: 80
+          ports: -1
+          cidr: [192.168.0.0/16]
+      egress:
+        - protocol: tcp
+          ports: -1
+          cidr: [192.168.0.0/16]
+    allow_all:
+      ingress:
+        - protocol: tcp
+          ports: -1
           cidr: [0.0.0.0/0]
+      egress:
         - protocol: tcp
-          ports: 2379
-          cidr: [192.168.0.0/16]
-        - protocol: tcp
-          ports: 2380
-          cidr: [192.168.0.0/16]
-        - protocol: tcp
-          ports: 6443
-          cidr: [192.168.0.0/16]
-        - protocol: tcp
-          ports: 10250
-          cidr: [192.168.0.0/16]
-        - protocol: tcp
-          ports: 10257
-          cidr: [192.168.0.0/16]
-        - protocol: tcp
-          ports: 10259
-          cidr: [192.168.0.0/16]
+          ports: -1
+          cidr: [0.0.0.0/0]
 
 # hosts specification
 # every host must have defined name, cpu, memory, disk, public_ip
 hosts:
+  bastion:
+    name: bastion
+    cpu: 2
+    memory: 4096
+    disk: 40
+    subnet: platform-a
+    public_ip: true
+    security_groups: [allow_all]  
   gitlab11:
     name: gitlab11
     cpu: 2
     memory: 4096
     disk: 40
     subnet: platform-a
-    public_ip: true
-    security_groups: [gitlab, ssh, internet, access_to_nexus]
+    public_ip: false
+    security_groups: [gitlab, ssh, internet, access_to_nexus, ansible_runner]
   nexus11:
     name: nexus11
     cpu: 2
     memory: 4096
     disk: 40
     subnet: platform-a
-    public_ip: true
+    public_ip: false
     security_groups: [nexus, ssh, internet, access_to_nexus]
