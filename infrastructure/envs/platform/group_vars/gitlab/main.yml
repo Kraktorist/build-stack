@@ -1,3 +1,4 @@
+gitlab_package_version: gitlab-ce=15.3.3
 gitlab_user: root
 gitlab_password: "{{ GITLAB_PASSWORD }}"
 gitlab_email: admin@example.com

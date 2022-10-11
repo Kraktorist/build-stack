@@ -24,7 +24,7 @@
 
     - name: Install Gitlab CE | Install Package
       ansible.builtin.package:
-        name: gitlab-ce
+        name: "{{ gitlab_package_version }}"
         state: present
       register: packagekey
 
