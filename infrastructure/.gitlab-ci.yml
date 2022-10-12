@@ -7,6 +7,8 @@ include:
 
 default:
   before_script:
+    - echo ${API_KEY} | base64 -d>key.json
+    - export YC_SERVICE_ACCOUNT_KEY_FILE=/app/key.json
     - if [ -f "${KUBECONFIG}" ]; then chmod 400 ${KUBECONFIG}; fi;
     - eval `ssh-agent -s`
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
