@@ -2,7 +2,7 @@
 
 function yc_init() {
   yc config profile create current
-  yc config set token $YC_TOKEN
+  yc config set service-account-key $YC_SERVICE_ACCOUNT_KEY_FILE
   yc config set folder-id $YC_FOLDER_ID
 }
 
@@ -78,6 +78,12 @@ function provision_misc() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
     --become /app/ansible/misc/main.yml 
+}
+
+function provision_bastion() {
+  ansible-playbook -i ${TF_VAR_ansible_inventory} \
+    --vault-password-file .vault \
+    --become /app/ansible/bastion/main.yml
 }
 
 function provision_gitlab() {
