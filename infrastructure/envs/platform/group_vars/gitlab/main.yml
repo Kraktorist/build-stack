@@ -35,8 +35,8 @@ infra_gitlab_vars:
     value: "{{ YC_CLOUD_ID }}"
   - name: YC_FOLDER_ID
     value: "{{ YC_FOLDER_ID }}"
-  - name: YC_TOKEN
-    value: "{{ YC_TOKEN }}"
+  - name: API_KEY
+    value: "{{ API_KEY }}"
   - name: ANSIBLE_VAULT_PASSWORD
     value: "{{ ANSIBLE_VAULT_PASSWORD }}"
   - name: ANSIBLE_FORCE_COLOR
