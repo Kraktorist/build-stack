@@ -1,0 +1,7 @@
+- name: Bastion Configuration
+  hosts: bastion
+  tasks:
+    - name: Bastion | Update All Packages
+      ansible.builtin.apt:
+        name: "*"
+        update_cache: yes
