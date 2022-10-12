@@ -36,7 +36,7 @@
 
     - name: Gitlab Runner | Infrastructure | Install gitlab-runner
       ansible.builtin.package:
-        name: gitlab-runner
+        name: "{{ gitlab_runner_package_version }}"
         state: present
       tags:
       - runner
