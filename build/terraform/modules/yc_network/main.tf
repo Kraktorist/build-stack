@@ -3,7 +3,7 @@ resource "yandex_vpc_network" "network" {
 }
 
 resource "yandex_vpc_gateway" "default" {
-  name = "foobar"
+  name = "default"
   shared_egress_gateway {}
 }
 
