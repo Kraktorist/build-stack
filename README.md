@@ -328,8 +328,7 @@ helm -n sock upgrade --install sock-shop /home/kraktorist/repos/lab-terraform-ya
 
 Infra:
   - working through bastion host and ALB https://cloud.yandex.ru/docs/security/domains/checklist
-  - security groups
-  - ansible inventory as a separate step
+  - security groups port range support
   - vms with multiple disks
 
 Apps:
