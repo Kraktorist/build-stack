@@ -34,6 +34,28 @@ runner:
   helm_values: 
     - runner/values.yml
 
+# network spec
+network: 
+  name: instances
+  subnets:
+    dev-a:
+      zone: ru-central1-a 
+      subnets: [192.168.16.0/28]
+    dev-b:
+      zone: ru-central1-b 
+      subnets: [192.168.32.0/28]
+  security_groups:
+    k8s_cluster:
+      ingress:
+        - protocol: tcp
+          ports: -1
+          cidr: [192.168.0.0/16]
+      egress:
+        - protocol: tcp
+          ports: -1
+          cidr: [192.168.0.0/16]
+
+
 # hosts specification
 # every host must have defined name, cpu, memory, disk, public_ip
 hosts:
@@ -43,7 +65,7 @@ hosts:
     memory: 2048
     disk: 40
     subnet: dev-a
-    public_ip: true
+    public_ip: false
     security_groups: [ssh,internet,access_to_nexus,k8s_cluster]
   worker-dev12:
     name: worker-dev12
@@ -51,7 +73,7 @@ hosts:
     memory: 2048
     disk: 40
     subnet: dev-b
-    public_ip: true
+    public_ip: false
     security_groups: [ssh,internet,access_to_nexus,k8s_cluster]
   master-dev13:
     name: master-dev13
@@ -59,5 +81,5 @@ hosts:
     memory: 2048
     disk: 40
     subnet: dev-b
-    public_ip: true
+    public_ip: false
     security_groups: [ssh,internet,access_to_nexus,k8s_cluster]

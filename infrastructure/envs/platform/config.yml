@@ -12,6 +12,9 @@ inventory:
       nexus:
         hosts:
           nexus11:
+      bastion:
+        hosts:
+          bastion:
 
 network: 
   name: instances
@@ -19,18 +22,6 @@ network:
     platform-a:
       zone: ru-central1-a 
       subnets: [192.168.0.0/28]
-    dev-a:
-      zone: ru-central1-a 
-      subnets: [192.168.16.0/28]
-    dev-b:
-      zone: ru-central1-b 
-      subnets: [192.168.32.0/28]
-    prod-a:
-      zone: ru-central1-a 
-      subnets: [192.168.48.0/28]
-    prod-b:
-      zone: ru-central1-b 
-      subnets: [192.168.64.0/28]
   security_groups:
     ssh:
       ingress:
@@ -80,15 +71,6 @@ network:
         - protocol: tcp
           ports: 443
           cidr: [0.0.0.0/0]
-    k8s_cluster:
-      ingress:
-        - protocol: tcp
-          ports: -1
-          cidr: [192.168.0.0/16]
-      egress:
-        - protocol: tcp
-          ports: -1
-          cidr: [192.168.0.0/16]
     allow_all:
       ingress:
         - protocol: tcp
