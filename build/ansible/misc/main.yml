@@ -1,5 +1,5 @@
 ---
-- name: Copying certificate to local machine
+- name: Copying Certificates To Local Machine
   hosts: localhost
   vars:
     install_root_cert_pem: "/misc/internal-root-ca.crt"
@@ -15,15 +15,15 @@
         content: "{{ INTERNAL_TRUSTED_ROOT_CERTIFICATE }}"
 
 - name: Waiting Machines SSH
-  hosts: all
+  hosts: all,!bastion
   gather_facts: no
   pre_tasks:
     - name: Waiting For SSH connection
       ansible.builtin.wait_for_connection:
         timeout: 300
 
-- name: Waiting Machines SSH
-  hosts: all
+- name: Start Misc Tasks
+  hosts: all,!bastion
   gather_facts: yes
   vars:
     install_root_cert_pem: "/misc/internal-root-ca.crt"
