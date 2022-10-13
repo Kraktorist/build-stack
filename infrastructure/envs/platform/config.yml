@@ -94,8 +94,8 @@ hosts:
     security_groups: [allow_all]  
   gitlab11:
     name: gitlab11
-    cpu: 2
-    memory: 4096
+    cpu: 4
+    memory: 8192
     disk: 40
     subnet: platform-a
     public_ip: false
