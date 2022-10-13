@@ -4,6 +4,7 @@ image:
 
 default:
   before_script:
+    - if [ -f "${KUBECONFIG}" ]; then chmod 400 ${KUBECONFIG}; fi;
     - source /app/scripts/lib.sh
 
 stages:

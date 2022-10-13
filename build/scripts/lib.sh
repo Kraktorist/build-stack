@@ -143,6 +143,6 @@ function deploy_boutique() {
     --extra-vars "DEPLOYMENT_NAME=${DEPLOYMENT_NAME}" \
     --extra-vars "NEXUS_GROUP_REGISTRY=${NEXUS_GROUP_REGISTRY}" \
     --extra-vars "NEXUS_GITLAB_USERNAME=${NEXUS_GITLAB_USERNAME}" \
-    --extra-vars "NEXUS_GITLAB_PASSWORD=${NEXUS_GROUP_PASSWORD}" \
+    --extra-vars "NEXUS_GITLAB_PASSWORD=${NEXUS_GITLAB_PASSWORD}" \
     /app/ansible/deploy/main.yml
 }

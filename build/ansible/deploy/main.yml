@@ -21,7 +21,8 @@
             name: "{{ DEPLOYMENT_NAME | default('sock') }}"
             chart_ref: /app/helm/boutique
             release_namespace: "{{ DEPLOYMENT_NAMESPACE }}"
-            values_files: values.yaml 
+            values_files: 
+              - "{{ lookup('env','CI_PROJECT_DIR') }}/values.yaml"
             values:
               global:
                 imageCredentials:
