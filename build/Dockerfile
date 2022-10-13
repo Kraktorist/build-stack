@@ -24,10 +24,11 @@ RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/s
     VERIFY_CHECKSUM=false ./get_helm.sh && rm -rf get_helm.sh
 COPY scripts scripts
 RUN chmod +x ./scripts/*
-COPY terraform terraform
-COPY .terraformrc /root/.terraformrc
+COPY helm helm
 COPY ansible ansible
 RUN ansible-galaxy install -r ./ansible/requirements.yml
 # install kubespray
 RUN curl -L https://github.com/kubernetes-sigs/kubespray/archive/refs/tags/v2.20.0.zip --output kubespray.zip && \
     unzip kubespray.zip && rm -rf kubespray.zip && mv kubespray-2.20.0 ./ansible/kubespray
+COPY terraform terraform
+COPY .terraformrc /root/.terraformrc
