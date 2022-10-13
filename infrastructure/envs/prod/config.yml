@@ -16,7 +16,13 @@ inventory:
             hosts:
               master-prod23: 
 
-  
+runner:
+  enabled: true
+  name: prod-runner
+  namespace: prod-runner
+  helm_values: 
+    - runner/values.yml
+
 # hosts specification
 # every host must have defined name, cpu, memory, disk, public_ip
 hosts:
