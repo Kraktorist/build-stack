@@ -1,0 +1,30 @@
+- name: Boutique Deployment
+  hosts: localhost
+  tasks:
+    - name: Boutique Deployment
+      block:
+      
+        # - name: Add stable chart repo
+        #   kubernetes.core.helm_repository:
+        #     name: gitlab
+        #     repo_url: https://charts.gitlab.io
+
+        - name: Create Namespace For Boutique Deployment
+          kubernetes.core.k8s:
+            name: "{{ DEPLOYMENT_NAMESPACE }}"
+            api_version: v1
+            kind: Namespace
+            state: present
+
+        - name: Push Deployment
+          kubernetes.core.helm:
+            name: "{{ DEPLOYMENT_NAME | default('sock') }}"
+            chart_ref: /app/helm/boutique
+            release_namespace: "{{ DEPLOYMENT_NAMESPACE }}"
+            values_files: values.yaml 
+            values:
+              global:
+                imageCredentials:
+                    registry: "{{ NEXUS_GROUP_REGISTRY }}"
+                    username: "{{ NEXUS_GITLAB_USERNAME }}"
+                    password: "{{ NEXUS_GITLAB_PASSWORD }}"

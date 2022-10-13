@@ -71,6 +71,26 @@ apps_gitlab_vars:
     value: "{{ ANSIBLE_VAULT_PASSWORD }}"
   - name: ANSIBLE_FORCE_COLOR
     value: true
+deploy_gitlab_vars:
+  - name: DOCKER_AUTH_CONFIG
+    value: " {\"auths\":{\"{{ NEXUS_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_GROUP_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_SNAPSHOTS_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_RELEASE_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"}}}"
+  - name: NEXUS_REGISTRY
+    value: "{{ NEXUS_REGISTRY }}"
+  - name: NEXUS_GROUP_REGISTRY
+    value: "{{ NEXUS_GROUP_REGISTRY }}"
+  - name: NEXUS_SNAPSHOTS_REGISTRY
+    value: "{{ NEXUS_SNAPSHOTS_REGISTRY }}"
+  - name: NEXUS_RELEASE_REGISTRY
+    value: "{{ NEXUS_RELEASE_REGISTRY }}"
+  - name: DEPLOYMENT_NAMESPACE
+    value: prod-sock-shop
+  - name: DEPLOYMENT_NAME
+    value: boutique
+  - name: NEXUS_GITLAB_PASSWORD
+    value: "{{ NEXUS_GITLAB_PASSWORD }}"
+  - name: NEXUS_GITLAB_USERNAME
+    value: "{{ NEXUS_GITLAB_USERNAME }}"
+
 git_repolist:
   - { reponame: carts, repopath: https://github.com/microservices-demo/carts.git }
   - { reponame: front-end, repopath: https://github.com/microservices-demo/front-end.git }

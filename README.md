@@ -327,7 +327,7 @@ helm -n sock upgrade --install sock-shop /home/kraktorist/repos/lab-terraform-ya
 **TODO**
 
 Infra:
-  - working through bastion host and ALB https://cloud.yandex.ru/docs/security/domains/checklist
+  - ALB https://cloud.yandex.ru/docs/security/domains/checklist
   - security groups port range support
   - vms with multiple disks
 
@@ -342,8 +342,7 @@ Apps:
 ## Issues
 
 1. Find a way to copy /boutique folder
-2. `catalogue` and `payment` don't work on privileged ports
-3. gitalb: The deployment job is older than the previously succeeded deployment job
+2. gitalb: The deployment job is older than the previously succeeded deployment job
    https://gitlab.com/gitlab-org/gitlab/-/issues/212621
 
 ## Working now
@@ -366,7 +365,5 @@ kubectl
 
 ## To Do
 
-1. Check if it's necessary to create `defaultcertificates`
-2. Work on helm deployment for application
-   - imagePullSecrets
-   - 
+create projects for deploy
+create job for deploy

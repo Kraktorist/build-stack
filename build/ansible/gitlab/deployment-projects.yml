@@ -18,6 +18,18 @@
   tags:
     - apps
 
+- name: Gitlab Group | Boutique Deployment | Set CI/CD variables
+  community.general.gitlab_group_variable:
+    api_url: "{{ gitlab_url }}"
+    validate_certs: False
+    api_username: "{{ gitlab_user }}"
+    api_password: "{{ gitlab_password }}"
+    group: deploy
+    purge: true
+    variables: "{{ deploy_gitlab_vars }}"
+  tags:
+  - apps
+
 - name: Gitlab Group | Boutique Deployment | Create Prod Repository
   community.general.gitlab_project:
     api_url: "{{ gitlab_url }}"

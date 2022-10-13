@@ -1,0 +1,18 @@
+image:
+  name: "$NEXUS_GROUP_REGISTRY/infrastructure/builder:latest"
+  entrypoint: [""]
+
+default:
+  before_script:
+    - source /app/scripts/lib.sh
+
+stages:
+  - deploy
+
+deploy:
+  stage:
+    deploy
+  tags: [prod]
+  script:
+  # - helm -n sock upgrade --install sock-shop /app/helm/boutique --values values.yaml
+  - deploy_boutique

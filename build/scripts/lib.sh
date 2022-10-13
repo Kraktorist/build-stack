@@ -136,3 +136,13 @@ function provision_monitoring() {
     --vault-password-file .vault \
     --become /app/ansible/monitoring/main.yml
 }
+
+function deploy_boutique() {
+  ansible-playbook \
+    --extra-vars "DEPLOYMENT_NAMESPACE=${DEPLOYMENT_NAMESPACE}" \
+    --extra-vars "DEPLOYMENT_NAME=${DEPLOYMENT_NAME}" \
+    --extra-vars "NEXUS_GROUP_REGISTRY=${NEXUS_GROUP_REGISTRY}" \
+    --extra-vars "NEXUS_GITLAB_USERNAME=${NEXUS_GITLAB_USERNAME}" \
+    --extra-vars "NEXUS_GITLAB_PASSWORD=${NEXUS_GROUP_PASSWORD}" \
+    /app/ansible/deploy/main.yml
+}
