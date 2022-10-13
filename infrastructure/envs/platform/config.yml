@@ -41,6 +41,9 @@ network:
         - protocol: tcp
           ports: 22
           cidr: [0.0.0.0/0]
+        - protocol: tcp
+          ports: 6443
+          cidr: [0.0.0.0/0]
     access_to_nexus:
       egress:
         - protocol: tcp
