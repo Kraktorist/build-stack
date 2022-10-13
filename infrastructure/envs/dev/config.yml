@@ -50,8 +50,14 @@ network:
         - protocol: tcp
           ports: -1
           cidr: [192.168.0.0/16]
+        - protocol: udp
+          ports: -1
+          cidr: [192.168.0.0/16]
       egress:
         - protocol: tcp
+          ports: -1
+          cidr: [192.168.0.0/16]
+        - protocol: udp
           ports: -1
           cidr: [192.168.0.0/16]
 
@@ -61,7 +67,7 @@ network:
 hosts:
   worker-dev11:
     name: worker-dev11
-    cpu: 2
+    cpu: 4
     memory: 8192
     disk: 40
     subnet: dev-a
@@ -69,7 +75,7 @@ hosts:
     security_groups: [ssh,common,internet,access_to_nexus,k8s_cluster]
   worker-dev12:
     name: worker-dev12
-    cpu: 2
+    cpu: 4
     memory: 8192
     disk: 40
     subnet: dev-b
