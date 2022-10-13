@@ -23,6 +23,20 @@ network:
       zone: ru-central1-a 
       subnets: [192.168.0.0/28]
   security_groups:
+    common:
+      egress:
+        - protocol: tcp
+          ports: 53
+          cidr: [0.0.0.0/0]
+        - protocol: udp
+          ports: 53
+          cidr: [0.0.0.0/0]
+        - protocol: tcp
+          ports: 123
+          cidr: [0.0.0.0/0]
+        - protocol: udp
+          ports: 123
+          cidr: [0.0.0.0/0]
     ssh:
       ingress:
         - protocol: tcp
@@ -102,7 +116,7 @@ hosts:
     disk: 40
     subnet: platform-a
     public_ip: false
-    security_groups: [gitlab, ssh, internet, access_to_nexus, ansible_runner]
+    security_groups: [gitlab, ssh, common, internet, access_to_nexus, ansible_runner]
   nexus11:
     name: nexus11
     cpu: 2
@@ -110,4 +124,4 @@ hosts:
     disk: 40
     subnet: platform-a
     public_ip: false
-    security_groups: [nexus, ssh, internet, access_to_nexus]
+    security_groups: [nexus, ssh, common, internet, access_to_nexus]
