@@ -5,3 +5,16 @@
       ansible.builtin.apt:
         name: "*"
         update_cache: yes
+
+    - name: Setup alternate SSH port
+      lineinfile:
+          dest: "/etc/ssh/sshd_config"
+          regexp: "^Port"
+          line: "Port 22322"
+      notify: "Restart sshd"
+
+  handlers:
+    - name: Restart sshd
+      service:
+        name: sshd
+        state: restarted
