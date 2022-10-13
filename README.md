@@ -362,8 +362,3 @@ kubectl
   --docker-username= \
   --docker-password= \
   --docker-email=1@1.ru
-
-## To Do
-
-create projects for deploy
-create job for deploy
