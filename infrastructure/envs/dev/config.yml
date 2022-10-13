@@ -62,7 +62,7 @@ hosts:
   worker-dev11:
     name: worker-dev11
     cpu: 2
-    memory: 2048
+    memory: 8192
     disk: 40
     subnet: dev-a
     public_ip: false
@@ -70,7 +70,7 @@ hosts:
   worker-dev12:
     name: worker-dev12
     cpu: 2
-    memory: 2048
+    memory: 8192
     disk: 40
     subnet: dev-b
     public_ip: false
