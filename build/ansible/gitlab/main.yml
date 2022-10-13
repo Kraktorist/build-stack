@@ -55,9 +55,12 @@
         - "gitaly['env'] = {'LD_PRELOAD' => '/opt/gitlab/embedded/lib/libjemalloc.so', 'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000', 'GITALY_COMMAND_SPAWN_MAX_PARALLEL' => '2'}"      
 
 
-    - name: Install Gitlab CE | Start Gitlab CE
-      ansible.builtin.shell: /opt/gitlab/embedded/bin/runsvdir-start &
-      when: packagekey.changed or external_url.changed
+    # - name: Install Gitlab CE | Start Gitlab CE
+    #   ansible.builtin.systemd:
+    #     state: restarted
+    #     daemon_reload: yes
+    #     name: gitlab-runsvdir
+    #   when: packagekey.changed or external_url.changed
 
     - name: Install Gitlab CE | Restart Gitlab CE
       ansible.builtin.shell: gitlab-ctl reconfigure && sleep 30
