@@ -1,56 +1,62 @@
-## Последовательность
-
-1. Деплоим каркас сетей в терраформ
-2. Устанавливаем машины
-- gitlab
-- nexus
-3. Делаем provisioning
-- gitlab
-- gitlab-runner (linux)
-- nexus
-4. Деплоим репозитории
-- инфраструктура
-- приложение
-
-5. Деплой кластера. Репозиторий инфраструктура по деплою в ветку infra/ создает джобу
-  - установка хостов
-  - провиженинг кластера
-  - добавление раннера
-  - провиженинг мониторинга (вручную)
-
-6. Сборка приложений
-По коммиту изменений в ветку develop/ создается джоба
-  - сборка приложения в staging версию (версия - CI_PIPELINE_IID, CI_COMMIT_SHORT_SHA)
-  - деплой приложения на dev кластер (вручную)
-
-7. Релиз
-По тэгу в в ветке мастер создается джоба
-  - сборка приложения (версия = тэг)
-  - деплой приложения на prod
-
-Отсюда структура репозитория
-- infrastructure
-  - envs
-    - base
-    - dev
-    - uat
-    - prod
-  - modules
-    - terraform
-    - ansible
-- apps
-
 ## Prerequisites
 
-- generated ssh-key
-- yandex.cloud created account
-- yandex.cloud created cloud YC_CLOUD_ID
-- yandex.cloud created folder YC_FOLDER_ID
-- yandex.cloud created service account and editor permissions
-- yandex.cloud created ACCESS_KEY and SECRET_KEY
-- yandex.cloud created s3 bucket S3_TF_STATE
-- yandex.cloud created OAUTH token for s3 bucket access YC_TOKEN
-- workstation with docker
+- yandex.cloud account 
+- `yc cli` installed and configured
+- `docker` installed
+- `git` installed
+- ssh key generated
+- server certificates for `*.ru-central1.internal` zone generated (mostly for nexus)
+- initial Yandex.Cloud Infrastructure
+
+### SSH Keys
+
+```
+ssh-keygen -t rsa -f $HOME/ya_key
+```
+
+### Certificates generating
+
+Self-Signed certificates procedure
+
+1. Root Key and Certificate generating
+
+```
+openssl genrsa -out rootCA.key 4096
+openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -out rootCA.crt
+```
+
+2. Certificate Key, CSR and Certificate generating
+
+```
+openssl genrsa -out ru-central1.internal.key 2048
+openssl req -new -sha256 \
+    -key ru-central1.internal.key \
+    -subj "/CN=ru-central1.internal" \
+    -reqexts SAN \
+    -config <(cat /etc/ssl/openssl.cnf \
+        <(printf "\n[SAN]\nsubjectAltName=DNS:*.ru-central1.internal")) \
+    -out ru-central1.internal.csr
+openssl x509 -req \
+-extfile <(printf "subjectAltName=DNS:*.ru-central1.internal") \
+-days 720 \
+-in ru-central1.internal.csr \
+-CA rootCA.crt \
+-CAkey rootCA.key \
+-CAcreateserial \
+-out ru-central1.internal.crt
+```
+
+### Create initial Yandex.Cloud Infrastructure
+
+First of all we need to create a folder and a network with routing table and internet gateway in it.
+Here is a script which will all the objects:
+```
+./docs/prerequisites.sh
+```
+
+### Set ansible group vars
+
+Update `envs/*/group_vars/all/secrets.yaml` with the generated parameters
 
 ## Build image
 
@@ -76,7 +82,9 @@ Network spec:
 
 ```yaml
 network: 
+  # network which must exist before running
   name: instances
+  # list of subnets to create
   subnets:
     dev-a:
       zone: ru-central1-a 
@@ -84,6 +92,21 @@ network:
     dev-b:
       zone: ru-central1-b 
       subnets: [192.168.32.0/28]
+  # list of security groups to create
+  # doesn't support port range or port list
+  # doesn't support other protocols but udp and tcp
+  # -1 means all the ports
+  # 0.0.0.0/0 means any IP address
+  security_groups:
+    allow_all:
+      ingress:
+        - protocol: tcp
+          ports: -1
+          cidr: [0.0.0.0/0]
+      egress:
+        - protocol: tcp
+          ports: -1
+          cidr: [0.0.0.0/0]
 ```
 
 ## Security Groups
@@ -111,20 +134,30 @@ Hosts spec:
 
 ```yaml
 hosts:
-  gitlab11:
-    name: gitlab11
+  bastion:
+    name: bastion
     cpu: 2
     memory: 4096
     disk: 40
     subnet: platform-a
     public_ip: true
+    security_groups: [allow_all]  
+  gitlab11:
+    name: gitlab11
+    cpu: 4
+    memory: 8192
+    disk: 40
+    subnet: platform-a
+    public_ip: false
+    security_groups: [gitlab, ssh, common, internet, access_to_nexus, ansible_runner]
   nexus11:
     name: nexus11
     cpu: 2
     memory: 4096
     disk: 40
     subnet: platform-a
-    public_ip: true
+    public_ip: false
+    security_groups: [nexus, ssh, common, internet, access_to_nexus]
 ```
 
 Inventory spec:
@@ -247,7 +280,8 @@ Stages:
 ```
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
-helm install prom prometheus-community/kube-prometheus-stack -n monitoring -f values.yaml
+helm upgrade --install prom prometheus-community/kube-prometheus-stack -n monitoring -f values.yaml
+## add some custom k8s objects
 ```
 
 monitoring spec:
@@ -258,6 +292,9 @@ monitoring:
   name: prom
   namespace: monitoring
   helm_values: monitoring/values.yaml
+  k8s_manifests:
+  - monitoring/k8s/manifest1.yml
+  - monitoring/k8s/manifest2.yml
 ```
 
 ## Apps

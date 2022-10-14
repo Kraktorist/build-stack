@@ -1,0 +1,6 @@
+alertmanager:
+  enabled: false
+grafana:
+  enabled: true
+  ingress:
+    enabled: true
