@@ -50,14 +50,6 @@ network:
         - protocol: tcp
           ports: 443
           cidr: [0.0.0.0/0]
-    ansible_runner:
-      egress:
-        - protocol: tcp
-          ports: 22
-          cidr: [0.0.0.0/0]
-        - protocol: tcp
-          ports: 6443
-          cidr: [0.0.0.0/0]
     access_to_nexus:
       egress:
         - protocol: tcp
@@ -88,6 +80,14 @@ network:
         - protocol: tcp
           ports: 443
           cidr: [0.0.0.0/0]
+      egress:
+        # rules for runner tasks
+        - protocol: tcp
+          ports: 22
+          cidr: [0.0.0.0/0]
+        - protocol: tcp
+          ports: 6443
+          cidr: [0.0.0.0/0]
     allow_all:
       ingress:
         - protocol: tcp
@@ -100,6 +100,7 @@ network:
 
 # hosts specification
 # every host must have defined name, cpu, memory, disk, public_ip
+# yandex limitations up to 5 security groups per host
 hosts:
   bastion:
     name: bastion
@@ -116,7 +117,7 @@ hosts:
     disk: 40
     subnet: platform-a
     public_ip: false
-    security_groups: [gitlab, ssh, common, internet, access_to_nexus, ansible_runner]
+    security_groups: [gitlab, ssh, common, internet, access_to_nexus]
   nexus11:
     name: nexus11
     cpu: 2
