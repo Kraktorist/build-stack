@@ -23,8 +23,9 @@ monitoring:
   namespace: monitoring
   helm_values: 
     - monitoring/values.yaml
-    - monitoring/values2.yaml
-    - monitoring/values3.yaml
+  k8s_manifests:
+  - monitoring/k8s/dashboards.yml
+
 
 # gitlab runner spec
 runner:

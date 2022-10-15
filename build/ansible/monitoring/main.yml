@@ -32,14 +32,25 @@
           ignore_errors: True
           when: config.monitoring.helm_values is defined
 
-        - name: Prints helm_values                                                                                                          
-          ansible.builtin.debug:
-            msg: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}" 
-
         - name: Install prometheus-operator
           kubernetes.core.helm:
             name: "{{ config.monitoring.name }}"
             chart_ref: prometheus-community/kube-prometheus-stack 
             release_namespace: "{{ config.monitoring.namespace | default('default') }}"
             values_files: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}" 
+
+        - name: Check k8s_manifests paths
+          stat:
+            path: "{{ lookup('env','ENV_PATH') }}//{{ item }}"
+          register: stat_results
+          with_items: "{{ config.monitoring.k8s_manifests }}"
+          ignore_errors: True
+          when: config.monitoring.k8s_manifests is defined
+
+        - name: Apply k8s manifests
+          kubernetes.core.k8s:
+            namespace: "{{ config.monitoring.namespace | default('default') }}"
+            state: present
+            src: "{{ item }}"
+          with_items: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}"
       when: config.monitoring.enabled is defined and config.monitoring.enabled | bool
