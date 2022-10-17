@@ -1537,7 +1537,7 @@ data:
                 "type": "prometheus",
                 "uid": "prometheus"
               },
-              "expr": "histogram_quantile(0.99, sum(rate(request_duration_seconds_bucket{name=\"front-end\"}[1m])) by (name, le))",
+              "expr": "histogram_quantile(0.99, sum(rate(request_duration_seconds_bucket{service=\"front-end\"}[1m])) by (name, le))",
               "intervalFactor": 2,
               "legendFormat": "99th quantile",
               "refId": "A",
@@ -1548,7 +1548,7 @@ data:
                 "type": "prometheus",
                 "uid": "prometheus"
               },
-              "expr": "histogram_quantile(0.5, sum(rate(request_duration_seconds_bucket{name=\"front-end\"}[1m])) by (name, le))",
+              "expr": "histogram_quantile(0.5, sum(rate(request_duration_seconds_bucket{service=\"front-end\"}[1m])) by (name, le))",
               "intervalFactor": 2,
               "legendFormat": "50th quantile",
               "refId": "B",
@@ -1559,7 +1559,7 @@ data:
                 "type": "prometheus",
                 "uid": "prometheus"
               },
-              "expr": "sum(rate(request_duration_seconds_sum{name=\"front-end\"}[1m])) / sum(rate(request_duration_seconds_count{name=\"front-end\"}[1m]))",
+              "expr": "sum(rate(request_duration_seconds_sum{service=\"front-end\"}[1m])) / sum(rate(request_duration_seconds_count{service=\"front-end\"}[1m]))",
               "intervalFactor": 2,
               "legendFormat": "Mean",
               "refId": "C",
