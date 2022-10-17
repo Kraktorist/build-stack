@@ -24,8 +24,9 @@ monitoring:
   helm_values: 
     - monitoring/values.yaml
   k8s_manifests:
-  - monitoring/k8s/dashboards.yml
-
+  - monitoring/k8s/dashboard-analytics.yml
+  - monitoring/k8s/dashboard-performance.yml
+  - monitoring/k8s/dashboard-resources.yml
 
 # gitlab runner spec
 runner:
