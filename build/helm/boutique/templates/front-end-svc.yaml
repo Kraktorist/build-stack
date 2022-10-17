@@ -8,7 +8,8 @@ metadata:
 spec:
   type: {{ .Values.frontend.service.type }}
   ports: 
-  - port: 80
+  - name: main
+    port: 80
     targetPort: 8079
 {{- if eq .Values.frontend.service.type "NodePort" }}
     nodePort: {{ .Values.frontend.service.nodePort }}

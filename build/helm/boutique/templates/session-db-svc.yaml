@@ -8,7 +8,8 @@ metadata:
 spec:
   ports:
     # the port that this service should serve on
-  - port: 6379
+  - name: main
+    port: 6379
     targetPort: 6379
   selector:
     name: session-db
