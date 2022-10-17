@@ -275,7 +275,9 @@ data:
       ],
       "schemaVersion": 37,
       "style": "dark",
-      "tags": [],
+      "tags": [
+        "boutique"
+      ],
       "templating": {
         "list": []
       },
@@ -311,6 +313,6 @@ data:
       "timezone": "browser",
       "title": "Boutique Analytics",
       "uid": "QkmQgJS4z",
-      "version": 1,
+      "version": 2,
       "weekStart": ""
     }

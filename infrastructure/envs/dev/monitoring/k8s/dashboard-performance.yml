@@ -22,7 +22,9 @@ data:
             "target": {
               "limit": 100,
               "matchAny": false,
-              "tags": [],
+              "tags": [
+                "boutique"
+              ],
               "type": "dashboard"
             },
             "type": "dashboard"
