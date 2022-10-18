@@ -56,7 +56,10 @@ push-catalogue:
       --registry-certificate ${NEXUS_RELEASE_REGISTRY}=${TRUSTED_CERTIFICATES}
       --registry-certificate ${NEXUS_GROUP_REGISTRY}=${TRUSTED_CERTIFICATES}
       --registry-mirror ${NEXUS_GROUP_REGISTRY}
-      
+  needs: 
+    - job: build
+      artifacts: true  
+            
 push-catalogue-db:
   stage: push
   tags: [dev]
