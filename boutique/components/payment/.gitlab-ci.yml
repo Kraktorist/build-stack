@@ -40,7 +40,7 @@ test:
       artifacts: true   
 
 push:
-  stage: build
+  stage: push
   tags: [dev]
   image:
     name: ${NEXUS_GROUP_REGISTRY}/kaniko-project/executor:v1.9.0-debug
