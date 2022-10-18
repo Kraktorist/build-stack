@@ -2,11 +2,44 @@ workflow:
   rules:
     - if: $CI_COMMIT_TAG
 
+default:
+  image: golang:1.7
+
+before_script:
+  - mkdir -p $GOPATH/src/github.com/microservices-demo/
+  - ln -s ${CI_PROJECT_DIR} $GOPATH/src/github.com/microservices-demo/user
+  
 stages:
   - build
+  - test
+  - push
 
-build-user:
+build:
   stage: build
+  tags: [dev]
+  script:
+    - go get -v github.com/Masterminds/glide 
+    - glide install
+    - cd $GOPATH/src/github.com/microservices-demo/user/
+    - CGO_ENABLED=0 go build -a -installsuffix cgo -o ${CI_PROJECT_DIR}/user main.go
+  artifacts:
+    expire_in: 2 hrs
+    paths: 
+      - ${CI_PROJECT_DIR}/app
+
+test:
+  stage: test
+  tags: [dev]
+  script:
+    - go get -v github.com/Masterminds/glide 
+    - glide install
+    - echo -e "./users/\n./api/" | xargs go test -v
+  needs: 
+    - job: build
+      artifacts: true   
+
+push-user:
+  stage: push
   tags: [dev]
   image:
     name: ${NEXUS_GROUP_REGISTRY}/kaniko-project/executor:v1.9.0-debug
@@ -22,8 +55,11 @@ build-user:
       --registry-certificate ${NEXUS_RELEASE_REGISTRY}=${TRUSTED_CERTIFICATES}
       --registry-certificate ${NEXUS_GROUP_REGISTRY}=${TRUSTED_CERTIFICATES}
       --registry-mirror ${NEXUS_GROUP_REGISTRY}
-      
-build-user-db:
+  needs: 
+    - job: build
+      artifacts: true 
+
+push-user-db:
   image: 
     name: ${NEXUS_GROUP_REGISTRY}/docker:20.10.16
   tags: [dev]
@@ -31,7 +67,7 @@ build-user-db:
     - name: ${NEXUS_GROUP_REGISTRY}/docker:20.10.16-dind
       # https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3808
       entrypoint: [ "sh", "-c", "dockerd-entrypoint.sh $DOCKER_DAEMON_OPTIONS" ]
-  stage: build
+  stage: push
   variables:
     DOCKER_DAEMON_OPTIONS: "--insecure-registry=${NEXUS_RELEASE_REGISTRY}"
     DOCKER_HOST: tcp://localhost:2376
