@@ -7,8 +7,10 @@ workflow:
 
 stages:
   - build
+  - test
+  - push
 
-build-package:
+build:
   stage: build
   tags: [dev]
   script:
@@ -18,8 +20,17 @@ build-package:
     expire_in: 2 hrs
     paths: 
       - ${CI_PROJECT_DIR}/docker/shipping
-      
-build:
+
+test:
+  stage: test
+  tags: [dev]
+  script:
+    - mvn -q test
+  needs: 
+    - job: build
+      artifacts: true
+
+push:
   stage: build
   tags: [dev]
   image:
@@ -37,5 +48,5 @@ build:
       --registry-certificate ${NEXUS_GROUP_REGISTRY}=${TRUSTED_CERTIFICATES}
       --registry-mirror ${NEXUS_GROUP_REGISTRY}
   needs: 
-    - job: build-package
+    - job: build
       artifacts: true
