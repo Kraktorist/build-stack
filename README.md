@@ -71,9 +71,7 @@ eval `ssh-agent -s`
 ssh-add ~/ya_key
 source /app/scripts/lib.sh
 
-terraform_apply network
-terraform_apply hosts
-terraform_apply inventory
+terraform_apply
 
 ```
 
@@ -81,6 +79,8 @@ terraform_apply inventory
 
 ```
 provision_bastion
+# then set SSH_ARGS variable to force all other task to use bastion host
+export SSH_ARGS='-o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q ubuntu@<BASTION_IP> -p 22322"'
 provision_misc # this is apt-get update
 provision_gitlab
 provision_nexus
