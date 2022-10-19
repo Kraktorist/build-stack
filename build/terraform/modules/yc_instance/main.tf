@@ -3,7 +3,7 @@ data "yandex_compute_image" "os" {
 }
 
 data "yandex_vpc_security_group" "group" {
-  for_each = toset(var.node.security_groups)
+  for_each = toset(setsubtract(var.node.security_groups, [for k, v in var.security_groups: v.name]))
   name = each.value
 }
 
