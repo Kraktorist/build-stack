@@ -10,7 +10,7 @@
       lineinfile:
           dest: "/etc/ssh/sshd_config"
           regexp: "^Port"
-          line: "Port 22322"
+          line: "Port {{ SSH_PORT }}"
       notify: "Restart sshd"
 
   handlers:

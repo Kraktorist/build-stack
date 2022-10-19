@@ -58,7 +58,7 @@ function terraform_status() {
 function provision_misc() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
-    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
+    --extra-vars "ansible_ssh_common_args='${ANSIBLE_SSH_COMMON_ARGS}'" \
     --become /app/ansible/misc/main.yml 
 }
 
@@ -71,14 +71,14 @@ function provision_bastion() {
 function provision_gitlab() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
-    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
+    --extra-vars "ansible_ssh_common_args='${ANSIBLE_SSH_COMMON_ARGS}'" \
     --become /app/ansible/gitlab/main.yml 
 }
 
 function provision_infra_repo() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
-    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
+    --extra-vars "ansible_ssh_common_args='${ANSIBLE_SSH_COMMON_ARGS}'" \
     --become /app/ansible/gitlab/main.yml \
     --tag infrastructure
 }
@@ -86,7 +86,7 @@ function provision_infra_repo() {
 function provision_apps_repo() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
-    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
+    --extra-vars "ansible_ssh_common_args='${ANSIBLE_SSH_COMMON_ARGS}'" \
     --become /app/ansible/gitlab/main.yml \
     --tag apps
 }
@@ -94,7 +94,7 @@ function provision_apps_repo() {
 function provision_infra_runner() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
-    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
+    --extra-vars "ansible_ssh_common_args='${ANSIBLE_SSH_COMMON_ARGS}'" \
     --become /app/ansible/gitlab/main.yml \
     --tag runner
 }
@@ -102,28 +102,28 @@ function provision_infra_runner() {
 function provision_nexus() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
-    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
+    --extra-vars "ansible_ssh_common_args='${ANSIBLE_SSH_COMMON_ARGS}'" \
     --become /app/ansible/nexus/main.yml
 }
 
 function provision_k8s() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
-    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
+    --extra-vars "ansible_ssh_common_args='${ANSIBLE_SSH_COMMON_ARGS}'" \
     --become /app/ansible/kubespray/cluster.yml
 }
 
 function provision_k8s_runner() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
-    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
+    --extra-vars "ansible_ssh_common_args='${ANSIBLE_SSH_COMMON_ARGS}'" \
     --become /app/ansible/k8s/main.yml
 }
 
 function provision_monitoring() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
-    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
+    --extra-vars "ansible_ssh_common_args='${ANSIBLE_SSH_COMMON_ARGS}'" \
     --become /app/ansible/monitoring/main.yml
 }
 
@@ -134,6 +134,6 @@ function deploy_boutique() {
     --extra-vars "NEXUS_GROUP_REGISTRY=${NEXUS_GROUP_REGISTRY}" \
     --extra-vars "NEXUS_GITLAB_USERNAME=${NEXUS_GITLAB_USERNAME}" \
     --extra-vars "NEXUS_GITLAB_PASSWORD=${NEXUS_GITLAB_PASSWORD}" \
-    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
+    --extra-vars "ansible_ssh_common_args='${ANSIBLE_SSH_COMMON_ARGS}'" \
     /app/ansible/deploy/main.yml
 }

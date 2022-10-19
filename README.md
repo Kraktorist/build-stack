@@ -79,9 +79,9 @@ terraform_apply
 
 ```
 provision_bastion
-# then set SSH_ARGS variable to force all other task to use bastion host
-export SSH_ARGS='-o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q ubuntu@<BASTION_IP> -p 22322"'
-provision_misc # this is apt-get update
+# then set ANSIBLE_SSH_COMMON_ARGS variable to force all other task to use bastion host
+export ANSIBLE_SSH_COMMON_ARGS='-o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q ubuntu@<BASTION_IP> -p 22322"'
+provision_misc # this is apt-get update and certificates pushing
 provision_gitlab
 provision_nexus
 provision_infra_repo
