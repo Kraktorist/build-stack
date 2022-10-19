@@ -14,7 +14,7 @@ inventory:
           nexus11:
       bastion:
         hosts:
-          bastion:
+          bastion11:
 
 network: 
   name: instances
@@ -102,8 +102,8 @@ network:
 # every host must have defined name, cpu, memory, disk, public_ip
 # yandex limitations up to 5 security groups per host
 hosts:
-  bastion:
-    name: bastion
+  bastion11:
+    name: bastion11
     cpu: 2
     memory: 4096
     disk: 40
