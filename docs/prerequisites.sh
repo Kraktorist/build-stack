@@ -68,6 +68,9 @@ if [ -z ${S3_TF_STATE} ]; then
   echo $(yellow "WARNING! Parameter --bucket is not set. Default value --bucket=${S3_TF_STATE} will be used.")
 fi
 
+echo $(green "Press enter to continue")
+read
+
 echo $(yellow "Starting initialization:")
 set -euo pipefail
 
