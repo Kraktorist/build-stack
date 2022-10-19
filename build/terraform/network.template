@@ -1,7 +1,0 @@
-module yc_network {
-  count = can(module.input.params.network.name) ? 1 : 0
-  network = module.input.params.network.name
-  subnets = module.input.params.network.subnets
-  security_groups = can(module.input.params.network.security_groups) ? module.input.params.network.security_groups : {}
-  source = "./modules/yc_network/"
-}

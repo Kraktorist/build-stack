@@ -17,6 +17,11 @@ variable ansible_inventory {
   description = "Ansible inventory file which will be outputed"
 }
 
+variable instances {
+  type        = list
+  description = "List of Instances"
+}
+
 variable inventory {
   type        = map
   description = "Object of inventory"

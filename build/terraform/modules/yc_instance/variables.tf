@@ -29,6 +29,17 @@ variable node {
   description = "Instance Parameters"
 }
 
+variable subnets {
+  type        = map
+  description = "List of Subnets"
+}
+
+variable security_groups {
+  type        = map
+  description = "List of Security Groups"
+}
+
+
 variable ENV {
   type        = string
   default     = ""

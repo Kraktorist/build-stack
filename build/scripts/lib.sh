@@ -23,12 +23,11 @@ function init_backend() {
       echo "Environment variable 'ENV' is empty">/dev/stderr
       exit 1
     fi
-    step=$1
     terraform -chdir=/app/terraform init \
         -backend-config="endpoint=storage.yandexcloud.net" \
         -backend-config="bucket=${S3_TF_STATE}" \
         -backend-config="region=ru-central1" \
-        -backend-config="key=${ENV}/${step}.tfstate" \
+        -backend-config="key=${ENV}/cloud.tfstate" \
         -backend-config="access_key=${ACCESS_KEY}" \
         -backend-config="secret_key=${SECRET_KEY}" \
         -backend-config="skip_region_validation=true" \
@@ -36,47 +35,30 @@ function init_backend() {
         -reconfigure
 }
 
-function init_step() {
-    # init_backend "network"
-    step=$1
-    cp /app/terraform/${step}.template /app/terraform/${step}.tf
-}
-
 function terraform_plan() {
-    step=$1
-    init_step $step
-    init_backend $step
+    init_backend
     terraform -chdir=/app/terraform plan
-    rm -rf "${step}.tf"
 }
 
 function terraform_apply() {
-    step=$1
-    init_step $step
-    init_backend $step
+    init_backend
     terraform -chdir=/app/terraform apply -auto-approve
-    rm -rf /app/terraform/${step}.tf
 }
 
 function terraform_destroy() {
-    step=$1
-    init_step $step
-    init_backend $step
+    init_backend
     terraform -chdir=/app/terraform destroy -auto-approve
-    rm -rf "${step}.tf"
 }
 
 function terraform_status() {
-    step=$1
-    init_step $step
-    init_backend $step
-    terraform -chdir=/app/terraform show
-    rm -rf "${step}.tf"    
+    init_backend
+    terraform -chdir=/app/terraform show  
 }
 
 function provision_misc() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
+    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
     --become /app/ansible/misc/main.yml 
 }
 
@@ -89,12 +71,14 @@ function provision_bastion() {
 function provision_gitlab() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
+    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
     --become /app/ansible/gitlab/main.yml 
 }
 
 function provision_infra_repo() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
+    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
     --become /app/ansible/gitlab/main.yml \
     --tag infrastructure
 }
@@ -102,6 +86,7 @@ function provision_infra_repo() {
 function provision_apps_repo() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
+    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
     --become /app/ansible/gitlab/main.yml \
     --tag apps
 }
@@ -109,6 +94,7 @@ function provision_apps_repo() {
 function provision_infra_runner() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
+    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
     --become /app/ansible/gitlab/main.yml \
     --tag runner
 }
@@ -116,24 +102,28 @@ function provision_infra_runner() {
 function provision_nexus() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
+    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
     --become /app/ansible/nexus/main.yml
 }
 
 function provision_k8s() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
+    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
     --become /app/ansible/kubespray/cluster.yml
 }
 
 function provision_k8s_runner() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
+    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
     --become /app/ansible/k8s/main.yml
 }
 
 function provision_monitoring() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
+    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
     --become /app/ansible/monitoring/main.yml
 }
 
@@ -144,5 +134,6 @@ function deploy_boutique() {
     --extra-vars "NEXUS_GROUP_REGISTRY=${NEXUS_GROUP_REGISTRY}" \
     --extra-vars "NEXUS_GITLAB_USERNAME=${NEXUS_GITLAB_USERNAME}" \
     --extra-vars "NEXUS_GITLAB_PASSWORD=${NEXUS_GITLAB_PASSWORD}" \
+    --extra-vars "ansible_ssh_common_args='${SSH_ARGS}'" \
     /app/ansible/deploy/main.yml
 }

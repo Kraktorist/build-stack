@@ -5,10 +5,10 @@ locals {
   ))
 }
 
-data "yandex_compute_instance" "node" {
-  for_each = toset(local.nodes)
-  name = each.key
-}
+# data "yandex_compute_instance" "node" {
+#   for_each = toset(local.nodes)
+#   name = each.key
+# }
 
 locals {
   misc_hosts = tomap(
@@ -19,11 +19,11 @@ locals {
                 for node, params in members.hosts:
                     node => {
                       ansible_host = [
-                          for v in data.yandex_compute_instance.node:
+                          for v in var.instances:
                             coalesce(v.network_interface[0].nat_ip_address, v.network_interface[0].ip_address ) if node == v.name
                       ][0]
                       fqdn = [
-                          for v in data.yandex_compute_instance.node:
+                          for v in var.instances:
                             try(v.fqdn) if node == v.name
                       ][0]                    
                     }
@@ -48,11 +48,11 @@ locals {
                         for node, params in members.hosts:
                             node => {
                               ansible_host = [
-                                  for v in data.yandex_compute_instance.node:
+                                  for v in var.instances:
                                     coalesce(v.network_interface[0].nat_ip_address, v.network_interface[0].ip_address ) if node == v.name
                               ][0]
                               fqdn = [
-                                  for v in data.yandex_compute_instance.node:
+                                  for v in var.instances:
                                     try(v.fqdn) if node == v.name
                               ][0]                
                             }
