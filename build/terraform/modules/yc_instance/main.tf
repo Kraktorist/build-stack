@@ -2,6 +2,11 @@ data "yandex_compute_image" "os" {
   family = var.os_family
 }
 
+data "yandex_vpc_security_group" "group" {
+  for_each = toset(var.node.security_groups)
+  name = each.value
+}
+
 resource "yandex_compute_instance" "node" {
   zone = [ for v in var.subnets: try(v.zone) if var.node.subnet == v.name ][0]  
   name = var.node.name
@@ -15,7 +20,7 @@ resource "yandex_compute_instance" "node" {
   network_interface {
     subnet_id = [ for v in var.subnets: try(v.id) if var.node.subnet == v.name ][0]  
     nat = var.node.public_ip
-    security_group_ids = [for o in var.security_groups : o.id if contains(var.node.security_groups, o.name) ]
+    security_group_ids = [for o in merge(var.security_groups, data.yandex_vpc_security_group.group) : o.id if contains(var.node.security_groups, o.name)]
   }
 
   boot_disk {
