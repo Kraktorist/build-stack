@@ -19,98 +19,31 @@ default:
   - infrastructure
 
 stages:
-  - status
   - plan
   - apply
+  - prepare
   - provision
-  - destroy
+  - other
 
-status.network:
-  extends: .terraform:status
-  script:
-    - terraform_status network
-    - yc_get_network
-
-status.hosts:
-  extends: .terraform:status
-  script:
-    - terraform_status hosts
-    - yc_get_instances
-
-plan.network:
+plan:
   extends: .terraform:plan
   script:
-    - terraform_plan network
+    - terraform_plan
 
-plan.hosts:
-  extends: .terraform:plan
-  script:
-    - terraform_plan hosts
-
-apply.network:
+apply:
   extends: .terraform:apply
   script:
-    - terraform_apply network
-
-apply.hosts:
-  extends: .terraform:apply
-  script:
-    - terraform_apply hosts
-
-apply.inventory:
-  extends: .terraform:apply
-  script:
-    - terraform_apply inventory
+    - terraform_apply
   artifacts:
     paths: 
       - ${CI_PROJECT_DIR}/envs/${ENV}/inventory.yml
 
-provision.misc:
-  extends: .ansible:provision
+prepare:
+  extends: .ansible:prepare
   script:
     - provision_misc
   needs: 
-    - job: apply.inventory
-      artifacts: true
-
-provision.gitlab:
-  extends: .ansible:provision
-  script:
-    - provision_gitlab
-  needs: 
-    - job: apply.inventory
-      artifacts: true
-
-provision.infra_repo:
-  extends: .ansible:provision
-  script:
-    - provision_infra_repo
-  needs: 
-    - job: apply.inventory
-      artifacts: true
-
-provision.infra_runner:
-  extends: .ansible:provision
-  script:
-    - provision_infra_runner
-  needs: 
-    - job: apply.inventory
-      artifacts: true
-
-provision.apps_repo:
-  extends: .ansible:provision
-  script:
-    - provision_apps_repo
-  needs: 
-    - job: apply.inventory
-      artifacts: true
-
-provision.nexus:
-  extends: .ansible:provision
-  script:
-    - provision_nexus
-  needs: 
-    - job: apply.inventory
+    - job: apply
       artifacts: true
 
 provision.k8s:
@@ -118,7 +51,7 @@ provision.k8s:
   script:
     - provision_k8s
   needs: 
-    - job: apply.inventory
+    - job: apply
       artifacts: true
   artifacts:
     paths: 
@@ -134,15 +67,17 @@ provision.monitoring:
   script:
     - provision_monitoring
   needs: 
-    - job: apply.inventory
+    - job: apply
       artifacts: true
 
-destroy.network:
-  extends: .terraform:destroy
+status:
+  extends: .terraform:status
   script:
-    - terraform_destroy network
+    - terraform_status
+    - yc_get_network
+    - yc_get_instances
 
-destroy.hosts:
+destroy:
   extends: .terraform:destroy
   script:
-    - terraform_destroy hosts
+    - terraform_destroy

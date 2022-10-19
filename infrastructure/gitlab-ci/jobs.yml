@@ -8,11 +8,6 @@ variables:
   TF_VAR_ansible_inventory: "${CI_PROJECT_DIR}/envs/${ENV}/inventory.yml"
   ENV_PATH: ${CI_PROJECT_DIR}/envs/${ENV}
 
-.terraform:status: 
-  stage: status
-  environment:
-    name: $ENV
-
 .terraform:plan: 
   stage: plan
   environment:
@@ -24,6 +19,12 @@ variables:
   environment:
     name: $ENV
 
+.ansible:prepare: 
+  stage: prepare
+  when: manual
+  environment:
+    name: $ENV
+
 .ansible:provision: 
   stage: provision
   when: manual
@@ -31,8 +32,12 @@ variables:
     name: $ENV
 
 .terraform:destroy: 
-  stage: destroy
+  stage: other
   when: manual
   environment:
     name: $ENV
 
+.terraform:status: 
+  stage: other
+  environment:
+    name: $ENV
