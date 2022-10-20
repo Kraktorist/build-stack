@@ -58,11 +58,6 @@ apps_gitlab_vars:
     value: |
       {{ INTERNAL_TRUSTED_CERTIFICATE }}
       {{ INTERNAL_TRUSTED_ROOT_CERTIFICATE }}
-
-  # - name: DOCKER_AUTH_CONFIG
-  #   value: " {\"auths\": { \"{{ NEXUS_REGISTRY }}\": { \"auth\": \"{{ ('admin:' + NEXUS_ADMIN_PASSWORD) | b64encode }}\" }}}"
-  # - name: NEXUS_REGISTRY
-  #   value: "{{ NEXUS_REGISTRY }}"
   - name: SSH_PRIVATE_KEY
     value: "{{ SSH_PRIVATE_KEY }}"
   - name: SSH_PUBLIC_KEY
