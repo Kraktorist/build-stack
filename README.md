@@ -27,7 +27,7 @@ Here is a script which will provision all the objects:
 ./docs/prerequisites.sh
 ```
 
-This will return list of variables which need to be copied to ansibl-vault secret file `envs/*/group_vars/all/secrets.yaml`.
+This will return list of variables which need to be copied to ansible-vault secret file `envs/*/group_vars/all/secrets.yaml`.
 
 
 ## Builder image
