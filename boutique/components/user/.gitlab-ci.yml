@@ -33,10 +33,8 @@ test:
   script:
     - go get -v github.com/Masterminds/glide 
     - glide install
+    - cd $GOPATH/src/github.com/microservices-demo/user/
     - echo -e "./users/\n./api/" | xargs go test -v
-  needs: 
-    - job: build
-      artifacts: true   
 
 push-user:
   stage: push
@@ -55,9 +53,6 @@ push-user:
       --registry-certificate ${NEXUS_RELEASE_REGISTRY}=${TRUSTED_CERTIFICATES}
       --registry-certificate ${NEXUS_GROUP_REGISTRY}=${TRUSTED_CERTIFICATES}
       --registry-mirror ${NEXUS_GROUP_REGISTRY}
-  needs: 
-    - job: build
-      artifacts: true 
 
 push-user-db:
   image: 
