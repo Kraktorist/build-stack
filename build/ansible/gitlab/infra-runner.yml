@@ -17,15 +17,6 @@
       - runner
       - never
 
-    # - name: Gitlab Runner | Infrastructure | Configure Docker Daemon
-    #   ansible.builtin.lineinfile:
-    #     path: /etc/docker/daemon.json
-    #     create: yes
-    #     line: " {\"insecure-registries\" : [ \"{{ hostvars[groups['nexus'][0]]['fqdn'] }}:9082\", \"{{ hostvars[groups['nexus'][0]]['fqdn'] }}:9080\" ]}"
-    #   tags:
-    #   - runner
-    #   - never
-
     - name: Gitlab Runner | Infrastructure | Restart Docker Daemon
       ansible.builtin.service:
         name: docker
