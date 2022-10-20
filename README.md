@@ -89,28 +89,18 @@ provision_infra_runner
 provision_apps_repo
 provision_k8s
 ```
-# Infrastructure pipeline
+# Infrastructure Pipeline
 
-Stages:
-  - status:
-    - network
-    - hosts
+```yaml
+stages:
   - plan
-    - network
-    - hosts 
   - apply
-    - network
-    - hosts 
+  - prepare
   - provision
-    - gitlab
-    - nexus
-    - runner
     - k8s
-    - repo
+    - runner
     - monitoring
-  - destroy
-    - network
-    - hosts
+```
 
 ## Monitoring
 
