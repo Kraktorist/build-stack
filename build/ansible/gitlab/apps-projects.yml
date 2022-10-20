@@ -31,15 +31,6 @@
   tags:
   - apps
 
-# - name: Gitlab Group | Boutique | Copying project
-#   ansible.builtin.copy:
-#     src: /boutique
-#     dest: /
-#     mode: '0644'
-#   tags:
-#   - never
-#   - apps
-
 - name: Gitlab Group | Boutique | Creating Projects
   include_tasks: boutique.yml
   loop: "{{ git_repolist }}"
