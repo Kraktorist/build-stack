@@ -39,5 +39,6 @@ variables:
 
 .terraform:status: 
   stage: other
+  when: manual
   environment:
     name: $ENV
