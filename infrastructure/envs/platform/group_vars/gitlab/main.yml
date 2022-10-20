@@ -42,6 +42,20 @@ infra_gitlab_vars:
     value: "{{ ANSIBLE_VAULT_PASSWORD }}"
   - name: ANSIBLE_FORCE_COLOR
     value: true
+  - name: KUBECONFIG
+    value: TO_BE_UPDATED
+    variable_type: file
+    environment_scope: dev
+  - name: RUNNER_TOKEN
+    value: TO_BE_UPDATED
+    environment_scope: dev
+  - name: KUBECONFIG
+    value: TO_BE_UPDATED
+    variable_type: file
+    environment_scope: prod
+  - name: RUNNER_TOKEN
+    value: TO_BE_UPDATED
+    environment_scope: prod
 apps_gitlab_vars:
   - name: DOCKER_AUTH_CONFIG
     value: " {\"auths\":{\"{{ NEXUS_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_GROUP_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_SNAPSHOTS_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_RELEASE_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"}}}"
@@ -66,6 +80,9 @@ apps_gitlab_vars:
     value: "{{ ANSIBLE_VAULT_PASSWORD }}"
   - name: ANSIBLE_FORCE_COLOR
     value: true
+  - name: KUBECONFIG
+    value: TO_BE_UPDATED
+    variable_type: file
 deploy_gitlab_vars:
   - name: DOCKER_AUTH_CONFIG
     value: " {\"auths\":{\"{{ NEXUS_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_GROUP_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_SNAPSHOTS_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_RELEASE_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"}}}"
@@ -85,6 +102,9 @@ deploy_gitlab_vars:
     value: "{{ NEXUS_GITLAB_PASSWORD }}"
   - name: NEXUS_GITLAB_USERNAME
     value: "{{ NEXUS_GITLAB_USERNAME }}"
+  - name: KUBECONFIG
+    value: TO_BE_UPDATED
+    variable_type: file
 
 git_repolist:
   - { reponame: carts, repopath: https://github.com/microservices-demo/carts.git }
