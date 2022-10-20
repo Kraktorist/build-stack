@@ -35,9 +35,6 @@ test:
     - gvt restore
     - cd $GOPATH/src/github.com/microservices-demo/catalogue/
     - go test -v -covermode=count -coverprofile=coverage.out
-  needs: 
-    - job: build
-      artifacts: true   
 
 push-catalogue:
   stage: push
@@ -56,9 +53,6 @@ push-catalogue:
       --registry-certificate ${NEXUS_RELEASE_REGISTRY}=${TRUSTED_CERTIFICATES}
       --registry-certificate ${NEXUS_GROUP_REGISTRY}=${TRUSTED_CERTIFICATES}
       --registry-mirror ${NEXUS_GROUP_REGISTRY}
-  needs: 
-    - job: build
-      artifacts: true  
             
 push-catalogue-db:
   stage: push
@@ -79,6 +73,3 @@ push-catalogue-db:
       --registry-certificate ${NEXUS_RELEASE_REGISTRY}=${TRUSTED_CERTIFICATES}
       --registry-certificate ${NEXUS_GROUP_REGISTRY}=${TRUSTED_CERTIFICATES}
       --registry-mirror ${NEXUS_GROUP_REGISTRY}
-  needs: 
-    - job: build
-      artifacts: true  

@@ -18,7 +18,7 @@ RUN	addgroup -g ${SERVICE_GID} ${SERVICE_GROUP} && \
 	adduser -g "${SERVICE_NAME} user" -D -H -G ${SERVICE_GROUP} -s /sbin/nologin -u ${SERVICE_UID} ${SERVICE_USER}
 
 WORKDIR /
-COPY --from=0 /app /app
+COPY app /app
 COPY images/ /images/
 
 RUN	chmod +x /app && \
