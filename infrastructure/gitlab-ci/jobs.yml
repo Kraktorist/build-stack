@@ -25,8 +25,20 @@ variables:
   environment:
     name: $ENV
 
-.ansible:provision: 
-  stage: provision
+.ansible:k8s: 
+  stage: k8s
+  when: manual
+  environment:
+    name: $ENV
+
+.ansible:runner: 
+  stage: runner
+  when: manual
+  environment:
+    name: $ENV
+
+.ansible:monitoring: 
+  stage: monitoring
   when: manual
   environment:
     name: $ENV

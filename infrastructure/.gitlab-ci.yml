@@ -22,7 +22,9 @@ stages:
   - plan
   - apply
   - prepare
-  - provision
+  - k8s
+  - runner
+  - monitoring
   - other
 
 plan:
@@ -44,20 +46,20 @@ prepare:
     - provision_misc
 
 provision.k8s:
-  extends: .ansible:provision
+  extends: .ansible:k8s
   script:
     - provision_k8s
   artifacts:
     paths: 
       - ${CI_PROJECT_DIR}/envs/${ENV}/artifacts/
 
-provision.k8s_runner:
-  extends: .ansible:provision
+provision.runner:
+  extends: .ansible:runner
   script:
     - provision_k8s_runner
 
 provision.monitoring:
-  extends: .ansible:provision
+  extends: .ansible:monitoring
   script:
     - provision_monitoring
 
