@@ -26,7 +26,7 @@
     api_password: "{{ gitlab_password }}"
     group: infrastructure
     purge: true
-    variables: "{{ infra_gitlab_vars}}"
+    variables: "{{ infra_gitlab_vars }}"
   tags:
     - infrastructure
 
@@ -54,6 +54,18 @@
   tags:
     - infrastructure
 
+- name: Gitlab Group | Infrastructure | Set CI/CD variables for envs project
+  community.general.gitlab_project_variable:
+    api_url: "{{ gitlab_url }}"
+    validate_certs: False
+    api_username: "{{ gitlab_user }}"
+    api_password: "{{ gitlab_password }}"
+    project: infrastructure/envs
+    purge: true
+    variables: "{{ envs_gitlab_vars }}"
+  tags:
+    - infrastructure
+  
 - name: Gitlab Group | Infrastructure | Push Content
   ansible.builtin.shell: |
     repopath={{ source_repo }}
