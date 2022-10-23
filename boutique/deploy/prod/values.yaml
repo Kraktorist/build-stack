@@ -225,7 +225,7 @@ user:
         tag: test
         imagePullSecrets:
         - name: registry-pull-credentials
-    containerPort: 80
+    containerPort: 8080
     resources:
         limits:
             cpu: 300m
