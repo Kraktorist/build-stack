@@ -160,16 +160,11 @@ Apps:
 - monitoring apps
 
 boutique
+- remove imagepullsecret from values
 - helm deploy: add some labels to pods
 - boutique services: name all the ports
 - create `ServiceMonitor` for all the services
 - fix dashboards according to scrapped data
 
-infra-job
-
-plan_network 
--> apply_network 
--> plan_hosts 
--> apply_hosts 
--> apply_inventory
--> provision_gitlab + provision_nexus + provision_k8s + provision_k8s_runner + provision_monitoring
+infra:
+- add handlers to ansible states
