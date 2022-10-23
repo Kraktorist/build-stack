@@ -26,9 +26,6 @@ test:
   tags: [env-dev]
   script:
     - mvn -q test
-  needs: 
-    - job: build
-      artifacts: true
 
 push:
   stage: push

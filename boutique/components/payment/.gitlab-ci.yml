@@ -35,9 +35,6 @@ test:
     - gvt restore
     - cd $GOPATH/src/github.com/microservices-demo/payment/
     - go test -v -covermode=count -coverprofile=coverage.out
-  needs: 
-    - job: build
-      artifacts: true   
 
 push:
   stage: push
