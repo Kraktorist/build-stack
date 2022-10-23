@@ -4,7 +4,7 @@ include:
 default:
   before_script:
     - | 
-      export ENV=${CI_ENVIRONMENT_NAME#deploy/}
+      export ENV=${CI_ENVIRONMENT_NAME}
       export TF_VAR_ENV=${ENV}
       export TF_VAR_config="${CI_PROJECT_DIR}/envs/${ENV}/config.yml"
       export TF_VAR_ansible_inventory="${CI_PROJECT_DIR}/envs/${ENV}/inventory.yml"
@@ -41,7 +41,7 @@ apply:
     - terraform_apply
   artifacts:
     paths: 
-      - ${CI_PROJECT_DIR}/envs/${ENV}/inventory.yml
+      - ${CI_PROJECT_DIR}/envs/${CI_ENVIRONMENT_NAME}/inventory.yml
 
 prepare:
   extends: .ansible:prepare
@@ -54,7 +54,7 @@ provision.k8s:
     - provision_k8s
   artifacts:
     paths: 
-      - ${CI_PROJECT_DIR}/envs/${ENV}/artifacts/
+      - ${CI_PROJECT_DIR}/envs/${CI_ENVIRONMENT_NAME}/artifacts/
 
 provision.runner:
   extends: .ansible:runner
