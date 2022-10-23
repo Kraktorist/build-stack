@@ -15,3 +15,16 @@ For working with the resources inside of cloud use SSH tunnel as a SOCKS proxy
 ```
 ssh -D 1337 -f -C -q -N ubuntu@<BASTION_IP> -p 22322
 ```
+
+For using socks5 proxy with local kubectl change kubeconfig
+
+```
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: ...
+    server: https://....:6443
+    proxy-url: socks5://localhost:1337
+  name: cluster.local
+...
+```
