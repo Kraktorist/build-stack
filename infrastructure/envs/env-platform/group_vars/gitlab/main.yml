@@ -46,17 +46,17 @@ envs_gitlab_vars:
   - name: KUBECONFIG
     value: TO_BE_UPDATED
     variable_type: file
-    environment_scope: dev
+    environment_scope: env-dev
   - name: RUNNER_TOKEN
     value: TO_BE_UPDATED
-    environment_scope: dev
+    environment_scope: env-dev
   - name: KUBECONFIG
     value: TO_BE_UPDATED
     variable_type: file
-    environment_scope: prod
+    environment_scope: env-prod
   - name: RUNNER_TOKEN
     value: TO_BE_UPDATED
-    environment_scope: prod
+    environment_scope: env-prod
 apps_gitlab_vars:
   - name: DOCKER_AUTH_CONFIG
     value: " {\"auths\":{\"{{ NEXUS_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_GROUP_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_SNAPSHOTS_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"},\"{{ NEXUS_RELEASE_REGISTRY }}\":{\"auth\":\"{{ ('gitlab:' + NEXUS_GITLAB_PASSWORD) | b64encode }}\"}}}"
