@@ -1,12 +1,15 @@
-workflow:
-  rules:
-    - if: $ENV
-  
 include:
   - local: gitlab-ci/jobs.yml
 
 default:
   before_script:
+    - | 
+      export ENV=${CI_ENVIRONMENT_NAME#deploy/}
+      export TF_VAR_ENV=${ENV}
+      export TF_VAR_config="${CI_PROJECT_DIR}/envs/${ENV}/config.yml"
+      export TF_VAR_ansible_inventory="${CI_PROJECT_DIR}/envs/${ENV}/inventory.yml"
+      export ENV_PATH=${CI_PROJECT_DIR}/envs/${ENV}
+
     - echo ${API_KEY} | base64 -d>/app/key.json
     - export YC_SERVICE_ACCOUNT_KEY_FILE=/app/key.json
     - if [ -f "${KUBECONFIG}" ]; then chmod 400 ${KUBECONFIG}; fi;

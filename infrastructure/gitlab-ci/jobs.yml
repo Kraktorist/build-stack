@@ -1,3 +1,7 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ "/^env-.*/"
+    - if: $CI_COMMIT_BRANCH =~ "/^env-.*/"  && $CI_PIPELINE_SOURCE == "push"
 image:
   name: "$NEXUS_GROUP_REGISTRY/infrastructure/builder:latest"
   entrypoint: [""]
@@ -11,46 +15,53 @@ variables:
 .terraform:plan: 
   stage: plan
   environment:
-    name: $ENV
+    name: "${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 .terraform:apply: 
   stage: apply
-  when: manual
   environment:
-    name: $ENV
+    name: "${CI_COMMIT_REF_NAME}"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
 
 .ansible:prepare: 
   stage: prepare
-  when: manual
   environment:
-    name: $ENV
+    name: "${CI_COMMIT_REF_NAME}"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
 
 .ansible:k8s: 
   stage: k8s
-  when: manual
   environment:
-    name: $ENV
+    name: "${CI_COMMIT_REF_NAME}"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
 
 .ansible:runner: 
   stage: runner
-  when: manual
   environment:
-    name: $ENV
+    name: "${CI_COMMIT_REF_NAME}"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
 
 .ansible:monitoring: 
   stage: monitoring
-  when: manual
   environment:
-    name: $ENV
+    name: "${CI_COMMIT_REF_NAME}"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
 
 .terraform:destroy: 
   stage: other
   when: manual
   environment:
-    name: $ENV
+    name: "${CI_COMMIT_REF_NAME}"
 
 .terraform:status: 
   stage: other
   when: manual
   environment:
-    name: $ENV
+    name: "${CI_COMMIT_REF_NAME}"
