@@ -1,0 +1,82 @@
+include:
+    - local: gitlab-ci/jobs.yml
+  
+  default:
+    before_script:
+      - export ANSIBLE_HOST_KEY_CHECKING=False
+      - |
+        if [ -n "${CI_COMMIT_REF_NAME}" ]; then export ENV=${CI_COMMIT_REF_NAME#deploy/}; fi
+        if [ -n "${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" ]; then export ENV=${CI_MERGE_REQUEST_TARGET_BRANCH_NAME#deploy/}; fi
+      - export TF_VAR_ENV=${ENV}
+      - export ENV_PATH=${CI_PROJECT_DIR}/envs/${ENV}
+      - export TF_VAR_config=${ENV_PATH}/config.yml
+      - export TF_VAR_ansible_inventory=${ENV_PATH}/inventory.yml
+      - echo ${API_KEY} | base64 -d>/app/key.json
+      - export YC_SERVICE_ACCOUNT_KEY_FILE=/app/key.json
+      - if [ -f "${KUBECONFIG}" ]; then chmod 400 ${KUBECONFIG}; fi;
+      - eval `ssh-agent -s`
+      - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+      - echo "$SSH_PUBLIC_KEY"> ~/ya_key.pub
+      - echo "$ANSIBLE_VAULT_PASSWORD">.vault
+      - source /app/scripts/lib.sh
+      - printenv
+    tags:
+    - infrastructure
+  
+  stages:
+    - plan
+    - apply
+    - prepare
+    - k8s
+    - runner
+    - monitoring
+    - other
+  
+  plan:
+    extends: .terraform:plan
+    script:
+      - terraform_plan
+  
+  apply:
+    extends: .terraform:apply
+    script:
+      - terraform_apply
+    artifacts:
+      paths: 
+        - ${CI_PROJECT_DIR}/envs/${ENV}/artifacts/
+  
+  prepare:
+    extends: .ansible:prepare
+    script:
+      - provision_misc
+  
+  provision.k8s:
+    extends: .ansible:k8s
+    script:
+      - provision_k8s
+    artifacts:
+      paths: 
+        - ${CI_PROJECT_DIR}/envs/${ENV}/artifacts/
+  
+  provision.runner:
+    extends: .ansible:runner
+    script:
+      - provision_k8s_runner
+  
+  provision.monitoring:
+    extends: .ansible:monitoring
+    script:
+      - provision_monitoring
+  
+  status:
+    extends: .terraform:status
+    script:
+      - terraform_status
+      - yc_get_network
+      - yc_get_instances
+  
+  destroy:
+    extends: .terraform:destroy
+    script:
+      - terraform_destroy
+      
