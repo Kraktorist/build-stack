@@ -12,7 +12,7 @@ stages:
 
 build:
   stage: build
-  tags: [dev]
+  tags: [env-dev]
   script:
     - mvn -DskipTests package
     - cp target/*.jar docker/shipping
@@ -23,7 +23,7 @@ build:
 
 test:
   stage: test
-  tags: [dev]
+  tags: [env-dev]
   script:
     - mvn -q test
   needs: 
@@ -32,7 +32,7 @@ test:
 
 push:
   stage: build
-  tags: [dev]
+  tags: [env-dev]
   image:
     name: ${NEXUS_GROUP_REGISTRY}/kaniko-project/executor:v1.9.0-debug
     entrypoint: [""]

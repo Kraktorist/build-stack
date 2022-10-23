@@ -16,7 +16,7 @@ stages:
 
 build:
   stage: build
-  tags: [dev]
+  tags: [env-dev]
   script:
     - go get -v github.com/Masterminds/glide 
     - glide install
@@ -29,7 +29,7 @@ build:
 
 test:
   stage: test
-  tags: [dev]
+  tags: [env-dev]
   script:
     - go get -v github.com/Masterminds/glide 
     - glide install
@@ -38,7 +38,7 @@ test:
 
 push-user:
   stage: push
-  tags: [dev]
+  tags: [env-dev]
   image:
     name: ${NEXUS_GROUP_REGISTRY}/kaniko-project/executor:v1.9.0-debug
     entrypoint: [""]
@@ -57,7 +57,7 @@ push-user:
 push-user-db:
   image: 
     name: ${NEXUS_GROUP_REGISTRY}/docker:20.10.16
-  tags: [dev]
+  tags: [env-dev]
   services:
     - name: ${NEXUS_GROUP_REGISTRY}/docker:20.10.16-dind
       # https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3808

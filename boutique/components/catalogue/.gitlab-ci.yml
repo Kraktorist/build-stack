@@ -16,7 +16,7 @@ stages:
 
 build:
   stage: build
-  tags: [dev]
+  tags: [env-dev]
   script:
     - go get -u github.com/FiloSottile/gvt
     - gvt restore
@@ -29,7 +29,7 @@ build:
 
 test:
   stage: test
-  tags: [dev]
+  tags: [env-dev]
   script:
     - go get -u github.com/FiloSottile/gvt
     - gvt restore
@@ -38,7 +38,7 @@ test:
 
 push-catalogue:
   stage: push
-  tags: [dev]
+  tags: [env-dev]
   image:
     name: ${NEXUS_GROUP_REGISTRY}/kaniko-project/executor:v1.9.0-debug
     entrypoint: [""]
@@ -56,7 +56,7 @@ push-catalogue:
             
 push-catalogue-db:
   stage: push
-  tags: [dev]
+  tags: [env-dev]
   image:
     name: ${NEXUS_GROUP_REGISTRY}/kaniko-project/executor:v1.9.0-debug
     entrypoint: [""]

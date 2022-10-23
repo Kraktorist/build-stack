@@ -59,11 +59,13 @@ provision.k8s:
 provision.runner:
   extends: .ansible:runner
   script:
+    - export K8S_AUTH_KUBECONFIG=${CI_PROJECT_DIR}/envs/${CI_ENVIRONMENT_NAME}/artifacts/admin.conf
     - provision_k8s_runner
 
 provision.monitoring:
   extends: .ansible:monitoring
   script:
+    - export K8S_AUTH_KUBECONFIG=${CI_PROJECT_DIR}/envs/${CI_ENVIRONMENT_NAME}/artifacts/admin.conf
     - provision_monitoring
 
 status:
