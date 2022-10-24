@@ -1,9 +1,20 @@
 default:
   image: ${NEXUS_GROUP_REGISTRY}/maven:3.6-jdk-11
+  before_script:
+    - |
+        mkdir -p /kaniko/.docker && echo $DOCKER_AUTH_CONFIG > /kaniko/.docker/config.json
+        if [ -n "$CI_COMMIT_TAG" ]; then 
+          export TAG=${CI_COMMIT_TAG};
+          export REGISTRY=${NEXUS_RELEASE_REGISTRY}; 
+        else 
+          export TAG=${CI_COMMIT_SHORT_SHA};
+          export REGISTRY=${NEXUS_SNAPSHOTS_REGISTRY}; 
+        fi
 
 workflow:
   rules:
     - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "push"
 
 stages:
   - build
@@ -34,13 +45,12 @@ push:
     name: ${NEXUS_GROUP_REGISTRY}/kaniko-project/executor:v1.9.0-debug
     entrypoint: [""]
   script:
-    - mkdir -p /kaniko/.docker && echo $DOCKER_AUTH_CONFIG > /kaniko/.docker/config.json
     - /kaniko/executor
       --build-arg "COMMIT=${CI_COMMIT_SHORT_SHA}"
       --build-arg "BUILD_DATE=${CI_JOB_STARTED_AT}"
       --context "${CI_PROJECT_DIR}/docker/queue-master"
       --dockerfile "${CI_PROJECT_DIR}/docker/queue-master/Dockerfile"
-      --destination "${NEXUS_RELEASE_REGISTRY}/boutique/queue-master:${CI_COMMIT_TAG}"
-      --registry-certificate ${NEXUS_RELEASE_REGISTRY}=${TRUSTED_CERTIFICATES}
+      --destination "${REGISTRY}/boutique/queue-master:${TAG}"
+      --registry-certificate ${REGISTRY}=${TRUSTED_CERTIFICATES}
       --registry-certificate ${NEXUS_GROUP_REGISTRY}=${TRUSTED_CERTIFICATES}
       --registry-mirror ${NEXUS_GROUP_REGISTRY}
