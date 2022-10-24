@@ -70,6 +70,9 @@ network:
           ports: 9179
           cidr: [192.168.0.0/16]
         - protocol: tcp
+          ports: 9180
+          cidr: [192.168.0.0/16]
+        - protocol: tcp
           ports: 9182
           cidr: [192.168.0.0/16]
     gitlab:
