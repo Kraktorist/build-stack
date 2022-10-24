@@ -52,8 +52,7 @@ push-catalogue:
     name: ${NEXUS_GROUP_REGISTRY}/kaniko-project/executor:v1.9.0-debug
     entrypoint: [""]
   script:
-    - |
-      /kaniko/executor
+    - /kaniko/executor
       --build-arg "COMMIT=${CI_COMMIT_SHORT_SHA}"
       --build-arg "BUILD_DATE=${CI_JOB_STARTED_AT}"
       --context "${CI_PROJECT_DIR}"
