@@ -39,7 +39,7 @@ test:
     - mvn -q test
 
 push:
-  stage: build
+  stage: push
   tags: [env-dev]
   image:
     name: ${NEXUS_GROUP_REGISTRY}/kaniko-project/executor:v1.9.0-debug
