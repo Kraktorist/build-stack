@@ -1,7 +1,7 @@
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ "/^env-.*/"
-    - if: $CI_COMMIT_BRANCH =~ "/^env-.*/"  && $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_COMMIT_BRANCH =~ "/^env-.*/"  && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BEFORE_SHA != '0000000000000000000000000000000000000000'
 image:
   name: "$NEXUS_GROUP_REGISTRY/infrastructure/builder:latest"
   entrypoint: [""]
