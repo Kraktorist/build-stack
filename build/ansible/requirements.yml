@@ -1,9 +1,9 @@
 roles:
 - name: geerlingguy.apache
 - name: ansible-thoteam.nexus3-oss
-- src: https://github.com/in0rdr/ansible-role-haproxy.git
-  version: feature/multiple-front-and-backends
-  name: geerlingguy.haproxy
+# - src: https://github.com/in0rdr/ansible-role-haproxy.git
+#   version: feature/multiple-front-and-backends
+#   name: geerlingguy.haproxy
 
 collections:
   - name: kubernetes.core
