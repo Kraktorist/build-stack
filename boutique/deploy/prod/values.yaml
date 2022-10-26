@@ -5,8 +5,8 @@ global:
     registry: nexus11.ru-central1.internal:9182
     imageCredentials:
         registry: nexus11.ru-central1.internal:9182
-        username: admin
-        password: admin
+        username: ''
+        password: ''
         email: someone@host.com
 
 java:
@@ -16,7 +16,7 @@ ingress:
     annotations:
         kubernetes.io/ingress.class: nginx
     labels: {}
-    host: ''
+    host: boutique.com
     tlsSecretName: ''
 
 cartsdb:
