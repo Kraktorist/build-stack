@@ -49,6 +49,7 @@
     api_password: "{{ gitlab_password }}"
     name: envs
     visibility: internal
+    only_allow_merge_if_pipeline_succeeds: yes
     group: "{{ gitlab_group.group.id }}"
   register: project
   tags:
@@ -65,6 +66,15 @@
     variables: "{{ envs_gitlab_vars }}"
   tags:
     - infrastructure
+
+- name: Gitlab Group | Infrastructure | Set Protected Branches for env-*
+  community.general.gitlab_protected_branch:
+    api_url: "{{ gitlab_url }}"
+    validate_certs: False
+    api_username: "{{ gitlab_user }}"
+    api_password: "{{ gitlab_password }}"
+    project: infrastructure/envs
+    name: env-*  
   
 - name: Gitlab Group | Infrastructure | Push Content
   ansible.builtin.shell: |
