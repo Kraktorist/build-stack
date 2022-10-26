@@ -32,3 +32,4 @@ RUN curl -L https://github.com/kubernetes-sigs/kubespray/archive/refs/tags/v2.20
     unzip kubespray.zip && rm -rf kubespray.zip && mv kubespray-2.20.0 ./ansible/kubespray
 COPY terraform terraform
 COPY .terraformrc /root/.terraformrc
+CMD /bin/bash --init-file "/app/scripts/entry.sh"
