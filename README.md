@@ -27,7 +27,7 @@ Here is a script which will provision all the objects:
 ./docs/prerequisites.sh
 ```
 
-This will return list of variables which need to be copied to ansible-vault secret file `envs/*/group_vars/all/secrets.yaml`.
+This will return list of variables which need to be copied to ansible-vault secret file `envs/*/group_vars/all/secrets.yaml` and into the `build/builder.env` file
 
 
 ## Builder image
@@ -40,7 +40,7 @@ Run:
 ```
 docker run \
     --rm \
-    --entrypoint /bin/bash \
+    --env-file build/builder.env \
     -v $(pwd)/infrastructure:/app/infrastructure \
     -v $HOME/ya_key.pub:/root/ya_key.pub \
     -v $HOME/ya_key:/root/ya_key \
