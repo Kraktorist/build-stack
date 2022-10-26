@@ -8,4 +8,4 @@ ansible_inventory.yml
 # excluding ansible inventory files
 infrastructure/envs/*/inventory.yml
 # excluding env files
-.env
+*.env
