@@ -122,9 +122,9 @@ yc vpc route-table create routing \
   --folder-name ${FOLDER}
 
 echo $(yellow "EXPORTED VALUES:")
-echo "export YC_CLOUD_ID=$(yc config get cloud-id)"
-echo "export YC_FOLDER_ID=${YC_FOLDER_ID}"
-echo "export ACCESS_KEY=${AWS_ACCESS_KEY_ID}"
-echo "export SECRET_KEY=${AWS_SECRET_ACCESS_KEY}"
-echo "export API_KEY=${API_KEY}"
-echo "export S3_TF_STATE=${S3_TF_STATE}"
+echo "YC_CLOUD_ID=$(yc config get cloud-id)"
+echo "YC_FOLDER_ID=${YC_FOLDER_ID}"
+echo "ACCESS_KEY=${AWS_ACCESS_KEY_ID}"
+echo "SECRET_KEY=${AWS_SECRET_ACCESS_KEY}"
+echo "API_KEY=${API_KEY}"
+echo "S3_TF_STATE=${S3_TF_STATE}"
