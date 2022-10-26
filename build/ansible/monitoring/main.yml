@@ -11,14 +11,6 @@
     - name: Monitoring Installation
       block:
 
-        - name: Create namespace for monitoring
-          kubernetes.core.k8s:
-            name: "{{ config.monitoring.namespace }}"
-            api_version: v1
-            kind: Namespace
-            state: present
-          when: config.monitoring.namespace is defined
-
         - name: Add stable chart repo
           kubernetes.core.helm_repository:
             name: prometheus-community
@@ -37,6 +29,7 @@
             name: "{{ config.monitoring.name }}"
             chart_ref: prometheus-community/kube-prometheus-stack 
             release_namespace: "{{ config.monitoring.namespace | default('default') }}"
+            create_namespace: yes
             values_files: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}" 
 
         - name: Check k8s_manifests paths
