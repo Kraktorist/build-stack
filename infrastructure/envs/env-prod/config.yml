@@ -16,12 +16,35 @@ inventory:
             hosts:
               master-prod23: 
 
+# monitoring spec
+monitoring:
+  enabled: true
+  name: prometheus
+  namespace: monitoring
+  helm_values: 
+    - monitoring/values.yaml
+  k8s_manifests:
+  - monitoring/k8s/dashboard-analytics.yml
+  - monitoring/k8s/dashboard-performance.yml
+  - monitoring/k8s/dashboard-resources.yml
+
 runner:
   enabled: true
   name: prod-runner
   namespace: prod-runner
   helm_values: 
     - runner/values.yml
+
+network: 
+  name: instances
+  subnets:
+    prod-a:
+      zone: ru-central1-a 
+      subnets: [192.168.48.0/28]
+    prod-b:
+      zone: ru-central1-b 
+      subnets: [192.168.64.0/28]
+  security_groups: {}
 
 # hosts specification
 # every host must have defined name, cpu, memory, disk, public_ip
@@ -33,6 +56,7 @@ hosts:
     disk: 40
     subnet: prod-a
     public_ip: true
+    security_groups: [ssh,common,internet,access_to_nexus,k8s_cluster]
   worker-prod22:
     name: worker-prod22
     cpu: 2
@@ -40,6 +64,7 @@ hosts:
     disk: 40
     subnet: prod-b
     public_ip: true
+    security_groups: [ssh,common,internet,access_to_nexus,k8s_cluster]
   master-prod23:
     name: master-prod23
     cpu: 2
@@ -47,3 +72,4 @@ hosts:
     disk: 40
     subnet: prod-b
     public_ip: true
+    security_groups: [ssh,common,internet,access_to_nexus,k8s_cluster]
