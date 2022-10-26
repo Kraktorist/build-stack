@@ -140,31 +140,14 @@ Infra:
   - security groups port range support
   - vms with multiple disks
 
-Apps:
-- build jobs for all microservices
-  - on commit build to staging
-  - on tag build to release
-- prod deploy job
-- app monitoring
-- anybadge
-
 ## Issues
 
 1. Find a way to copy /boutique folder
-2. gitalb: The deployment job is older than the previously succeeded deployment job
-   https://gitlab.com/gitlab-org/gitlab/-/issues/212621
 
 ## Working now
 
-- make deploy for boutique environments
-- monitoring apps
-
 boutique
-- remove imagepullsecret from values
-- helm deploy: add some labels to pods
-- boutique services: name all the ports
-- create `ServiceMonitor` for all the services
-- fix dashboards according to scrapped data
+- anybadge
 
 infra:
 - add handlers to ansible states
