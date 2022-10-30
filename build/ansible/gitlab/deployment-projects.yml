@@ -6,7 +6,7 @@
     validate_certs: False
     api_username: "{{ gitlab_user }}"
     api_password: "{{ gitlab_password }}"
-    name: deploy
+    name: release
     visibility: internal
     description: ''
     project_creation_level: maintainer
@@ -24,7 +24,7 @@
     validate_certs: False
     api_username: "{{ gitlab_user }}"
     api_password: "{{ gitlab_password }}"
-    group: deploy
+    group: release
     purge: true
     variables: "{{ deploy_gitlab_vars }}"
   tags:
@@ -35,7 +35,7 @@
     api_url: "{{ gitlab_url }}"
     api_username: "{{ gitlab_user }}"
     api_password: "{{ gitlab_password }}"
-    name: deploy-prod
+    name: release-prod
     visibility: internal
     group: "{{ gitlab_group.group.id }}"
   register: project
@@ -48,7 +48,7 @@
     reponame={{ source_repo_name }}
     rm -rf $reponame
     git clone $repopath $reponame
-    cp -r $reponame/boutique/deploy/prod .
+    cp -r $reponame/boutique/release/prod .
     cd prod
     git init
     git add .

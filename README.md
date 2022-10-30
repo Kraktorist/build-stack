@@ -146,8 +146,10 @@ Infra:
 
 ## Working now
 
-boutique
-- anybadge
 
 infra:
 - add handlers to ansible states
+
+rename
+- build to builder
+- deploy to release
