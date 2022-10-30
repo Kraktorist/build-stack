@@ -33,14 +33,14 @@ This will return list of variables which need to be copied to ansible-vault secr
 ## Builder image
 
 Contains ansible, kubectl and terraform.  
-Location: [Dockerfile](build/Dockerfile)  
-Build Step: `docker build --no-cache ./build/ -t builder`  
+Location: [Dockerfile](builder/Dockerfile)  
+Build Step: `docker build --no-cache ./builder/ -t builder`  
 Run:  
 
 ```
 docker run \
     --rm \
-    --env-file build/builder.env \
+    --env-file builder/builder.env \
     -v $(pwd)/infrastructure:/app/infrastructure \
     -v $HOME/ya_key.pub:/root/ya_key.pub \
     -v $HOME/ya_key:/root/ya_key \
@@ -129,7 +129,7 @@ git filter-branch --index-filter "cp /home/kraktorist/repos/lab-terraform-ya/bou
 ## Boutique deployment
 
 ```
-helm -n sock upgrade --install sock-shop /home/kraktorist/repos/lab-terraform-ya/build/helm/boutique --values /home/kraktorist/repos/lab-terraform-ya/boutique/deploy/prod/values.yaml
+helm -n sock upgrade --install sock-shop /home/kraktorist/repos/lab-terraform-ya/builder/helm/boutique --values /home/kraktorist/repos/lab-terraform-ya/boutique/deploy/prod/values.yaml
 ```
 
 

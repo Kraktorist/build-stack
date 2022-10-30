@@ -2,7 +2,7 @@ workflow:
   rules:
     - if: $CI_DEFAULT_BRANCH == $CI_COMMIT_BRANCH
       changes:
-      - build/**/*
+      - builder/**/*
 default:
   image: ${NEXUS_GROUP_REGISTRY}/docker:20.10.16
   tags:
