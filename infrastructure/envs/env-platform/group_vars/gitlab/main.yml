@@ -43,17 +43,9 @@ infra_gitlab_vars:
   - name: ANSIBLE_FORCE_COLOR
     value: true
 envs_gitlab_vars:
-  - name: KUBECONFIG
-    value: TO_BE_UPDATED
-    variable_type: file
-    environment_scope: env-dev
   - name: RUNNER_TOKEN
     value: TO_BE_UPDATED
     environment_scope: env-dev
-  - name: KUBECONFIG
-    value: TO_BE_UPDATED
-    variable_type: file
-    environment_scope: env-prod
   - name: RUNNER_TOKEN
     value: TO_BE_UPDATED
     environment_scope: env-prod
