@@ -53,7 +53,7 @@
     git init
     git add .
     git commit -m "[skip ci] init commit"
-    git remote add gitlab-origin http://{{ gitlab_user }}:{{ gitlab_password }}@{{ gitlab_host }}/{{ gitlab_group.group.name }}/deploy-prod.git
+    git remote add gitlab-origin http://{{ gitlab_user }}:{{ gitlab_password }}@{{ gitlab_host }}/{{ gitlab_group.group.name }}/release-prod.git
     git push -o ci.skip --all gitlab-origin
     git push -o ci.skip --tags gitlab-origin
     cd .. && rm -rf prod
