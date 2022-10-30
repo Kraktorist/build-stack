@@ -16,6 +16,6 @@ stages:
 build:
   stage: build
   script:
-    - docker build ./build/ -t ${NEXUS_RELEASE_REGISTRY}/infrastructure/builder:latest -t ${NEXUS_RELEASE_REGISTRY}/infrastructure/builder:${CI_PIPELINE_IID}
+    - docker build ./builder/ -t ${NEXUS_RELEASE_REGISTRY}/infrastructure/builder:latest -t ${NEXUS_RELEASE_REGISTRY}/infrastructure/builder:${CI_PIPELINE_IID}
     - docker push ${NEXUS_RELEASE_REGISTRY}/infrastructure/builder:${CI_PIPELINE_IID}
     - docker push ${NEXUS_RELEASE_REGISTRY}/infrastructure/builder:latest || true
