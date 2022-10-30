@@ -110,7 +110,7 @@
       - output
       - never
 
-    - name: Gitlab Group | Boutique | Copying project
+    - name: Gitlab Group | Boutique | Caching boutique project
       ansible.builtin.copy:
         src: /boutique
         dest: /
