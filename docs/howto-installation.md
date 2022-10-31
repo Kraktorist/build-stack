@@ -41,7 +41,7 @@
     - for application and deploy with the command `provision_apps_repo`
 1. provision infrastructure runner with the command `provision_infra_runner`
 1. Deploy socks5 on your local machine with the command
-    `BASTION_IP=x.x.x.x ssh -D 1337 -f -C -q -N ubuntu@${BASTION_IP} -p 22322
+    `BASTION_IP=x.x.x.x ssh -D 1337 -f -C -q -N ubuntu@${BASTION_IP} -p 22322`
 1. Configure web browser with the proxy and open gitlab web UI.
 1. Navigate to `infrastructure/build-stack` project, start CI job to build `builder` image and wait until it completed. Credentials can be found in step #3.
 1. Open nexus web UI and check the `builder` image is created in the `docker-group` repository. Credentials can be found in step #3.
