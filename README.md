@@ -24,7 +24,7 @@ Build `microservices-demo` application on Yandex.Cloud infrastructure.
 First of all we need to create a cloud-folder and a network with routing table and internet gateway in it.
 Here is a script which will provision all the objects:
 ```
-./docs/prerequisites.sh
+./prerequisites.sh
 ```
 
 This will return list of variables which need to be copied to ansible-vault secret file `envs/*/group_vars/all/secrets.yaml` and into the `build/builder.env` file

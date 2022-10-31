@@ -1,11 +1,17 @@
 ## Prerequisites
 
-1. run ./docs/prerequisites.sh
+1. Create basic Yandex.Cloud objects (folder, service account, network and s3 bucket) 
+   ```
+   ./prerequisites.sh
+   ```
 1. update ./builder/builder.env
-1. update  
+1. update the following files with the passwords and certificates:
    ./infrastructure/envs/env-platform/group_vars/all/secrets.yaml  
-   ./infrastructure/envs/env-dev/group_vars/all/secrets.yml
+   ./infrastructure/envs/env-*/group_vars/all/secrets.yml
 1. build `builder image`
+   ```
+   docker build --no-cache ./builder/ -t builder
+   ```
 1. run the `builder` container  
    ```
    docker run \
@@ -64,7 +70,15 @@
 1. Check the installation (set host into hosts file on bastion)
 
 ## Load Testing and Monitoring
+   
+Run locally:
 
+   ```
+   docker run --net=host weaveworksdemos/load-test -h localhost -r 100 -c 2
+   ```
 
 ## Destroy Infrastructure
 
+1. Start `builder` container
+1. Set variable ENV for the environment you want to destroy
+1.  Run th command `terraform_destroy`
