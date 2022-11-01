@@ -23,3 +23,25 @@
       tags:
         - apps_runner
         - never
+
+    - name: Check k8s_manifests paths
+      stat:
+        path: "{{ lookup('env','ENV_PATH') }}//{{ item }}"
+      register: stat_results
+      with_items: "{{ config.runner.k8s_manifests }}"
+      ignore_errors: True
+      when: config.runner.k8s_manifests is defined
+      tags:
+        - apps_runner
+        - never
+
+    - name: Apply k8s manifests
+      kubernetes.core.k8s:
+        namespace: "{{ config.runner.namespace | default('default') }}"
+        state: present
+        src: "{{ item }}"
+      with_items: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}"
+      when: config.runner.enabled is defined and config.runner.enabled | bool
+      tags:
+        - apps_runner
+        - never
