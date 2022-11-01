@@ -122,9 +122,9 @@
     url: "{{ gitlab_url }}"
     token: "{{ gitlab_infrastructure_group.group.runners_token }}"
 
-- name: Boutique Gitlab Runner | Install
-  ansible.builtin.import_playbook: apps-runner.yml
-  vars:
-    url: "{{ gitlab_url }}"
-    token: "{{ gitlab_apps_group.group.runners_token }}"
-    env: "{{ lookup('env','ENV') }}"
+# - name: Boutique Gitlab Runner | Install
+#   ansible.builtin.import_playbook: apps-runner.yml
+#   vars:
+#     url: "{{ gitlab_url }}"
+#     token: "{{ gitlab_apps_group.group.runners_token }}"
+#     env: "{{ lookup('env','ENV') }}"
