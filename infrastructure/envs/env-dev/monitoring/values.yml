@@ -4,3 +4,4 @@ grafana:
   enabled: true
   ingress:
     enabled: true
+    ingressClassName: ''
