@@ -117,7 +117,7 @@ function provision_k8s_runner() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
     --extra-vars "ansible_ssh_common_args='${ANSIBLE_SSH_COMMON_ARGS}'" \
-    --become /app/ansible/k8s/main.yml
+    --become /app/ansible/k8s_runner/main.yml
 }
 
 function provision_monitoring() {

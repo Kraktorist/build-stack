@@ -34,4 +34,20 @@
               gitlabUrl: "http://{{ lookup('env','CI_SERVER_HOST') }}/"
               runners:
                 tags: "{{ lookup('env','ENV') }}"
+
+        - name: Check k8s_manifests paths
+          stat:
+            path: "{{ lookup('env','ENV_PATH') }}//{{ item }}"
+          register: stat_results
+          with_items: "{{ config.runner.k8s_manifests }}"
+          ignore_errors: True
+          when: config.runner.k8s_manifests is defined
+
+        - name: Apply k8s manifests
+          kubernetes.core.k8s:
+            namespace: "{{ config.runner.namespace | default('default') }}"
+            state: present
+            src: "{{ item }}"
+          with_items: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}"
+          when: config.runner.k8s_manifests is defined and config.runner.enabled is defined and config.runner.enabled | bool
       when: config.runner.enabled is defined and config.runner.enabled | bool
