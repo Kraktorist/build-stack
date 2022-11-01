@@ -149,7 +149,3 @@ Infra:
 
 infra:
 - add handlers to ansible states
-
-rename
-- build to builder
-- deploy to release
