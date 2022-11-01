@@ -95,9 +95,6 @@ deploy_gitlab_vars:
     value: "{{ NEXUS_GITLAB_PASSWORD }}"
   - name: NEXUS_GITLAB_USERNAME
     value: "{{ NEXUS_GITLAB_USERNAME }}"
-  - name: KUBECONFIG
-    value: TO_BE_UPDATED
-    variable_type: file
 
 git_repolist:
   - { reponame: carts, repopath: https://github.com/microservices-demo/carts.git }

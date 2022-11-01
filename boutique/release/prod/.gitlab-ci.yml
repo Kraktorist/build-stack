@@ -7,7 +7,6 @@ image:
 
 default:
   before_script:
-    - if [ -f "${KUBECONFIG}" ]; then chmod 400 ${KUBECONFIG}; fi;
     - source /app/scripts/lib.sh
 
 stages:
@@ -18,5 +17,4 @@ deploy:
     deploy
   tags: [env-prod]
   script:
-  # - helm -n sock upgrade --install sock-shop /app/helm/boutique --values values.yaml
-  - K8S_AUTH_KUBECONFIG=${KUBECONFIG} deploy_boutique
+  - deploy_boutique
