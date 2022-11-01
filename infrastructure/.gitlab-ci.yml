@@ -68,14 +68,14 @@ provision.monitoring:
     - export K8S_AUTH_KUBECONFIG=${CI_PROJECT_DIR}/envs/${CI_ENVIRONMENT_NAME}/artifacts/admin.conf
     - provision_monitoring
 
-status:
-  extends: .terraform:status
-  script:
-    - terraform_status
-    - yc_get_network
-    - yc_get_instances
+# status:
+#   extends: .terraform:status
+#   script:
+#     - terraform_status
+#     - yc_get_network
+#     - yc_get_instances
 
-destroy:
-  extends: .terraform:destroy
-  script:
-    - terraform_destroy
+# destroy:
+#   extends: .terraform:destroy
+#   script:
+#     - terraform_destroy
