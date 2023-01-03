@@ -28,6 +28,7 @@
           kubernetes.core.helm:
             name: "{{ config.monitoring.name }}"
             chart_ref: prometheus-community/kube-prometheus-stack 
+            chart_version: "{{ config.monitoring.version | default('') }}"
             release_namespace: "{{ config.monitoring.namespace | default('default') }}"
             create_namespace: yes
             values_files: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}" 

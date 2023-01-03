@@ -19,6 +19,7 @@ inventory:
 # monitoring spec
 monitoring:
   enabled: true
+  version: 41.7.2
   name: prometheus
   namespace: monitoring
   helm_values: 
