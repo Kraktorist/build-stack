@@ -26,6 +26,7 @@
           kubernetes.core.helm:
             name: "{{ config.runner.name }}"
             chart_ref: gitlab/gitlab-runner
+            chart_version: "{{ config.runner.version | default(omit) }}"
             release_namespace: "{{ config.runner.namespace | default('gitlab-runner') }}"
             create_namespace: yes
             values_files: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}" 
