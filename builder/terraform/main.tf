@@ -22,7 +22,7 @@ module yc_instance {
 
 module yc_alb {
   count = can(module.input.params.balancer) ? 1 : 0
-  instances = [for k, v in module.yc_instance: v.instances]
+  instances = [for k, v in module.yc_instance: v.instances if contains(module.input.params.balancer.nodes, v.instances.name)]
   network_id = module.yc_network[0].network_id
   subnets = module.yc_network[0].subnets
   target_port = module.input.params.balancer.target_port
