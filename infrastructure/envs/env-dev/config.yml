@@ -92,3 +92,10 @@ hosts:
     subnet: dev-b
     public_ip: false
     security_groups: [ssh,internet,access_to_nexus,k8s_cluster]
+
+balancer:
+  target_port: 80
+  ext_port: 80
+  nodes:
+  - worker-dev11
+  - worker-dev12
