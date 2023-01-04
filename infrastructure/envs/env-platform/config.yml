@@ -37,7 +37,6 @@ network:
         - protocol: udp
           ports: 123
           cidr: [0.0.0.0/0]
-    ssh:
       ingress:
         - protocol: tcp
           ports: 22
@@ -67,13 +66,7 @@ network:
           ports: 443
           cidr: [0.0.0.0/0]
         - protocol: tcp
-          ports: 9179
-          cidr: [192.168.0.0/16]
-        - protocol: tcp
-          ports: 9180
-          cidr: [192.168.0.0/16]
-        - protocol: tcp
-          ports: 9182
+          ports: 9179-9182
           cidr: [192.168.0.0/16]
     gitlab:
       ingress:
@@ -100,6 +93,12 @@ network:
         - protocol: tcp
           ports: -1
           cidr: [0.0.0.0/0]
+    alb_healthcheck:
+      egress:
+        - protocol: tcp
+          ports: -1
+          cidr: [198.18.235.0/24, 198.18.248.0/24]
+
 
 # hosts specification
 # every host must have defined name, cpu, memory, disk, public_ip
@@ -120,7 +119,7 @@ hosts:
     disk: 40
     subnet: platform-a
     public_ip: false
-    security_groups: [gitlab, ssh, common, internet, access_to_nexus]
+    security_groups: [gitlab, common, internet, access_to_nexus]
   nexus11:
     name: nexus11
     cpu: 2
@@ -128,4 +127,4 @@ hosts:
     disk: 40
     subnet: platform-a
     public_ip: false
-    security_groups: [nexus, ssh, common, internet, access_to_nexus]
+    security_groups: [nexus, common, internet, access_to_nexus]
