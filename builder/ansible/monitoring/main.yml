@@ -18,11 +18,15 @@
 
         - name: Check helm_values paths
           stat:
-            path: "{{ lookup('env','ENV_PATH') }}//{{ item }}"
+            path: "{{ lookup('env','ENV_PATH') }}/{{ item }}"
           register: stat_results
           with_items: "{{ config.monitoring.helm_values }}"
           ignore_errors: True
           when: config.monitoring.helm_values is defined
+
+        - name: Print existing helm_values files
+          ansible.builtin.debug:
+            msg: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}" 
 
         - name: Install prometheus-operator
           kubernetes.core.helm:

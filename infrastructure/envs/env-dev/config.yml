@@ -23,7 +23,7 @@ monitoring:
   name: prometheus
   namespace: monitoring
   helm_values: 
-    - monitoring/values.yaml
+    - monitoring/values.yml
   k8s_manifests:
   - monitoring/k8s/dashboard-analytics.yml
   - monitoring/k8s/dashboard-performance.yml
