@@ -48,7 +48,7 @@ This block is for subnets and security group creation.
 Each security group must have at least one block `egress` or `ingress`. Such block contain list of rules with the following specification:
 
 - **`protocol`** - IP protocol `TCP` or `UDP`
-- **`ports`** - port address or `-1` for all ports. Port range and port list are not supported.
+- **`ports`** - port address, range or `-1` for all ports. Example of valid values: "80", "1024-65535", "-1"
 - **`cidr`** - list of CIDR to apply
 
 ## Runner Block

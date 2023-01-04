@@ -27,7 +27,9 @@ resource "yandex_vpc_security_group" "security_group" {
       protocol       = ingress.value.protocol
       description    = ""
       v4_cidr_blocks = ingress.value.cidr
-      port           = ingress.value.ports
+      from_port      = regex("(\\d{1,5})-?(\\d{1,5})?",ingress.value.ports)[0]
+      to_port        = coalesce(regex("(\\d{1,5})-?(\\d{1,5})?",ingress.value.ports)[1],regex("(\\d{1,5})-?(\\d{1,5})?",ingress.value.ports)[0])
+      #port           = ingress.value.ports
     }
   }
   dynamic "egress" {
@@ -36,7 +38,9 @@ resource "yandex_vpc_security_group" "security_group" {
       protocol       = egress.value.protocol
       description    = ""
       v4_cidr_blocks = egress.value.cidr
-      port           = egress.value.ports
+      from_port      = regex("(\\d{1,5})-?(\\d{1,5})?", egress.value.ports)[0]
+      to_port        = coalesce(regex("(\\d{1,5})-?(\\d{1,5})?", egress.value.ports)[1],regex("(\\d{1,5})-?(\\d{1,5})?", egress.value.ports)[0])
+      #port           = ingress.value.ports
     }
   }
 }
