@@ -1,3 +1,8 @@
+output network_id {
+  value = data.yandex_vpc_network.network.id
+  description = "Network ID"
+}
+
 output "subnets" {
   value       = yandex_vpc_subnet.subnet
   sensitive   = false

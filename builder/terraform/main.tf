@@ -20,6 +20,16 @@ module yc_instance {
   ENV = var.ENV
 }
 
+module yc_alb {
+  count = can(module.input.params.balancer) ? 1 : 0
+  instances = [for k, v in module.yc_instance: v.instances]
+  network_id = module.yc_network[0].network_id
+  subnets = module.yc_network[0].subnets
+  target_port = module.input.params.balancer.target_port
+  ext_port = module.input.params.balancer.ext_port
+  source = "./modules/yc_alb/"
+}
+
 module inventory {
   source = "./modules/inventory"
   inventory = module.input.inventory

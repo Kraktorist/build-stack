@@ -15,6 +15,21 @@ Specification for all the hosts.
 - **`public_ip`** - boolean value if machine requires a public IP address (for bastion mostly)  
 - **`security_groups`** - list of VPC Security Groups (according to Yandex Cloud documentation it's limited to 5)  
 
+## Application Load Balancer Block
+
+ALB Specification describes load balancer for the environment
+
+- **`target_port`** - port on workers that ingress controller listens to
+- **`ext_port`** - ALB port for user connections
+- **`nodes`** - list of backend nodes
+
+balancer:
+  target_port: 80
+  ext_port: 80
+  nodes:
+  - worker11
+  - worker12
+
 ## Network Block
 
 This block is for subnets and security group creation.
@@ -127,5 +142,11 @@ hosts:
     subnet: dev-a
     public_ip: false
     security_groups: [k8s_cluster]
+
+balancer:
+  target_port: 80
+  ext_port: 80
+  nodes:
+  - master-dev13
 ```
 
