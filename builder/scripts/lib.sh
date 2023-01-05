@@ -66,6 +66,7 @@ function provision_bastion() {
   ansible-playbook -i ${TF_VAR_ansible_inventory} \
     --vault-password-file .vault \
     --become /app/ansible/bastion/main.yml
+  echo "[INFO] Bastion has been reconfigured. Set ANSIBLE_SSH_COMMON_ARGS to use it."
 }
 
 function provision_gitlab() {
