@@ -52,11 +52,8 @@ network:
     access_to_nexus:
       egress:
         - protocol: tcp
-          ports: 9182
+          ports: 9179-9182
           cidr: [192.168.0.0/16]
-        - protocol: tcp
-          ports: 9179
-          cidr: [192.168.0.0/16]    
     nexus:
       ingress:
         - protocol: tcp
@@ -87,16 +84,16 @@ network:
     allow_all:
       ingress:
         - protocol: tcp
-          ports: -1
+          ports: 1-65535
           cidr: [0.0.0.0/0]
       egress:
         - protocol: tcp
-          ports: -1
+          ports: 1-65535
           cidr: [0.0.0.0/0]
     alb_healthcheck:
       egress:
         - protocol: tcp
-          ports: -1
+          ports: 1-65535
           cidr: [198.18.235.0/24, 198.18.248.0/24]
 
 
