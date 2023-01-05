@@ -23,11 +23,11 @@ network:
     allow_all:
       ingress:
         - protocol: tcp
-          ports: -1
+          ports: 1-65535
           cidr: [0.0.0.0/0]
       egress:
         - protocol: tcp
-          ports: -1
+          ports: 1-65535
           cidr: [0.0.0.0/0]
 
 # hosts specification
