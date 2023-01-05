@@ -48,21 +48,21 @@ network:
       zone: ru-central1-b 
       subnets: [192.168.32.0/28]
   security_groups:
-    k8s_cluster:
+    dev_k8s_cluster:
       ingress:
         - protocol: tcp
           ports: 1-65535
-          cidr: [192.168.0.0/16]
+          cidr: [192.168.16.0/28, 192.168.32.0/28]
         - protocol: udp
           ports: 1-65535
-          cidr: [192.168.0.0/16]
+          cidr: [192.168.16.0/28, 192.168.32.0/28]
       egress:
         - protocol: tcp
           ports: 1-65535
-          cidr: [192.168.0.0/16]
+          cidr: [192.168.16.0/28, 192.168.32.0/28]
         - protocol: udp
           ports: 1-65535
-          cidr: [192.168.0.0/16]
+          cidr: [192.168.16.0/28, 192.168.32.0/28]
 
 
 # hosts specification
@@ -75,7 +75,7 @@ hosts:
     disk: 40
     subnet: dev-a
     public_ip: false
-    security_groups: [common,internet,access_to_nexus,k8s_cluster,alb_healthcheck]
+    security_groups: [common,internet,access_to_nexus,dev_k8s_cluster,alb_healthcheck]
   worker-dev12:
     name: worker-dev12
     cpu: 4
@@ -83,7 +83,7 @@ hosts:
     disk: 40
     subnet: dev-b
     public_ip: false
-    security_groups: [common,internet,access_to_nexus,k8s_cluster,alb_healthcheck]
+    security_groups: [common,internet,access_to_nexus,dev_k8s_cluster,alb_healthcheck]
   master-dev13:
     name: master-dev13
     cpu: 2
@@ -91,7 +91,7 @@ hosts:
     disk: 40
     subnet: dev-b
     public_ip: false
-    security_groups: [common,internet,access_to_nexus,k8s_cluster]
+    security_groups: [common,internet,access_to_nexus,dev_k8s_cluster]
 
 balancer:
   target_port: 80

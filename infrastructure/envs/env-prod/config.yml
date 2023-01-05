@@ -47,7 +47,22 @@ network:
     prod-b:
       zone: ru-central1-b 
       subnets: [192.168.64.0/28]
-  security_groups: {}
+  security_groups:
+    prod_k8s_cluster:
+      ingress:
+        - protocol: tcp
+          ports: 1-65535
+          cidr: [192.168.48.0/28, 192.168.64.0/28]
+        - protocol: udp
+          ports: 1-65535
+          cidr: [192.168.48.0/28, 192.168.64.0/28]
+      egress:
+        - protocol: tcp
+          ports: 1-65535
+          cidr: [192.168.48.0/28, 192.168.64.0/28]
+        - protocol: udp
+          ports: 1-65535
+          cidr: [192.168.48.0/28, 192.168.64.0/28]
 
 # hosts specification
 # every host must have defined name, cpu, memory, disk, public_ip
@@ -59,7 +74,7 @@ hosts:
     disk: 40
     subnet: prod-a
     public_ip: false
-    security_groups: [common,internet,access_to_nexus,k8s_cluster]
+    security_groups: [common,internet,access_to_nexus,prod_k8s_cluster]
   worker-prod22:
     name: worker-prod22
     cpu: 4
@@ -67,7 +82,7 @@ hosts:
     disk: 40
     subnet: prod-b
     public_ip: false
-    security_groups: [common,internet,access_to_nexus,k8s_cluster]
+    security_groups: [common,internet,access_to_nexus,prod_k8s_cluster]
   master-prod23:
     name: master-prod23
     cpu: 4
@@ -75,7 +90,7 @@ hosts:
     disk: 40
     subnet: prod-b
     public_ip: false
-    security_groups: [common,internet,access_to_nexus,k8s_cluster]
+    security_groups: [common,internet,access_to_nexus,prod_k8s_cluster]
 
 balancer:
   target_port: 80
