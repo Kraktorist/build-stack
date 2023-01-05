@@ -280,10 +280,10 @@ _Проверка:_ приложение отвечает по адресу, у�
 docker run weaveworksdemos/load-test -h boutique.qamo.ru:9999 -r 100000 -c 20
 ```
 
-Команда выполнит 100000 запросов к хосту boutique.qamo.ru:9999, эмулируя 20 клиентов, и выдаст статистику запросов, на основе которых можно заниматься тюнингом ресурсов
+Команда выполнит 100000 запросов к хосту boutique.qamo.ru:9999, эмулируя 20 клиентов, и выдаст статистику запросов, на основе которых можно заниматься отладкой приложения и тюнингом ресурсов 
 
 ```
-(base) kraktorist@hmlab01:~$ docker run weaveworksdemos/load-test -h boutique.qamo.ru:9999 -r 100000 -c 20
+% docker run weaveworksdemos/load-test -h boutique.qamo.ru:9999 -r 100000 -c 20
 Locust file: /config/locustfile.py
 Will run /config/locustfile.py against boutique.qamo.ru:9999. Spawning 20 clients and 100000 total requests.
 [2023-01-05 16:15:18,691] 08af36145888/INFO/locust.main: Starting Locust 0.7.5
@@ -348,6 +348,8 @@ Error report
 
 done
 ```
+
+Помимо этого
 
 ![Boutique Analytics](docs/pictures/grafana-prod-analytics.png)
 
