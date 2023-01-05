@@ -76,3 +76,10 @@ hosts:
     subnet: prod-b
     public_ip: false
     security_groups: [common,internet,access_to_nexus,k8s_cluster]
+
+balancer:
+  target_port: 80
+  ext_port: 9999
+  nodes:
+  - worker-prod21
+  - worker-prod22
