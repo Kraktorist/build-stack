@@ -349,7 +349,7 @@ Error report
 done
 ```
 
-Помимо этого
+В `grafana` доступны дашборды для анализа работы приложения:
 
 ![Boutique Analytics](docs/pictures/grafana-prod-analytics.png)
 
