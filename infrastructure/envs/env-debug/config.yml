@@ -1,0 +1,67 @@
+inventory:
+  # ansible inventory structure
+  # every host mentioned in this section must be specified in the hosts: section
+  all:
+    children:
+      worker11:
+        hosts:
+          worker11:
+      worker12:
+        hosts:
+          worker12:
+
+network: 
+  name: instances
+  subnets:
+    debug-a:
+      zone: ru-central1-a 
+      subnets: [192.168.0.0/24]
+    debug-b:
+      zone: ru-central1-b 
+      subnets: [192.168.1.0/24]
+  security_groups:
+    allow_all:
+      ingress:
+        - protocol: tcp
+          ports: -1
+          cidr: [0.0.0.0/0]
+      egress:
+        - protocol: tcp
+          ports: -1
+          cidr: [0.0.0.0/0]
+
+# hosts specification
+# every host must have defined name, cpu, memory, disk, public_ip
+# yandex limitations up to 5 security groups per host
+hosts:
+  worker11:
+    name: worker11
+    cpu: 4
+    memory: 8192
+    disk: 40
+    subnet: debug-a
+    public_ip: false
+    security_groups: [allow_all]
+  worker12:
+    name: worker12
+    cpu: 2
+    memory: 4096
+    disk: 40
+    subnet: debug-b
+    public_ip: false
+    security_groups: [allow_all]
+  worker13:
+    name: worker13
+    cpu: 2
+    memory: 4096
+    disk: 40
+    subnet: debug-b
+    public_ip: false
+    security_groups: [allow_all]
+
+balancer:
+  target_port: 80
+  ext_port: 80
+  nodes:
+  - worker11
+  - worker12
