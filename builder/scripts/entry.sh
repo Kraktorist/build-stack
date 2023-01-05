@@ -8,5 +8,6 @@ ssh-add ~/ya_key
 export ENV_PATH=/app/infrastructure/envs/${ENV}
 export TF_VAR_config=/app/infrastructure/envs/${ENV}/config.yml
 export TF_VAR_ansible_inventory=/app/infrastructure/envs/${ENV}/inventory.yml
+export TF_VAR_ENV=${ENV}
 
 source /app/scripts/lib.sh

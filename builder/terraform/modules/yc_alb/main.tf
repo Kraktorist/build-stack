@@ -1,5 +1,5 @@
 resource "yandex_alb_target_group" "targetgroup" {
-  name      = "alb-target-group"
+  name      = "${var.ENV}-alb-target-group"
 
   dynamic "target" {
     for_each = var.instances
@@ -12,14 +12,14 @@ resource "yandex_alb_target_group" "targetgroup" {
 
 
 resource "yandex_alb_http_router" "router" {
-  name      = "http-router"
+  name      = "${var.ENV}-http-router"
 }
 
 
 resource "yandex_alb_backend_group" "group" {
-  name      = "group"
+  name      = "${var.ENV}-group"
   http_backend {
-    name = "backend"
+    name = "${var.ENV}-backend"
     weight = 1
     port = var.target_port
     target_group_ids = [yandex_alb_target_group.targetgroup.id]
@@ -38,7 +38,7 @@ resource "yandex_alb_backend_group" "group" {
 
 
 resource "yandex_alb_virtual_host" "virtualhost" {
-  name      = "virtualhost"
+  name      = "${var.ENV}-virtualhost"
   http_router_id = yandex_alb_http_router.router.id
   route {
     name = "route"
@@ -53,7 +53,7 @@ resource "yandex_alb_virtual_host" "virtualhost" {
 
 
 resource "yandex_alb_load_balancer" "balancer" {
-  name        = "balancer"
+  name        = "${var.ENV}-balancer"
   network_id  = var.network_id
 
   allocation_policy {
@@ -67,7 +67,7 @@ resource "yandex_alb_load_balancer" "balancer" {
   }
 
   listener {
-    name = "alb-listener"
+    name = "${var.ENV}-alb-listener"
     endpoint {
       address {
         external_ipv4_address {

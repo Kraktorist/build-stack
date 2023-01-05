@@ -22,3 +22,9 @@ variable subnets {
   type        = map
   description = "List of Subnets"
 }
+
+variable ENV {
+  type        = string
+  default     = ""
+  description = "environment label"
+}

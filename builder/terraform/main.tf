@@ -28,6 +28,7 @@ module yc_alb {
   target_port = module.input.params.balancer.target_port
   ext_port = module.input.params.balancer.ext_port
   source = "./modules/yc_alb/"
+  ENV = var.ENV
 }
 
 module inventory {
