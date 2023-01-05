@@ -51,17 +51,17 @@ network:
     k8s_cluster:
       ingress:
         - protocol: tcp
-          ports: -1
+          ports: 1-65535
           cidr: [192.168.0.0/16]
         - protocol: udp
-          ports: -1
+          ports: 1-65535
           cidr: [192.168.0.0/16]
       egress:
         - protocol: tcp
-          ports: -1
+          ports: 1-65535
           cidr: [192.168.0.0/16]
         - protocol: udp
-          ports: -1
+          ports: 1-65535
           cidr: [192.168.0.0/16]
 
 
