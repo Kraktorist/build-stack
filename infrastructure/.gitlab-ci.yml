@@ -9,7 +9,8 @@ default:
       export TF_VAR_config="${CI_PROJECT_DIR}/envs/${ENV}/config.yml"
       export TF_VAR_ansible_inventory="${CI_PROJECT_DIR}/envs/${ENV}/inventory.yml"
       export ENV_PATH=${CI_PROJECT_DIR}/envs/${ENV}
-
+      export YC_STORAGE_ACCESS_KEY=${ACCESS_KEY}
+      export YC_STORAGE_SECRET_KEY=${SECRET_KEY}
     - echo ${API_KEY} | base64 -d>/app/key.json
     - export YC_SERVICE_ACCOUNT_KEY_FILE=/app/key.json
     - if [ -f "${KUBECONFIG}" ]; then chmod 400 ${KUBECONFIG}; fi;
