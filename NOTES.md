@@ -159,7 +159,7 @@
 
 ## Подготовка переменных
 
-1. _Этот пункт необходим, если планируется настрока https для сайта._ Создаем CNAME записи в публичной DNS-зоне для проверки сертификата Let's Encrypt. Если сайт будет запущен на хосте www.domain.tld, то запись для www должна быть вида www.domain.tld.website.yandexcloud.net. 
+1. _Этот пункт необходим, если планируется настройка https для сайта._ Создаем CNAME записи в публичной DNS-зоне для проверки сертификата Let's Encrypt. Если сайт будет запущен на хосте www.domain.tld, то запись для www должна быть вида www.domain.tld.website.yandexcloud.net. 
 2. Генерируем самоподписной wildcard сертификат для `*.ru-central1.internal` (см. [статью](docs/certificates-generating.md)). Этот домен используется внутри Yandex.Cloud, а сертификат будет использоваться для настройки https на хостах `gitlab` и `nexus`.
 3. Генерируем ssh-key для доступа к нодам([инструкция](docs/ssh-keys-generating.md))
 4. Вносим сгенерированные ключи, а также переменные, полученные при запуске `prerequisites.sh` в ansible-secret файл для `platform` окружения `./infrastructure/envs/env-platform/group_vars/all/secrets.yaml` и шифруем его.
