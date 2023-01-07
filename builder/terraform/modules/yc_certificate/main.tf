@@ -28,5 +28,5 @@ resource "yandex_storage_object" "challenge" {
 data "yandex_cm_certificate" "certificate" {
   certificate_id            = yandex_cm_certificate.cert.id
   wait_validation = var.wait_validation
-  depends_on = [yandex_cm_certificate.cert]
+  depends_on = [yandex_storage_object.challenge]
 }
