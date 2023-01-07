@@ -32,3 +32,10 @@ data "yandex_cm_certificate" "certificate" {
   wait_validation = var.wait_validation
   depends_on = [yandex_storage_object.challenge]
 }
+
+resource "null_resource" "cert_check" {
+  depends_on = [data.yandex_cm_certificate.certificate]
+  provisioner "local-exec" {
+    command = "sleep 60"
+  }
+}
