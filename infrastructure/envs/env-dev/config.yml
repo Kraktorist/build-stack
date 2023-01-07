@@ -75,7 +75,7 @@ hosts:
     disk: 40
     subnet: dev-a
     public_ip: false
-    security_groups: [common,internet,access_to_nexus,dev_k8s_cluster,alb_healthcheck]
+    security_groups: [common,internet,access_to_nexus,k8s_ingress,dev_k8s_cluster]
   worker-dev12:
     name: worker-dev12
     cpu: 4
@@ -83,7 +83,7 @@ hosts:
     disk: 40
     subnet: dev-b
     public_ip: false
-    security_groups: [common,internet,access_to_nexus,dev_k8s_cluster,alb_healthcheck]
+    security_groups: [common,internet,access_to_nexus,k8s_ingress,dev_k8s_cluster]
   master-dev13:
     name: master-dev13
     cpu: 2
@@ -91,7 +91,7 @@ hosts:
     disk: 40
     subnet: dev-b
     public_ip: false
-    security_groups: [common,internet,access_to_nexus,dev_k8s_cluster]
+    security_groups: [common,internet,access_to_nexus,dev_k8s_cluster,k8s_api]
 
 certificate:
   name: dev-certificate

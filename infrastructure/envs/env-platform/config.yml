@@ -90,12 +90,19 @@ network:
         - protocol: tcp
           ports: 1-65535
           cidr: [0.0.0.0/0]
-    alb_healthcheck:
-      egress:
+    k8s_ingress:
+      ingress:
         - protocol: tcp
-          ports: 1-65535
-          cidr: [198.18.235.0/24, 198.18.248.0/24]
-
+          ports: 80
+          cidr: [0.0.0.0/0]
+        - protocol: udp
+          ports: 80
+          cidr: [0.0.0.0/0]
+    k8s_api:
+      ingress:
+        - protocol: tcp
+          ports: 6443
+          cidr: [192.168.0.0/28]
 
 # hosts specification
 # every host must have defined name, cpu, memory, disk, public_ip

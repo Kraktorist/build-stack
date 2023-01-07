@@ -74,7 +74,7 @@ hosts:
     disk: 40
     subnet: prod-a
     public_ip: false
-    security_groups: [common,internet,access_to_nexus,prod_k8s_cluster]
+    security_groups: [common,internet,access_to_nexus,k8s_ingress,prod_k8s_cluster]
   worker-prod22:
     name: worker-prod22
     cpu: 4
@@ -82,7 +82,7 @@ hosts:
     disk: 40
     subnet: prod-b
     public_ip: false
-    security_groups: [common,internet,access_to_nexus,prod_k8s_cluster]
+    security_groups: [common,internet,access_to_nexus,k8s_ingress,prod_k8s_cluster]
   master-prod23:
     name: master-prod23
     cpu: 4
@@ -90,7 +90,7 @@ hosts:
     disk: 40
     subnet: prod-b
     public_ip: false
-    security_groups: [common,internet,access_to_nexus,prod_k8s_cluster]
+    security_groups: [common,internet,access_to_nexus,prod_k8s_cluster,k8s_api]
 
 certificate:
   name: prod-certificate
