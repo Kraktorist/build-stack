@@ -93,9 +93,9 @@ hosts:
     public_ip: false
     security_groups: [common,internet,access_to_nexus,dev_k8s_cluster]
 
-balancer:
-  target_port: 80
-  ext_port: 9999
-  nodes:
-  - worker-dev11
-  - worker-dev12
+# balancer:
+#   target_port: 80
+#   ext_port: 9999
+#   nodes:
+#   - worker-dev11
+#   - worker-dev12

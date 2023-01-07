@@ -1,6 +1,5 @@
 resource "yandex_alb_target_group" "targetgroup" {
   name      = "${var.ENV}-alb-target-group"
-
   dynamic "target" {
     for_each = var.instances
     content {
@@ -75,10 +74,26 @@ resource "yandex_alb_load_balancer" "balancer" {
       }
       ports = [ var.ext_port ]
     }    
-    http {
-      handler {
-        http_router_id = yandex_alb_http_router.router.id
+    dynamic "http" {
+      for_each = var.certificate_id == null ? [1] : []
+      content {
+        handler {
+          http_router_id = yandex_alb_http_router.router.id
+        }
       }
     }
+
+    dynamic "tls" {
+      for_each = var.certificate_id == null ? [] : [1]
+      content {
+        default_handler {
+          certificate_ids = [ var.certificate_id ]
+          http_handler {
+            http_router_id = yandex_alb_http_router.router.id
+          }
+        }
+      }
+    }
+
   }
 }

@@ -23,6 +23,13 @@ variable subnets {
   description = "List of Subnets"
 }
 
+variable certificate_id {
+  type        = string
+  default     = null
+  description = "Certificate ID"
+}
+
+
 variable ENV {
   type        = string
   default     = ""

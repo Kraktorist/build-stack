@@ -15,12 +15,22 @@ Specification for all the hosts.
 - **`public_ip`** - boolean value if machine requires a public IP address (for bastion mostly)  
 - **`security_groups`** - list of VPC Security Groups (according to Yandex Cloud documentation it's limited to 5)  
 
-## Application Load Balancer Block
+## Certificate Block
 
-ALB Specification describes load balancer for the environment
+Specification for Let's Encrypt certificate created in Certificate Manager
+
+- **`name`** - certificate name
+- **`wait_validation`** - wait for HTTP-01 challenge completed. Required for ALB installation.
+- **`domains`** - list of domains (Subject Alternative Names). Wildcards are not supported as we don't use DNS-01 challenge.
+
+
+## Balancer Block
+
+Application Load Specification describes load balancer for the environment
 
 - **`target_port`** - port on workers that ingress controller listens to
 - **`ext_port`** - ALB port for user connections
+- **tls** - boolean value to enable HTTPS (certificate block required)
 - **`nodes`** - list of backend nodes
 
 balancer:
@@ -143,9 +153,18 @@ hosts:
     public_ip: false
     security_groups: [k8s_cluster]
 
+certificate:
+  name: env-debug
+  wait_validation: true
+  domains:
+  - 'boutique.qamo.ru'
+  - 'grafana.dev.qamo.ru'
+  - 'grafana.prod.qamo.ru'
+
 balancer:
   target_port: 80
   ext_port: 80
+  tls: true
   nodes:
   - master-dev13
 ```
