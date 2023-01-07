@@ -56,13 +56,14 @@ if [ -z ${NETWORK} ]; then
   echo $(yellow "WARNING! Parameter --network is not set. Default value --network=${NETWORK} will be used.")
 fi
 if [ -z ${SERVICE_ACCOUNT} ]; then
-  SERVICE_ACCOUNT=${FOLDER}-editor
+  SERVICE_ACCOUNT=${FOLDER}-admin
   echo $(yellow "WARNING! Parameter --service-account is not set. Default value --service-account=${SERVICE_ACCOUNT} will be used.")
 fi
 if [ -z ${ROLE} ]; then
-  ROLE=editor
+  ROLE=admin
   echo $(yellow "WARNING! Parameter --role is not set. Default value --role=${ROLE} will be used.")
 fi
+
 if [ -z ${S3_TF_STATE} ]; then
   S3_TF_STATE=${FOLDER}-tfstates
   echo $(yellow "WARNING! Parameter --bucket is not set. Default value --bucket=${S3_TF_STATE} will be used.")
