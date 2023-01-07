@@ -3,15 +3,6 @@ module input {
   source = "./modules/input/"
 }
 
-module yc_certificate {
-  count = can(module.input.params.certificate) ? 1 : 0
-  domains = module.input.params.certificate.domains
-  name = module.input.params.certificate.name
-  wait_validation = module.input.params.certificate.wait_validation
-  source = "./modules/yc_certificate/"
-  ENV = var.ENV
-}
-
 module yc_network {
   count = can(module.input.params.network.name) ? 1 : 0
   network = module.input.params.network.name
@@ -26,6 +17,15 @@ module yc_instance {
   subnets = module.yc_network[0].subnets
   security_groups = module.yc_network[0].security_groups
   source = "./modules/yc_instance/"
+  ENV = var.ENV
+}
+
+module yc_certificate {
+  count = can(module.input.params.certificate) ? 1 : 0
+  domains = module.input.params.certificate.domains
+  name = module.input.params.certificate.name
+  wait_validation = module.input.params.certificate.wait_validation
+  source = "./modules/yc_certificate/"
   ENV = var.ENV
 }
 
