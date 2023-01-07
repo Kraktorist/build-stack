@@ -94,9 +94,10 @@ hosts:
 
 certificate:
   name: prod-certificate
-  wait_validation: false
+  wait_validation: true
   domains:
   - 'boutique.qamo.ru'
+  - 'www.boutique.qamo.ru'
   - 'grafana.prod.qamo.ru'
 
 balancer:
