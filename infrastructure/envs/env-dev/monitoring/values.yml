@@ -5,4 +5,4 @@ grafana:
   ingress:
     enabled: true
     ingressClassName: ''
-    hosts: [grafana.dev.qamo.ru]
+    hosts: [monitoring.dev.qamo.ru]

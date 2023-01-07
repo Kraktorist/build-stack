@@ -96,9 +96,9 @@ certificate:
   name: prod-certificate
   wait_validation: true
   domains:
-  - 'boutique.qamo.ru'
-  - 'www.boutique.qamo.ru'
-  - 'grafana.prod.qamo.ru'
+  - 'store.qamo.ru'
+  - 'www.store.qamo.ru'
+  - 'monitoring.prod.qamo.ru'
 
 balancer:
   target_port: 80

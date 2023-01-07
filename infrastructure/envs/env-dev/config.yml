@@ -97,7 +97,7 @@ certificate:
   name: dev-certificate
   wait_validation: true
   domains:
-  - 'grafana.dev.qamo.ru'
+  - 'monitoring.dev.qamo.ru'
 
 
 balancer:
