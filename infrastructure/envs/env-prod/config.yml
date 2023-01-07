@@ -92,9 +92,17 @@ hosts:
     public_ip: false
     security_groups: [common,internet,access_to_nexus,prod_k8s_cluster]
 
+certificate:
+  name: prod-certificate
+  wait_validation: false
+  domains:
+  - 'boutique.qamo.ru'
+  - 'grafana.prod.qamo.ru'
+
 balancer:
   target_port: 80
   ext_port: 9999
+  tls: true
   nodes:
   - worker-prod21
   - worker-prod22

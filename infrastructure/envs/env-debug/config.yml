@@ -19,6 +19,9 @@ network:
     debug-b:
       zone: ru-central1-b 
       subnets: [192.168.1.0/24]
+    debug-c:
+      zone: ru-central1-c
+      subnets: [192.168.2.0/24]
   security_groups:
     allow_all:
       ingress:
@@ -55,13 +58,23 @@ hosts:
     cpu: 2
     memory: 4096
     disk: 40
-    subnet: debug-b
+    subnet: debug-c
     public_ip: false
     security_groups: [allow_all]
 
+certificate:
+  name: env-debug
+  wait_validation: false
+  domains:
+  - 'boutique.qamo.ru'
+  - 'grafana.dev.qamo.ru'
+  - 'grafana.prod.qamo.ru'
+
 balancer:
   target_port: 80
-  ext_port: 80
+  ext_port: 9999
+  tls: false
   nodes:
   - worker11
   - worker12
+  - worker13

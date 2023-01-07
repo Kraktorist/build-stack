@@ -93,9 +93,17 @@ hosts:
     public_ip: false
     security_groups: [common,internet,access_to_nexus,dev_k8s_cluster]
 
-# balancer:
-#   target_port: 80
-#   ext_port: 9999
-#   nodes:
-#   - worker-dev11
-#   - worker-dev12
+certificate:
+  name: dev-certificate
+  wait_validation: true
+  domains:
+  - 'grafana.dev.qamo.ru'
+
+
+balancer:
+  target_port: 80
+  ext_port: 9999
+  tls: true
+  nodes:
+  - worker-dev11
+  - worker-dev12
