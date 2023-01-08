@@ -215,7 +215,7 @@ _Проверка:_ контейнер должен запуститься.
   ssh -D 1337 -f -C -q -N ubuntu@<BASTION_IP> -p 22322  
   ```  
   Далее необходимо прописать в браузере SOCKS5-прокси localhost:1337, после чего станут доступны веб-интерфейсы 
-- `gitlab` - http://gitlab11.ru-central1.internal/
+- `gitlab` - https://gitlab11.ru-central1.internal/
 - `nexus` - https://nexus11.ru-central1.internal/
 
 _Проверка:_ проверить в браузере доступность интерфейсов.
