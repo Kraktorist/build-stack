@@ -300,11 +300,11 @@ _Проверка:_ приложение отвечает по адресу, у�
 
 ## Нагрузочное тестирование и мониторинг
 
-Для тестирования воспользуемся `locust` контейнером. Запустим следующую команду
+Для тестирования воспользуемся `locust` контейнером. Запустим следующую команду на локальной рабочей станции
 
 ```
 docker run --rm -p 8089:8089 \
-    -v /home/kraktorist/repos/load-test/locustfile.py:/mnt/locust/locustfile.py \
+    -v ${PWD}/boutique/locust/locustfile.py:/mnt/locust/locustfile.py \
     locustio/locust \
         -f /mnt/locust/locustfile.py \
         --host https://store.qamo.ru:9999 \
@@ -319,7 +319,7 @@ docker run --rm -p 8089:8089 \
 
 ```console
 $ docker run --rm -p 8089:8089 \
->     -v /home/kraktorist/repos/load-test/locustfile.py:/mnt/locust/locustfile.py \
+>     -v ${PWD}/boutique/locust/locustfile.py:/mnt/locust/locustfile.py \
 >     locustio/locust \
 >         -f /mnt/locust/locustfile.py \
 >         --host https://store.qamo.ru:9999 \
