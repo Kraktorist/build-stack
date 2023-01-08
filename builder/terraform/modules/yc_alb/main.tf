@@ -29,7 +29,7 @@ resource "yandex_alb_backend_group" "group" {
       timeout = "1s"
       interval = "1s"
       http_healthcheck {
-        path  = "/healtz"
+        path  = "/healthz"
       }
     }
   }
