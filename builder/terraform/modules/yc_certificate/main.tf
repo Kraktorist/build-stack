@@ -33,9 +33,10 @@ data "yandex_cm_certificate" "certificate" {
   depends_on = [yandex_storage_object.challenge]
 }
 
-resource "null_resource" "cert_check" {
-  depends_on = [data.yandex_cm_certificate.certificate]
-  provisioner "local-exec" {
-    command = "sleep 60"
-  }
-}
+# resource "null_resource" "cert_check" {
+#   depends_on = [data.yandex_cm_certificate.certificate]
+#   provisioner "local-exec" {
+#     # command = "yc_init; yc certificate-manager certificate get ${yandex_cm_certificate.cert.id} --format json; sleep 300; yc certificate-manager certificate get ${yandex_cm_certificate.cert.id} --format json"
+#     command = "sleep 300"
+#   }
+# }

@@ -1,4 +1,4 @@
 output certificate_id {
-  value       = yandex_cm_certificate.cert.id
+  value       = data.yandex_cm_certificate.certificate.id
   description = "Certificate ID"
 }
