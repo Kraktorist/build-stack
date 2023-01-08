@@ -35,6 +35,12 @@
         line: external_url '{{ gitlab_url }}'
       register: external_url
 
+    - name: Install Gitlab CE | Create the directory /etc/gitlab/ssl/
+      ansible.builtin.file:
+        path: /etc/gitlab/ssl/
+        state: directory
+        mode: '0755'
+
     - name: Install Gitlab CE | Copy Trusted Certificate For Internal Zone
       copy:
         dest: "/etc/gitlab/ssl/{{ gitlab_host }}.crt"
@@ -42,7 +48,7 @@
 
     - name: Install Gitlab CE | Copy Trusted Certificate Key For Internal Zone
       copy:
-        dest: "/etc/gitlab/ssl/{{ gitlab_host }}.crt"
+        dest: "/etc/gitlab/ssl/{{ gitlab_host }}.key"
         content: "{{ INTERNAL_TRUSTED_CERTIFICATE_KEY }}"          
 
     - name: Install Gitlab CE | Configuring HTTPS Redirect
@@ -72,7 +78,7 @@
         - "gitaly['env'] = {'LD_PRELOAD' => '/opt/gitlab/embedded/lib/libjemalloc.so', 'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000', 'GITALY_COMMAND_SPAWN_MAX_PARALLEL' => '2'}"      
 
     - name: Install Gitlab CE | Restart Gitlab CE
-      ansible.builtin.shell: gitlab-ctl reconfigure
+      ansible.builtin.shell: gitlab-ctl reconfigure && sleep 30
       when: packagekey.changed or external_url.changed
 
     - name: Initial Configuration | Get Gitlab password
