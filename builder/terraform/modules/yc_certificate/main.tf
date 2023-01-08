@@ -1,6 +1,6 @@
 resource "yandex_cm_certificate" "cert" {
   name    = var.name
-  domains = var.domains
+  domains = sort(var.domains)
   managed {
     challenge_type  = "HTTP"
     challenge_count = length(var.domains)
