@@ -4,7 +4,7 @@ gitlab_user: root
 gitlab_password: "{{ GITLAB_PASSWORD }}"
 gitlab_email: admin@example.com
 gitlab_host: "{{ hostvars[inventory_hostname].fqdn }}"
-gitlab_url: http://{{ gitlab_host }}
+gitlab_url: https://{{ gitlab_host }}
 source_repo: https://github.com/Kraktorist/build-stack.git
 source_repo_name: build-stack
 NEXUS_REGISTRY: "{{ hostvars[groups['nexus'][0]]['fqdn'] }}:9080"
