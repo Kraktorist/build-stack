@@ -28,6 +28,7 @@ resource "yandex_alb_backend_group" "group" {
     healthcheck {
       timeout = "1s"
       interval = "1s"
+      healthcheck_port = 80
       http_healthcheck {
         path  = "/healthz"
       }
