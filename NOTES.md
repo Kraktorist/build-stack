@@ -91,7 +91,9 @@
 В проекте используется две зоны.
 - внешняя интернет-зона для доступа к сайту по интернет имени.
 - внутренняя yandex.cloud зона `ru-central1.internal.` для регистрации в ней внутренних ресурсов (`gitlab` и `nexus`).
+  
 Во внешнем интернет-домене необходимо сделать три временных CNAME-записи для регистрации Let's Encrypt сертификата.
+
 - monitoring.dev.domain.tld 
 - monitoring.prod.domain.tld 
 - store.domain.tld
