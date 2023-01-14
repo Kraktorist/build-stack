@@ -87,12 +87,12 @@
     git init
     git add .
     git commit -m "init commit"
-    git remote add gitlab-origin http://{{ gitlab_user }}:{{ gitlab_password }}@{{ gitlab_host }}/{{ gitlab_group.group.name }}/envs.git
+    git remote add gitlab-origin https://{{ gitlab_user }}:{{ gitlab_password }}@{{ gitlab_host }}/{{ gitlab_group.group.name }}/envs.git
     git push --all gitlab-origin
     git push --tags gitlab-origin
     cd .. && rm -rf envs
     cd $reponame
-    git remote add gitlab-origin http://{{ gitlab_user }}:{{ gitlab_password }}@{{ gitlab_host }}/{{ gitlab_group.group.name }}/${reponame}.git
+    git remote add gitlab-origin https://{{ gitlab_user }}:{{ gitlab_password }}@{{ gitlab_host }}/{{ gitlab_group.group.name }}/${reponame}.git
     git push -o ci.skip --all gitlab-origin
     git push -o ci.skip --tags gitlab-origin
     cd .. && rm -rf $reponame

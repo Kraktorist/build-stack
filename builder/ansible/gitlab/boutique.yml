@@ -31,7 +31,7 @@
     cd $reponame
     git filter-branch --index-filter "cp -r ${basepath}/${reponame}/. . && git add --no-all ." --tag-name-filter cat --prune-empty -- --all
     git commit -m "[skip ci]"
-    git remote add gitlab-origin http://{{ gitlab_user }}:{{ gitlab_password }}@{{ gitlab_host }}/{{ gitlab_group.group.name }}/${reponame}.git
+    git remote add gitlab-origin https://{{ gitlab_user }}:{{ gitlab_password }}@{{ gitlab_host }}/{{ gitlab_group.group.name }}/${reponame}.git
     git push -o ci.skip --all gitlab-origin
     git push -o ci.skip --tags gitlab-origin
     cd .. && rm -rf $reponame
