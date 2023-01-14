@@ -32,7 +32,7 @@
             values_files: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}" 
             values:
               runnerRegistrationToken: "{{ lookup('env','RUNNER_TOKEN') }}"
-              gitlabUrl: "http://{{ lookup('env','CI_SERVER_HOST') }}/"
+              gitlabUrl: "https://{{ lookup('env','CI_SERVER_HOST') }}/"
               runners:
                 tags: "{{ lookup('env','ENV') }}"
 
