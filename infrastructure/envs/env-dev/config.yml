@@ -36,6 +36,8 @@ runner:
   namespace: gitlab-runner
   helm_values: 
     - runner/values.yml
+  k8s_manifests:
+  - runner/k8s/certs-secret.yml
 
 # network spec
 network: 
