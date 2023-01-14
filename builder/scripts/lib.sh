@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -x
-
 function yc_init() {
   yc config profile create current
   yc config set service-account-key $YC_SERVICE_ACCOUNT_KEY_FILE
