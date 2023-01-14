@@ -37,6 +37,7 @@ runner:
     - runner/values.yml
   k8s_manifests:
   - runner/k8s/rolebinding.yml
+  - runner/k8s/certs-secret.yml
 
 network: 
   name: instances
