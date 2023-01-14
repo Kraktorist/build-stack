@@ -11,5 +11,7 @@ export TF_VAR_ansible_inventory=/app/infrastructure/envs/${ENV}/inventory.yml
 export TF_VAR_ENV=${ENV}
 export YC_STORAGE_ACCESS_KEY=${ACCESS_KEY}
 export YC_STORAGE_SECRET_KEY=${SECRET_KEY}
+export AWS_ACCESS_KEY_ID=${ACCESS_KEY}
+export AWS_SECRET_ACCESS_KEY=${SECRET_KEY}
 
 source /app/scripts/lib.sh

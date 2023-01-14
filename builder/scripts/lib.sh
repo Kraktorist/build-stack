@@ -17,21 +17,27 @@ function yc_get_instances() {
   yc compute instance list
 }
 
+# function init_backend() {
+#     # init_backend "network"
+#     if [ -z ${ENV} ]; then
+#       echo "Environment variable 'ENV' is empty">/dev/stderr
+#       exit 1
+#     fi
+#     terraform -chdir=/app/terraform init \
+#         -backend-config="bucket=${S3_TF_STATE}" \
+#         -backend-config="key=${ENV}/cloud.tfstate" \
+#         -reconfigure
+# }
+
 function init_backend() {
     # init_backend "network"
     if [ -z ${ENV} ]; then
       echo "Environment variable 'ENV' is empty">/dev/stderr
       exit 1
     fi
+    terraform -chdir=/app/terraform workspace select ${ENV} || terraform -chdir=/app/terraform workspace new ${ENV}
     terraform -chdir=/app/terraform init \
-        -backend-config="endpoint=storage.yandexcloud.net" \
         -backend-config="bucket=${S3_TF_STATE}" \
-        -backend-config="region=ru-central1" \
-        -backend-config="key=${ENV}/cloud.tfstate" \
-        -backend-config="access_key=${ACCESS_KEY}" \
-        -backend-config="secret_key=${SECRET_KEY}" \
-        -backend-config="skip_region_validation=true" \
-        -backend-config="skip_credentials_validation=true" \
         -reconfigure
 }
 
