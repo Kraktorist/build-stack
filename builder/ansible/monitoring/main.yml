@@ -36,6 +36,8 @@
             release_namespace: "{{ config.monitoring.namespace | default('default') }}"
             create_namespace: yes
             values_files: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}" 
+            values:
+              grafana.adminPassword: "{{ lookup('ansible.builtin.password', '/dev/null length=15 chars=ascii_letters') }}"
 
         - name: Check k8s_manifests paths
           stat:
