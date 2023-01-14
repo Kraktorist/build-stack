@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 function yc_init() {
   yc config profile create current
   yc config set service-account-key $YC_SERVICE_ACCOUNT_KEY_FILE
@@ -35,10 +37,10 @@ function init_backend() {
       echo "Environment variable 'ENV' is empty">/dev/stderr
       exit 1
     fi
-    terraform -chdir=/app/terraform workspace select ${ENV} || terraform -chdir=/app/terraform workspace new ${ENV}
     terraform -chdir=/app/terraform init \
         -backend-config="bucket=${S3_TF_STATE}" \
         -reconfigure
+    terraform -chdir=/app/terraform workspace select ${ENV} || terraform -chdir=/app/terraform workspace new ${ENV}
 }
 
 function terraform_plan() {
